@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="es" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Módulo Vista &mdash; documentación de Control de stock - 0.0.1</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+        <script src="_static/translations.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Índice" href="genindex.html" />
+    <link rel="search" title="Búsqueda" href="search.html" />
+    <link rel="prev" title="Módulo Validar" href="validar.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Control de stock
+          </a>
+              <div class="version">
+                0.0.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Buscar documentos" aria-label="Buscar documentos" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contenidos:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="controlador.html">Módulo Controlador</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modelo.html">Módulo Modelo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="validar.html">Módulo Validar</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Módulo Vista</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#vista.Menu"><code class="docutils literal notranslate"><span class="pre">Menu</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#vista.Menu.__init__"><code class="docutils literal notranslate"><span class="pre">Menu.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#vista.Menu.menu_opciones"><code class="docutils literal notranslate"><span class="pre">Menu.menu_opciones()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#vista.Menu.call_agreg"><code class="docutils literal notranslate"><span class="pre">Menu.call_agreg()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#vista.Menu.call_elim"><code class="docutils literal notranslate"><span class="pre">Menu.call_elim()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#vista.Menu.call_modif"><code class="docutils literal notranslate"><span class="pre">Menu.call_modif()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#vista.Menu.call_consulta"><code class="docutils literal notranslate"><span class="pre">Menu.call_consulta()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#vista.SubWindow"><code class="docutils literal notranslate"><span class="pre">SubWindow</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#vista.SubWindow.ingreso_datos"><code class="docutils literal notranslate"><span class="pre">SubWindow.ingreso_datos()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Control de stock</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Módulo Vista</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/vista.rst.txt" rel="nofollow"> Ver código fuente de la página</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-vista">
+<span id="modulo-vista"></span><h1>Módulo Vista<a class="headerlink" href="#module-vista" title="Enlace permanente a este encabezado"></a></h1>
+<dl class="simple">
+<dt>vista.py:</dt><dd><p>Módulo encargado de generar la interfaz gráfica de la app.</p>
+</dd>
+</dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="vista.Menu">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">vista.</span></span><span class="sig-name descname"><span class="pre">Menu</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">window</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/vista.html#Menu"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#vista.Menu" title="Enlazar permanentemente con esta definición"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Clase que configura la ventana, treeview, botones y mensajes emergentes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parámetros<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>window</strong> – Objeto ventana que recibe como argumento de <code class="docutils literal notranslate"><span class="pre">controlador.py</span></code></p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="vista.Menu.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">window</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/vista.html#Menu.__init__"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#vista.Menu.__init__" title="Enlazar permanentemente con esta definición"></a></dt>
+<dd><p>Constructor que configura la ventana y treeview.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parámetros<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>window</strong> – Objeto ventana que recibe como argumento de <code class="docutils literal notranslate"><span class="pre">controlador.py</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="vista.Menu.menu_opciones">
+<span class="sig-name descname"><span class="pre">menu_opciones</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/vista.html#Menu.menu_opciones"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#vista.Menu.menu_opciones" title="Enlazar permanentemente con esta definición"></a></dt>
+<dd><p>Método que configura los botones de opciones.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="vista.Menu.call_agreg">
+<span class="sig-name descname"><span class="pre">call_agreg</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/vista.html#Menu.call_agreg"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#vista.Menu.call_agreg" title="Enlazar permanentemente con esta definición"></a></dt>
+<dd><p>Método que imprime un mensaje emergente de acuerdo al string que retorna
+la función de agregar un dato <code class="docutils literal notranslate"><span class="pre">agreg()</span></code>, que forma parte de <code class="docutils literal notranslate"><span class="pre">modelo.py</span></code>.</p>
+<p>Si se generó una excepción mostrará el mensaje de error correspondiente.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="vista.Menu.call_elim">
+<span class="sig-name descname"><span class="pre">call_elim</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/vista.html#Menu.call_elim"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#vista.Menu.call_elim" title="Enlazar permanentemente con esta definición"></a></dt>
+<dd><p>Método que imprime un mensaje emergente de acuerdo al string que retorna
+la función de eliminar un dato <code class="docutils literal notranslate"><span class="pre">elim()</span></code>, que forma parte de <code class="docutils literal notranslate"><span class="pre">modelo.py</span></code>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="vista.Menu.call_modif">
+<span class="sig-name descname"><span class="pre">call_modif</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/vista.html#Menu.call_modif"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#vista.Menu.call_modif" title="Enlazar permanentemente con esta definición"></a></dt>
+<dd><p>Método que imprime un mensaje emergente de acuerdo al string que retorna
+la función de modificar un dato <code class="docutils literal notranslate"><span class="pre">modif()</span></code>, que forma parte de <code class="docutils literal notranslate"><span class="pre">modelo.py</span></code>.</p>
+<p>Si se generó una excepción mostrará el mensaje de error correspondiente.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="vista.Menu.call_consulta">
+<span class="sig-name descname"><span class="pre">call_consulta</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/vista.html#Menu.call_consulta"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#vista.Menu.call_consulta" title="Enlazar permanentemente con esta definición"></a></dt>
+<dd><p>Método que imprime un mensaje emergente de acuerdo al string que retorna
+la función de consultar stock <code class="docutils literal notranslate"><span class="pre">consulta()</span></code>, que forma parte de <code class="docutils literal notranslate"><span class="pre">modelo.py</span></code>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="vista.SubWindow">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">vista.</span></span><span class="sig-name descname"><span class="pre">SubWindow</span></span><a class="reference internal" href="_modules/vista.html#SubWindow"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#vista.SubWindow" title="Enlazar permanentemente con esta definición"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Clase que configura las etiquetas y los campos de entrada.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="vista.SubWindow.ingreso_datos">
+<span class="sig-name descname"><span class="pre">ingreso_datos</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">window</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var_nombre</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var_cantidad</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var_precio</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var_descrip</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/vista.html#SubWindow.ingreso_datos"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#vista.SubWindow.ingreso_datos" title="Enlazar permanentemente con esta definición"></a></dt>
+<dd><p>Método que define las etiquetas, los campos de entrada y eventos asociados a los mismos.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parámetros<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>window</strong> – Objeto ventana que recibe como argumento de la clase <code class="docutils literal notranslate"><span class="pre">Menu()</span></code>.</p></li>
+<li><p><strong>var_nombre</strong> – Variable que será asociada al campo de entrada <strong>Nombre</strong>.</p></li>
+<li><p><strong>var_cantidad</strong> – Variable que será asociada al campo de entrada <strong>Cantidad</strong>.</p></li>
+<li><p><strong>var_precio</strong> – Variable que será asociada al campo de entrada <strong>Precio</strong>.</p></li>
+<li><p><strong>var_descrip</strong> – Variable que será asociada al campo de entrada <strong>Descripción</strong>.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Pie de página">
+        <a href="validar.html" class="btn btn-neutral float-left" title="Módulo Validar" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Anterior</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Derechos de autor 2023, Diego Calderón, Nahuel Vargas.</p>
+  </div>
+
+  Compilado con <a href="https://www.sphinx-doc.org/">Sphinx</a> usando un
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">tema</a>
+    proporcionado por <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
