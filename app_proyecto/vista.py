@@ -234,6 +234,8 @@ class Menu:
                 showerror("Error en la operación", "No se ha ingresado ningun nombre")
             elif mje == "no existe":
                 showerror("Error en la operación", "Artículo no encontrado")
+            elif mje == "sin modificar":
+                showerror("Error en la operación", "No se completó ningún campo")
             elif mje == "modificado":
                 showinfo("Operación exitosa", "Artículo modificado correctamente")
 

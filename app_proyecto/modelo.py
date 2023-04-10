@@ -10,6 +10,7 @@ __version__ = "0.0.1"
 
 from peewee import *
 from validar import Validacion
+import datetime
 
 # --------------------Variables---------------------------------
 # Flag utilizado para informar si hubo un error en la validación de los datos de un campo a actualizar.
@@ -21,7 +22,59 @@ flag_p = 0
 # Flag utilizado para informar que existe un dato válido para actualizar en el campo descripción.
 flag_d = 0
 
+# ---------------------Decoradores-------------------------------
+def decorador_add(metodo):
+    def envoltura(*args):
+        print("Se ingresó un nuevo registro")
+        archivo = open("registro_log.txt", "a")
+        archivo.write(
+            "Se ingresó un nuevo registro "
+            + "Fecha: "
+            + str(datetime.datetime.today().strftime("%d/%m/%y"))
+            + " Hora: "
+            + str(datetime.datetime.today().strftime("%H:%M:%S"))
+            + "\n"
+        )
+        metodo(*args)
 
+    return envoltura
+
+
+def decorador_del(metodo):
+    def envoltura(*args):
+        print("Se eliminó un registro")
+        archivo = open("registro_log.txt", "a")
+        archivo.write(
+            "Se eliminó un registro "
+            + "Fecha: "
+            + str(datetime.datetime.today().strftime("%d/%m/%y"))
+            + " Hora: "
+            + str(datetime.datetime.today().strftime("%H:%M:%S"))
+            + "\n"
+        )
+        metodo(*args)
+
+    return envoltura
+
+
+def decorador_mod(metodo):
+    def envoltura(*args):
+        print("Se modificó un registro")
+        archivo = open("registro_log.txt", "a")
+        archivo.write(
+            "Se modificó un registro "
+            + "Fecha: "
+            + str(datetime.datetime.today().strftime("%d/%m/%y"))
+            + " Hora: "
+            + str(datetime.datetime.today().strftime("%H:%M:%S"))
+            + "\n"
+        )
+        metodo(*args)
+
+    return envoltura
+
+
+# ---------------------Clase que contienen métodos para eventos--------------------------------
 class Evento:
     """
     Clase que integra los métodos asociados a los eventos de los campos de entrada.
@@ -82,7 +135,6 @@ class Evento:
 
 
 # ---------------------Clases que contienen métodos para base de datos--------------------------------
-
 try:
     db = SqliteDatabase(
         "base_stock.db"
@@ -125,6 +177,7 @@ class BaseDatos:
         self.con.connect()  # Me conecto a la bd.
         self.con.create_tables([Componentes])  # Creo la tabla Componentes.
 
+    @decorador_add
     def agregar_db(self, nombre, cantidad, precio, descripcion):
         """
         Método para agregar una fila de datos (registro) a la tabla.
@@ -147,6 +200,7 @@ class BaseDatos:
         except:
             print("No se pudo guardar el registro")
 
+    @decorador_del
     def eliminar_db(self, nombre):
         """
         Método para eliminar una fila de datos (registro) de la tabla
@@ -176,35 +230,55 @@ class BaseDatos:
 
         return rows
 
-    def actualizar_db(self, nombre, param, data2mod):
+    @decorador_mod
+    def actualizar_db(self, nombre, cant, prec, descrip):
         """
         Método para actualizar uno o varios campos de una fila de la tabla.
 
         :param nombre: Nombre del componente.
-        :param param: Nuevo valor del campo.
-        :param data2mod: Campo a modificar.
+        :param cant: Nuevo valor del campo cantidad(si existe un dato válido).
+        :param cant: Nuevo valor del campo precio(si existe un dato válido).
+        :param cant: Nuevo valor del campo descripción(si existe un dato válido).
         """
-        if data2mod == "cant":
-            reg_actualizar = Componentes.update(cantidad=param).where(
+        global flag_c
+        global flag_p
+        global flag_d
+
+        if flag_c == 1:  # Si existe un dato cantidad válido
+            reg_actualizar = Componentes.update(cantidad=cant).where(
                 Componentes.nombre == nombre
             )
+            flag_c = 0
 
-        elif data2mod == "prec":
-            reg_actualizar = Componentes.update(precio=param).where(
+            try:
+                reg_actualizar.execute()  # Actualizo el registro.
+            except:
+                print("No se pudo actualizar el registro")
+
+        if flag_p == 1:  # Si existe un dato precio válido
+            reg_actualizar = Componentes.update(precio=prec).where(
                 Componentes.nombre == nombre
             )
+            flag_p = 0
 
-        elif data2mod == "descrip":
-            reg_actualizar = Componentes.update(descripcion=param).where(
+            try:
+                reg_actualizar.execute()  # Actualizo el registro.
+            except:
+                print("No se pudo actualizar el registro")
+
+        if flag_d == 1:  # Si existe un dato descripción válido
+            reg_actualizar = Componentes.update(descripcion=descrip).where(
                 Componentes.nombre == nombre
             )
+            flag_d = 0
 
-        try:
-            reg_actualizar.execute()  # Actualizo el registro.
-        except:
-            print("No se pudo actualizar el registro")
+            try:
+                reg_actualizar.execute()  # Actualizo el registro.
+            except:
+                print("No se pudo actualizar el registro")
 
 
+# ---------------------Clase que contienen métodos para manejo de datos ingresados--------------------------------
 class Crud(BaseDatos):
     """
     Clase que contiene métodos para el manejo de los datos ingresados.
@@ -351,17 +425,13 @@ class Crud(BaseDatos):
                 # Si no hubo error en la validación de datos (flag_e == 0) se actualizarán
                 # los datos que hayan sido ingresados en los campos correspondientes.
                 if flag_e == 0:
-                    if flag_c:
-                        self.actualizar_db(nom, cant, "cant")
-                        flag_c = 0
-                    if flag_p:
-                        self.actualizar_db(nom, prec, "prec")
-                        flag_p = 0
-                    if flag_d:
-                        self.actualizar_db(nom, descrip, "descrip")
-                        flag_d = 0
+                    if flag_c or flag_p or flag_d:  # Si se ingresó un dato a modificar
+                        self.actualizar_db(nom, cant, prec, descrip)
 
-                    return "modificado"
+                        return "modificado"
+                    else:
+                        # No se completó ningún campo a modificar
+                        return "sin modificar"
 
                 # Si hubo error en la validación de datos (flag == 1)
                 # no se actualizará ningun campo y se informará del error al usuario.
