@@ -8,7 +8,7 @@ from PySide2 import QtCore as core
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 import matplotlib.pyplot as plt
 
-from app_stock import *
+from Qt.app_stock import *
 from ventanas import *
 
 class Opciones():

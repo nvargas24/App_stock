@@ -5,10 +5,10 @@ from PySide2.QtGui import *
 from PySide2.QtWidgets import *
 from PySide2 import QtCore as core
 
-from agregar import *
-from eliminar import *
-from modificar import *
-from consulta import *
+from Qt.agregar import *
+from Qt.eliminar import *
+from Qt.modificar import *
+from Qt.consulta import *
 
 
 class WindowAgregar(QDialog):
