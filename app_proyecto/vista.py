@@ -151,7 +151,7 @@ class Menu:
             activebackground="#3FB9F5",
             width=20,
             height=2,
-            command=lambda: self.obj_f.mostrar_cat(self.tree),
+            command=lambda: self.obj_f.mostrar_cat(self.tree, True),
         )
 
         # -------------------Posiciono los controles ---------------------------

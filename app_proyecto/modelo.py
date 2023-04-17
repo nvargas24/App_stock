@@ -11,6 +11,8 @@ __version__ = "0.0.1"
 from peewee import *
 from validar import Validacion
 import datetime
+import pandas as pd
+import matplotlib.pyplot as plt
 
 # --------------------Variables---------------------------------
 # Flag utilizado para informar si hubo un error en la validación de los datos de un campo a actualizar.
@@ -26,7 +28,7 @@ flag_d = 0
 def decorador_add(metodo):
     def envoltura(*args):
         print("Se ingresó un nuevo registro")
-        archivo = open("registro_log.txt", "a")
+        archivo = open("registro_log.txt", "a", encoding="utf-8")
         archivo.write(
             "Se ingresó un nuevo registro "
             + "Fecha: "
@@ -43,7 +45,7 @@ def decorador_add(metodo):
 def decorador_del(metodo):
     def envoltura(*args):
         print("Se eliminó un registro")
-        archivo = open("registro_log.txt", "a")
+        archivo = open("registro_log.txt", "a", encoding="utf-8")
         archivo.write(
             "Se eliminó un registro "
             + "Fecha: "
@@ -60,7 +62,7 @@ def decorador_del(metodo):
 def decorador_mod(metodo):
     def envoltura(*args):
         print("Se modificó un registro")
-        archivo = open("registro_log.txt", "a")
+        archivo = open("registro_log.txt", "a", encoding="utf-8")
         archivo.write(
             "Se modificó un registro "
             + "Fecha: "
@@ -70,6 +72,38 @@ def decorador_mod(metodo):
             + "\n"
         )
         metodo(*args)
+
+    return envoltura
+
+
+def decorador_mostrar(metodo):
+    def envoltura(*args):
+        # Si args[2] == True (graf=True) se muestra en consola una tabla de cada componente cargado con su respectiva cantidad
+        # y se realiza un gráfico de torta a partir de dichos datos
+        if len(args) == 3 and args[2] == True:
+            x, y = metodo(*args)
+
+            # Se calcula y se muestra en consola una tabla de componentes cargados con sus respectivas cantidades
+            print("---" * 23)
+            print("Lista de stock")
+            dataset = {"Componente": x, "Cantidad": y}
+            df = pd.DataFrame(dataset)
+            print(df)
+            print("---" * 23)
+
+            # Se realiza un gráfico de torta del total de componentes cargados con sus respectivas cantidades
+            df.groupby(["Componente"]).sum().plot(
+                kind="pie",
+                y="Cantidad",
+                autopct=lambda p: "{:.0f}".format(p * sum(df["Cantidad"]) / 100),
+                title="Stock total de componentes",
+                legend=False,
+            )
+            plt.ylabel("")
+            plt.show()
+
+        else:
+            metodo(*args)
 
     return envoltura
 
@@ -244,7 +278,7 @@ class BaseDatos:
         global flag_p
         global flag_d
 
-        if flag_c == 1:  # Si existe un dato cantidad válido
+        if flag_c == 1:  # Si existe un dato "cantidad" válido
             reg_actualizar = Componentes.update(cantidad=cant).where(
                 Componentes.nombre == nombre
             )
@@ -255,7 +289,7 @@ class BaseDatos:
             except:
                 print("No se pudo actualizar el registro")
 
-        if flag_p == 1:  # Si existe un dato precio válido
+        if flag_p == 1:  # Si existe un dato "precio" válido
             reg_actualizar = Componentes.update(precio=prec).where(
                 Componentes.nombre == nombre
             )
@@ -266,7 +300,7 @@ class BaseDatos:
             except:
                 print("No se pudo actualizar el registro")
 
-        if flag_d == 1:  # Si existe un dato descripción válido
+        if flag_d == 1:  # Si existe un dato "descripción" válido
             reg_actualizar = Componentes.update(descripcion=descrip).where(
                 Componentes.nombre == nombre
             )
@@ -482,23 +516,51 @@ class Crud(BaseDatos):
         else:
             return "campo vacio"
 
-    def mostrar_cat(self, tree):
+    @decorador_mostrar
+    def mostrar_cat(self, tree, graf=False):
         """
         Método que muestra el catálogo completo de componentes cargados hasta el momento.
 
         :param tree: Treeview de la interfaz.
+        :param graf: Indica si se requiere graficar o no el stock total de componentes cargados. Por defecto dicho parámetro será ``"False"``.
+
+        :returns: ``x``,``y`` solo si se solicitó graficar el stock total de componentes cargados.
         """
+
+        x = []  # Lista que almacena los nombres de cada componente cargado
+        y = []  # Lista que almacena los cantidades de cada componente cargado
+
         data_from_db = self.leer_db(None)
         tree.delete(*tree.get_children())
-        for row in data_from_db:
-            tree.insert(
-                "",
-                "end",
-                text=str(row.id),
-                values=(
-                    row.nombre,
-                    int(row.cantidad),
-                    float(row.precio),
-                    row.descripcion,
-                ),
-            )
+        if graf == True:
+            for row in data_from_db:
+                tree.insert(
+                    "",
+                    "end",
+                    text=str(row.id),
+                    values=(
+                        row.nombre,
+                        int(row.cantidad),
+                        float(row.precio),
+                        row.descripcion,
+                    ),
+                )
+
+                x.append(row.nombre)
+                y.append(int(row.cantidad))
+
+            return x, y
+
+        else:
+            for row in data_from_db:
+                tree.insert(
+                    "",
+                    "end",
+                    text=str(row.id),
+                    values=(
+                        row.nombre,
+                        int(row.cantidad),
+                        float(row.precio),
+                        row.descripcion,
+                    ),
+                )
