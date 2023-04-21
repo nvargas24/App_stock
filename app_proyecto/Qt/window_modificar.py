@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'modificar.ui'
+## Form generated from reading UI file 'window_modificar.ui'
 ##
 ## Created by: Qt User Interface Compiler version 5.15.2
 ##
@@ -120,6 +120,17 @@ class Ui_Modificar(object):
 
         self.formLayout.setWidget(3, QFormLayout.FieldRole, self.in_descrip)
 
+        self.notificacion = QLabel(Modificar)
+        self.notificacion.setObjectName(u"notificacion")
+        self.notificacion.setGeometry(QRect(100, 210, 161, 20))
+        font2 = QFont()
+        font2.setBold(True)
+        font2.setWeight(75)
+        self.notificacion.setFont(font2)
+        self.notificacion.setLayoutDirection(Qt.LeftToRight)
+        self.notificacion.setStyleSheet(u"color: #aa0000")
+        self.notificacion.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.notificacion.setTextInteractionFlags(Qt.LinksAccessibleByMouse|Qt.TextEditable)
 
         self.retranslateUi(Modificar)
 
@@ -145,5 +156,6 @@ class Ui_Modificar(object):
         self.in_descrip.setInputMask("")
         self.in_descrip.setText("")
         self.in_descrip.setPlaceholderText(QCoreApplication.translate("Modificar", u"Ingrese una breve descripcion", None))
+        self.notificacion.setText("")
     # retranslateUi
 

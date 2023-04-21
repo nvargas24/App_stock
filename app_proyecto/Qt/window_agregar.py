@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'agregar.ui'
+## Form generated from reading UI file 'window_agregar.ui'
 ##
 ## Created by: Qt User Interface Compiler version 5.15.2
 ##
@@ -126,6 +126,17 @@ class Ui_Agregar(object):
 
         self.formLayout.setWidget(3, QFormLayout.FieldRole, self.in_descrip)
 
+        self.notificacion = QLabel(Agregar)
+        self.notificacion.setObjectName(u"notificacion")
+        self.notificacion.setGeometry(QRect(90, 210, 161, 20))
+        font2 = QFont()
+        font2.setBold(True)
+        font2.setWeight(75)
+        self.notificacion.setFont(font2)
+        self.notificacion.setLayoutDirection(Qt.LeftToRight)
+        self.notificacion.setStyleSheet(u"color: #aa0000")
+        self.notificacion.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.notificacion.setTextInteractionFlags(Qt.LinksAccessibleByMouse|Qt.TextEditable)
 
         self.retranslateUi(Agregar)
 
@@ -151,5 +162,6 @@ class Ui_Agregar(object):
         self.in_descrip.setInputMask("")
         self.in_descrip.setText("")
         self.in_descrip.setPlaceholderText(QCoreApplication.translate("Agregar", u"Ingrese una breve descripcion", None))
+        self.notificacion.setText("")
     # retranslateUi
 

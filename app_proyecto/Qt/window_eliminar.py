@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'eliminar.ui'
+## Form generated from reading UI file 'window_eliminar.ui'
 ##
 ## Created by: Qt User Interface Compiler version 5.15.2
 ##
@@ -60,6 +60,17 @@ class Ui_Eliminar(object):
         font1.setWeight(75)
         self.titulo.setFont(font1)
         self.titulo.setAlignment(Qt.AlignCenter)
+        self.notificacion = QLabel(Eliminar)
+        self.notificacion.setObjectName(u"notificacion")
+        self.notificacion.setGeometry(QRect(100, 130, 161, 20))
+        font2 = QFont()
+        font2.setBold(True)
+        font2.setWeight(75)
+        self.notificacion.setFont(font2)
+        self.notificacion.setLayoutDirection(Qt.LeftToRight)
+        self.notificacion.setStyleSheet(u"color: #aa0000")
+        self.notificacion.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.notificacion.setTextInteractionFlags(Qt.LinksAccessibleByMouse|Qt.TextEditable)
 
         self.retranslateUi(Eliminar)
 
@@ -73,5 +84,6 @@ class Ui_Eliminar(object):
         self.in_nombre.setText("")
         self.in_nombre.setPlaceholderText(QCoreApplication.translate("Eliminar", u"Ingrese nombre de producto", None))
         self.titulo.setText(QCoreApplication.translate("Eliminar", u"Eliminar articulo", None))
+        self.notificacion.setText("")
     # retranslateUi
 

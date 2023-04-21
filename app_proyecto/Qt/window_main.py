@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'app_stock.ui'
+## Form generated from reading UI file 'window_main.ui'
 ##
 ## Created by: Qt User Interface Compiler version 5.15.2
 ##
@@ -80,6 +80,17 @@ class Ui_MainWindow(object):
         self.grafica_torta = QVBoxLayout(self.verticalLayoutWidget)
         self.grafica_torta.setObjectName(u"grafica_torta")
         self.grafica_torta.setContentsMargins(0, 0, 0, 0)
+        self.notificacion = QLabel(self.centralwidget)
+        self.notificacion.setObjectName(u"notificacion")
+        self.notificacion.setGeometry(QRect(390, 330, 161, 20))
+        font2 = QFont()
+        font2.setBold(True)
+        font2.setWeight(75)
+        self.notificacion.setFont(font2)
+        self.notificacion.setLayoutDirection(Qt.LeftToRight)
+        self.notificacion.setStyleSheet(u"color: #aa0000")
+        self.notificacion.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.notificacion.setTextInteractionFlags(Qt.LinksAccessibleByMouse|Qt.TextEditable)
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
@@ -96,5 +107,6 @@ class Ui_MainWindow(object):
         self.btn_consultar.setText(QCoreApplication.translate("MainWindow", u"Consultar Stock", None))
         self.titulo.setText(QCoreApplication.translate("MainWindow", u"Electronica del oeste", None))
         self.subtitulo.setText(QCoreApplication.translate("MainWindow", u"Bienvenido, seleccione la opcion a realizar", None))
+        self.notificacion.setText("")
     # retranslateUi
 

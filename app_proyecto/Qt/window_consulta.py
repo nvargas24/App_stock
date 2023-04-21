@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'consulta.ui'
+## Form generated from reading UI file 'window_consulta.ui'
 ##
 ## Created by: Qt User Interface Compiler version 5.15.2
 ##
@@ -17,7 +17,7 @@ class Ui_Consulta(object):
     def setupUi(self, Consulta):
         if not Consulta.objectName():
             Consulta.setObjectName(u"Consulta")
-        Consulta.resize(564, 355)
+        Consulta.resize(564, 352)
         Consulta.setToolTipDuration(0)
         Consulta.setStyleSheet(u"QApplication::setStyle(\"fusion\");\n"
 "")
@@ -151,6 +151,17 @@ class Ui_Consulta(object):
         font3.setWeight(75)
         self.titulo.setFont(font3)
         self.titulo.setAlignment(Qt.AlignCenter)
+        self.notificacion = QLabel(Consulta)
+        self.notificacion.setObjectName(u"notificacion")
+        self.notificacion.setGeometry(QRect(310, 30, 231, 20))
+        font4 = QFont()
+        font4.setBold(True)
+        font4.setWeight(75)
+        self.notificacion.setFont(font4)
+        self.notificacion.setLayoutDirection(Qt.LeftToRight)
+        self.notificacion.setStyleSheet(u"color: #aa0000")
+        self.notificacion.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.notificacion.setTextInteractionFlags(Qt.LinksAccessibleByMouse|Qt.TextEditable)
 
         self.retranslateUi(Consulta)
 
@@ -186,5 +197,6 @@ class Ui_Consulta(object):
         self.in_descrip.setPlaceholderText(QCoreApplication.translate("Consulta", u"Ingrese descripcion", None))
         self.btn_buscar.setText(QCoreApplication.translate("Consulta", u"Buscar", None))
         self.titulo.setText(QCoreApplication.translate("Consulta", u"Catalogo", None))
+        self.notificacion.setText("")
     # retranslateUi
 
