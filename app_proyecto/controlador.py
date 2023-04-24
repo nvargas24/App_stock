@@ -10,7 +10,7 @@ __version__ = "0.0.1"
 
 from tkinter import Tk
 from vista import Menu
-
+from observador import ObservadorConcreto
 
 class Controlador:
     """
@@ -23,11 +23,15 @@ class Controlador:
         """
         Constructor que crea un objeto de clase ``Menu()`` (que importa de ``vista.py``)
         y le pasa como argumento el objeto ventana (``window``).
+        También crea un observador que seguirá las acciones del objeto de clase Crud creado en vista.Menu
 
         :param window: Objeto ventana que se crea al iniciar la app.
         """
         self.window_controlador = window
         self.obj_vista = Menu(self.window_controlador)
+
+        # Creo el observador y le paso el objeto de clase Crud creado en vista.Menu
+        self.el_observador = ObservadorConcreto(self.obj_vista.obj_f)
 
 
 if __name__ == "__main__":

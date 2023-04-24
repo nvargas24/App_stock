@@ -10,9 +10,11 @@ __version__ = "0.0.1"
 
 from peewee import *
 from validar import Validacion
+from observador import Sujeto
 import datetime
 import pandas as pd
 import matplotlib.pyplot as plt
+
 
 # --------------------Variables---------------------------------
 # Flag utilizado para informar si hubo un error en la validación de los datos de un campo a actualizar.
@@ -27,7 +29,6 @@ flag_d = 0
 # ---------------------Decoradores-------------------------------
 def decorador_add(metodo):
     def envoltura(*args):
-        print("Se ingresó un nuevo registro")
         archivo = open("registro_log.txt", "a", encoding="utf-8")
         archivo.write(
             "Se ingresó un nuevo registro "
@@ -44,7 +45,6 @@ def decorador_add(metodo):
 
 def decorador_del(metodo):
     def envoltura(*args):
-        print("Se eliminó un registro")
         archivo = open("registro_log.txt", "a", encoding="utf-8")
         archivo.write(
             "Se eliminó un registro "
@@ -61,7 +61,6 @@ def decorador_del(metodo):
 
 def decorador_mod(metodo):
     def envoltura(*args):
-        print("Se modificó un registro")
         archivo = open("registro_log.txt", "a", encoding="utf-8")
         archivo.write(
             "Se modificó un registro "
@@ -274,16 +273,12 @@ class BaseDatos:
         :param cant: Nuevo valor del campo precio(si existe un dato válido).
         :param cant: Nuevo valor del campo descripción(si existe un dato válido).
         """
-        global flag_c
-        global flag_p
-        global flag_d
 
         if flag_c == 1:  # Si existe un dato "cantidad" válido
             reg_actualizar = Componentes.update(cantidad=cant).where(
                 Componentes.nombre == nombre
             )
-            flag_c = 0
-
+            
             try:
                 reg_actualizar.execute()  # Actualizo el registro.
             except:
@@ -293,8 +288,7 @@ class BaseDatos:
             reg_actualizar = Componentes.update(precio=prec).where(
                 Componentes.nombre == nombre
             )
-            flag_p = 0
-
+            
             try:
                 reg_actualizar.execute()  # Actualizo el registro.
             except:
@@ -304,8 +298,7 @@ class BaseDatos:
             reg_actualizar = Componentes.update(descripcion=descrip).where(
                 Componentes.nombre == nombre
             )
-            flag_d = 0
-
+           
             try:
                 reg_actualizar.execute()  # Actualizo el registro.
             except:
@@ -313,7 +306,7 @@ class BaseDatos:
 
 
 # ---------------------Clase que contienen métodos para manejo de datos ingresados--------------------------------
-class Crud(BaseDatos):
+class Crud(BaseDatos,Sujeto):
     """
     Clase que contiene métodos para el manejo de los datos ingresados.
     """
@@ -366,11 +359,9 @@ class Crud(BaseDatos):
                     return "existe"
                 else:
                     self.agregar_db(nom, cant, prec, descrip)
-                    tree.insert(
-                        "",
-                        "end",
-                        values=(nom, int(cant), float(prec), descrip),
-                    )
+
+                    # Notifico al observador
+                    self.notificar("agreg",nom,cant,prec,descrip)
                     return "cargado"
             else:
                 raise ValueError(
@@ -397,6 +388,9 @@ class Crud(BaseDatos):
             # Chequeo si el artículo a eliminar existe.
             if self.leer_db(nom):
                 self.eliminar_db(nom)
+
+                # Notifico al observador
+                self.notificar("elim",nom)
                 return "eliminado"
             else:
                 return "no encontrado"
@@ -461,6 +455,13 @@ class Crud(BaseDatos):
                 if flag_e == 0:
                     if flag_c or flag_p or flag_d:  # Si se ingresó un dato a modificar
                         self.actualizar_db(nom, cant, prec, descrip)
+
+                        # Notifico al observador
+                        self.notificar("modif", nom, flag_c, cant, flag_p, prec, flag_d, descrip)
+
+                        flag_c = 0
+                        flag_p = 0
+                        flag_d = 0
 
                         return "modificado"
                     else:
