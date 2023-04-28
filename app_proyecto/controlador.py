@@ -6,12 +6,16 @@ from PySide2.QtWidgets import *
 from PySide2 import QtCore as core
 
 from vista import *
+from observador import ObservadorConcreto
 
 class Controlador:
-    def __init__(self, window):
+    def __init__(self, ):    
+        self.obj_win_main = MainWindow() # Creo objeto de la clase MainWindow
         # Los metodos utilizados son los heredados de la clase QMainWindow
-        window.setWindowTitle("App Stock")
-        window.show()
+        self.obj_win_main.setWindowTitle("App Stock")
+        self.obj_win_main.show()
+
+        self.observador_win_agregar=ObservadorConcreto(self.obj_win_main.obj_f)
 
         try:
             sys.exit(app.exec_())    # Mantiene abierta la app
@@ -21,6 +25,5 @@ class Controlador:
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     QApplication.setStyle("fusion")
-    window = MainWindow() # Creo objeto de la clase MainWindow
 
-    obj_controlador = Controlador(window)
+    obj_controlador = Controlador()

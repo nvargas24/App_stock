@@ -10,6 +10,7 @@ __version__ = "0.0.1"
 
 from peewee import *
 from validar import Validacion
+from observador import Sujeto
 import datetime
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -209,16 +210,11 @@ class BaseDatos:
         :param cant: Nuevo valor del campo precio(si existe un dato válido).
         :param cant: Nuevo valor del campo descripción(si existe un dato válido).
         """
-        global flag_c
-        global flag_p
-        global flag_d
 
         if flag_c == 1:  # Si existe un dato cantidad válido
             reg_actualizar = Componentes.update(cantidad=cant).where(
                 Componentes.nombre == nombre
             )
-            flag_c = 0
-
             try:
                 reg_actualizar.execute()  # Actualizo el registro.
             except:
@@ -228,8 +224,6 @@ class BaseDatos:
             reg_actualizar = Componentes.update(precio=prec).where(
                 Componentes.nombre == nombre
             )
-            flag_p = 0
-
             try:
                 reg_actualizar.execute()  # Actualizo el registro.
             except:
@@ -239,8 +233,6 @@ class BaseDatos:
             reg_actualizar = Componentes.update(descripcion=descrip).where(
                 Componentes.nombre == nombre
             )
-            flag_d = 0
-
             try:
                 reg_actualizar.execute()  # Actualizo el registro.
             except:
@@ -248,7 +240,7 @@ class BaseDatos:
 
 
 # ---------------------Clase que contienen métodos para manejo de datos ingresados--------------------------------
-class Crud(BaseDatos):
+class Crud(BaseDatos, Sujeto):
     """
     Clase que contiene métodos para el manejo de los datos ingresados.
     """
@@ -302,6 +294,7 @@ class Crud(BaseDatos):
                 
                 else:
                     self.agregar_db(nom, cant, prec, descrip)
+                    self.notificar("agreg",nom,cant,prec,descrip)  # Notifico al observador
                     return "Nuevo articulo cargado"
                 
             else:
@@ -330,6 +323,7 @@ class Crud(BaseDatos):
             # Chequeo si el artículo a eliminar existe.
             if self.leer_db(nom):
                 self.eliminar_db(nom)
+                self.notificar("elim", nom)  # Notifico al observador
                 return "Articulo eliminado"
             else:
                 return "Articulo no encontrado"
@@ -393,6 +387,11 @@ class Crud(BaseDatos):
                 if flag_e == 0:
                     if flag_c or flag_p or flag_d:  # Si se ingresó un dato a modificar
                         self.actualizar_db(nom, cant, prec, descrip)
+                        self.notificar("modif", nom, flag_c, cant, flag_p, prec, flag_d, descrip)
+
+                        flag_c = 0
+                        flag_p = 0
+                        flag_d = 0
 
                         return "Articulo modificado"
                     else:
