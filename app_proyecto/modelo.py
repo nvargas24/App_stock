@@ -294,7 +294,7 @@ class Crud(BaseDatos, Sujeto):
                 
                 else:
                     self.agregar_db(nom, cant, prec, descrip)
-                    self.notificar("agreg",nom,cant,prec,descrip)  # Notifico al observador
+                    self.notificar(nom,cant,prec,descrip)  # Notifico al observador
                     return "Nuevo articulo cargado"
                 
             else:
@@ -323,7 +323,7 @@ class Crud(BaseDatos, Sujeto):
             # Chequeo si el artículo a eliminar existe.
             if self.leer_db(nom):
                 self.eliminar_db(nom)
-                self.notificar("elim", nom)  # Notifico al observador
+                self.notificar(nom)  # Notifico al observador
                 return "Articulo eliminado"
             else:
                 return "Articulo no encontrado"
@@ -387,7 +387,7 @@ class Crud(BaseDatos, Sujeto):
                 if flag_e == 0:
                     if flag_c or flag_p or flag_d:  # Si se ingresó un dato a modificar
                         self.actualizar_db(nom, cant, prec, descrip)
-                        self.notificar("modif", nom, flag_c, cant, flag_p, prec, flag_d, descrip)
+                        self.notificar(nom, flag_c, cant, flag_p, prec, flag_d, descrip)
 
                         flag_c = 0
                         flag_p = 0

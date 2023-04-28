@@ -80,9 +80,9 @@ class Canvas_grafica(FigureCanvas):
         
         # Asigno color aleatorio segun la cantidad de articulos disponibles
         for i in range(len(self.nombres)):
-            r = random.randint(0, 255)
-            g = random.randint(0, 255)
-            b = random.randint(0, 255)
+            r = random.randint(150, 255)
+            g = random.randint(150, 255)
+            b = random.randint(150, 255)
             self.colores.append('#%02x%02x%02x' % (r, g, b))
             self.explotar.append(0.05)
 

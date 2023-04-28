@@ -1,3 +1,15 @@
 Se ingresó un nuevo registro Fecha: 21/04/23 Hora: 08:48:39
 Se ingresó un nuevo registro Fecha: 21/04/23 Hora: 08:49:31
 Se ingresó un nuevo registro Fecha: 28/04/23 Hora: 09:25:50
+Se ingresó un nuevo registro Fecha: 28/04/23 Hora: 11:51:04
+Se ingresó un nuevo registro Fecha: 28/04/23 Hora: 11:52:41
+Se modificó un registro Fecha: 28/04/23 Hora: 11:53:49
+Se ingresó un nuevo registro Fecha: 28/04/23 Hora: 12:05:38
+Se ingresó un nuevo registro Fecha: 28/04/23 Hora: 12:07:20
+Se ingresó un nuevo registro Fecha: 28/04/23 Hora: 12:08:38
+Se ingresó un nuevo registro Fecha: 28/04/23 Hora: 12:09:32
+Se eliminó un registro Fecha: 28/04/23 Hora: 12:12:24
+Se modificó un registro Fecha: 28/04/23 Hora: 12:12:41
+Se ingresó un nuevo registro Fecha: 28/04/23 Hora: 12:13:38
+Se eliminó un registro Fecha: 28/04/23 Hora: 12:13:58
+Se modificó un registro Fecha: 28/04/23 Hora: 12:14:17

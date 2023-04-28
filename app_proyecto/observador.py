@@ -23,33 +23,36 @@ class ObservadorConcreto(Observador):
         self.observado.agregar(self)
 
     def update(self, *args):
-        if args[0][0] == "agreg":
+        if len(args[0]) == 4:
+            nombre, cantidad, precio, descrip = args[0]
             print("---"*23)
             print("Se ingresó un nuevo componente con los siguientes parámetros:")
             print(
                 "Nombre: "
-                + args[0][1]
+                + nombre
                 + ", Cantidad: "
-                + args[0][2]
+                + cantidad
                 + ", Precio: "
-                + args[0][3]
+                + precio
                 + ", Descripción: "
-                + args[0][4]
+                + descrip
             )
             print("---"*23)
 
-        elif args[0][0] == "elim":
+        elif len(args[0]) == 1:
+            nombre = args[0]
             print("---"*23)
-            print("Se eliminó el siguiente componente: ", args[0][1])
+            print("Se eliminó el siguiente componente: ", nombre)
             print("---"*23)
 
-        elif args[0][0] == "modif":
+        elif len(args[0]) == 7:
+            nombre, flag_cant, cantidad, flag_precio, precio, flag_descrip, descrip = args[0]
             print("---"*23)
-            print("Se actualizó el componente: " + args[0][1] +  ", y se modificaron los siguientes parámetros: ")
-            if args[0][2] == 1: # flag_c == 1
-                print("Nueva cantidad: ",args[0][3])
-            if args[0][4] == 1: # flag_p == 1
-                print("Nuevo precio: ",args[0][5])
-            if args[0][6] == 1: # flag_d == 1
-                print("Nueva descripción: ",args[0][7])
+            print("Se actualizó el componente: %s y se modificaron los siguientes parámetros: " %nombre)
+            if flag_cant == 1: # flag_c == 1
+                print("Nueva cantidad: ", cantidad)
+            if flag_precio == 1: # flag_p == 1
+                print("Nuevo precio: ", precio)
+            if flag_descrip == 1: # flag_d == 1
+                print("Nueva descripción: ", descrip)
             print("---"*23)
