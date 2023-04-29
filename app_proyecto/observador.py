@@ -18,11 +18,13 @@ class Observador:
 
 
 class ObservadorConcreto(Observador):
-    def __init__(self, obj):
-        self.observado = obj
+    def __init__(self, obj_crud, obj_db):
+        self.observado = obj_crud
+        self.data_base = obj_db
         self.observado.agregar(self)
 
     def update(self, *args):
+        # Agregar nuevo articulo
         if len(args[0]) == 4:
             nombre, cantidad, precio, descrip = args[0]
             print("---"*23)
@@ -39,12 +41,25 @@ class ObservadorConcreto(Observador):
             )
             print("---"*23)
 
+            if self.data_base.leer_db(nombre):
+                print("Ya existe articulo")
+            else:
+                self.data_base.agregar_db(nombre, cantidad, precio, descrip)
+                print("Nuevo articulo cargado")
+
+        # Eliminar articulo
         elif len(args[0]) == 1:
             nombre = args[0]
             print("---"*23)
             print("Se eliminó el siguiente componente: ", nombre)
             print("---"*23)
+            if self.data_base.leer_db(nombre):
+                self.data_base.eliminar_db(nombre)
+                print("Articulo eliminado")
+            else:
+                print("Articulo no encontrado")
 
+        # Modificar articulo
         elif len(args[0]) == 7:
             nombre, flag_cant, cantidad, flag_precio, precio, flag_descrip, descrip = args[0]
             print("---"*23)
@@ -56,3 +71,5 @@ class ObservadorConcreto(Observador):
             if flag_descrip == 1: # flag_d == 1
                 print("Nueva descripción: ", descrip)
             print("---"*23)
+            self.data_base.actualizar_db(nombre, cantidad, precio, descrip)
+
