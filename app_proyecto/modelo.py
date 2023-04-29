@@ -292,7 +292,6 @@ class Crud(Sujeto):
                 mje=self.notificar(nom,cant,prec,descrip)  # Notifico al observador
                 return mje
             else:
-                return "Campos incorrectos"
                 raise ValueError(
                     "Campos incorrectos"
                 )  # Si se ingresó un dato inválido genero una excepción.
@@ -388,7 +387,6 @@ class Crud(Sujeto):
                 # no se actualizará ningun campo y se informará del error al usuario.
                 if flag_e:
                     flag_e = 0
-                    return "Campos incorrectos"
                     raise ValueError(
                         "Campos incorrectos"
                     )  # Si se ingresó un dato inválido genero una excepción.
