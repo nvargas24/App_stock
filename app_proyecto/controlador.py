@@ -37,6 +37,6 @@ class Controlador:
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    QApplication.setStyle("fusion")
+    #QApplication.setStyle("fusion")
 
     obj_controlador = Controlador()

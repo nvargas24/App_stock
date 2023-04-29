@@ -6,15 +6,25 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>591</width>
-    <height>354</height>
+    <width>643</width>
+    <height>550</height>
    </rect>
+  </property>
+  <property name="mouseTracking">
+   <bool>false</bool>
+  </property>
+  <property name="tabletTracking">
+   <bool>true</bool>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
+  <property name="autoFillBackground">
+   <bool>false</bool>
+  </property>
   <property name="styleSheet">
-   <string notr="true">QApplication::setStyle(&quot;fusion&quot;);
+   <string notr="true">/*QApplication::setStyle(&quot;fusion&quot;);*/
+background-color: #EAEAEA;
 </string>
   </property>
   <property name="documentMode">
@@ -27,75 +37,221 @@
    <widget class="QGroupBox" name="menu_opciones">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>90</y>
-      <width>161</width>
-      <height>241</height>
+      <x>60</x>
+      <y>180</y>
+      <width>191</width>
+      <height>331</height>
      </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+      <horstretch>3</horstretch>
+      <verstretch>3</verstretch>
+     </sizepolicy>
+    </property>
+    <property name="font">
+     <font>
+      <family>Segoe UI</family>
+      <pointsize>12</pointsize>
+     </font>
     </property>
     <property name="title">
      <string>Opciones</string>
     </property>
-    <widget class="QPushButton" name="btn_agregar">
-     <property name="geometry">
-      <rect>
-       <x>20</x>
-       <y>30</y>
-       <width>121</width>
-       <height>41</height>
-      </rect>
+    <property name="flat">
+     <bool>false</bool>
+    </property>
+    <property name="checkable">
+     <bool>false</bool>
+    </property>
+    <property name="checked">
+     <bool>false</bool>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout_2" stretch="5,5,5,5">
+     <property name="spacing">
+      <number>14</number>
      </property>
-     <property name="text">
-      <string>Agregar articulo</string>
+     <property name="leftMargin">
+      <number>16</number>
      </property>
-    </widget>
-    <widget class="QPushButton" name="btn_eliminar">
-     <property name="geometry">
-      <rect>
-       <x>20</x>
-       <y>80</y>
-       <width>121</width>
-       <height>41</height>
-      </rect>
+     <property name="topMargin">
+      <number>16</number>
      </property>
-     <property name="text">
-      <string>Eliminar articulo</string>
+     <property name="rightMargin">
+      <number>16</number>
      </property>
-    </widget>
-    <widget class="QPushButton" name="btn_modificar">
-     <property name="geometry">
-      <rect>
-       <x>20</x>
-       <y>130</y>
-       <width>121</width>
-       <height>41</height>
-      </rect>
+     <property name="bottomMargin">
+      <number>18</number>
      </property>
-     <property name="text">
-      <string>Modificar articulo</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="btn_consultar">
-     <property name="geometry">
-      <rect>
-       <x>20</x>
-       <y>180</y>
-       <width>121</width>
-       <height>41</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Consultar Stock</string>
-     </property>
-    </widget>
+     <item>
+      <widget class="QPushButton" name="btn_agregar">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>-1</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="mouseTracking">
+        <bool>false</bool>
+       </property>
+       <property name="tabletTracking">
+        <bool>false</bool>
+       </property>
+       <property name="acceptDrops">
+        <bool>false</bool>
+       </property>
+       <property name="autoFillBackground">
+        <bool>false</bool>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    background-color: #F2F2F2; /* Color de fondo */
+    border: 2px solid #D9D9D9; /* Borde gris claro */
+    border-radius: 15px; /* Bordes curvos */
+    padding: 5px 10px; /* Espacio interno para texto */
+    font-weight: bold; /* Texto en negrita */
+    font-size: 14px; /* Tamaño de fuente */
+    color: #444444; /* Color de texto */
+}
+
+QPushButton:hover {
+    background-color: #88AEF1; /* Color celeste */
+    border-color: #0078D7; /* Borde celeste */
+    color: #FFFFFF; /* Color de texto blanco */
+}</string>
+       </property>
+       <property name="text">
+        <string>Agregar articulo</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btn_eliminar">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>-1</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    background-color: #F2F2F2; /* Color de fondo */
+    border: 2px solid #D9D9D9; /* Borde gris claro */
+    border-radius: 15px; /* Bordes curvos */
+    padding: 5px 10px; /* Espacio interno para texto */
+    font-weight: bold; /* Texto en negrita */
+    font-size: 14px; /* Tamaño de fuente */
+    color: #444444; /* Color de texto */
+}
+
+QPushButton:hover {
+    background-color: #88AEF1; /* Color celeste */
+    border-color: #0078D7; /* Borde celeste */
+    color: #FFFFFF; /* Color de texto blanco */
+}</string>
+       </property>
+       <property name="text">
+        <string>Eliminar articulo</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btn_modificar">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>-1</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    background-color: #F2F2F2; /* Color de fondo */
+    border: 2px solid #D9D9D9; /* Borde gris claro */
+    border-radius: 15px; /* Bordes curvos */
+    padding: 5px 10px; /* Espacio interno para texto */
+    font-weight: bold; /* Texto en negrita */
+    font-size: 14px; /* Tamaño de fuente */
+    color: #444444; /* Color de texto */
+}
+
+QPushButton:hover {
+    background-color: #88AEF1; /* Color celeste */
+    border-color: #0078D7; /* Borde celeste */
+    color: #FFFFFF; /* Color de texto blanco */
+}</string>
+       </property>
+       <property name="text">
+        <string>Modificar articulo</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btn_consultar">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>-1</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    background-color: #F2F2F2; /* Color de fondo */
+    border: 2px solid #D9D9D9; /* Borde gris claro */
+    border-radius: 15px; /* Bordes curvos */
+    padding: 5px 10px; /* Espacio interno para texto */
+    font-weight: bold; /* Texto en negrita */
+    font-size: 14px; /* Tamaño de fuente */
+    color: #444444; /* Color de texto */
+}
+
+QPushButton:hover {
+    background-color: #88AEF1; /* Color celeste */
+    border-color: #0078D7; /* Borde celeste */
+    color: #FFFFFF; /* Color de texto blanco */
+}</string>
+       </property>
+       <property name="text">
+        <string>Consultar Stock</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </widget>
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>10</y>
-      <width>551</width>
-      <height>72</height>
+      <x>20</x>
+      <y>30</y>
+      <width>591</width>
+      <height>103</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout">
@@ -103,7 +259,8 @@
       <widget class="QLabel" name="titulo">
        <property name="font">
         <font>
-         <pointsize>28</pointsize>
+         <family>Segoe UI</family>
+         <pointsize>36</pointsize>
          <weight>75</weight>
          <bold>true</bold>
         </font>
@@ -120,7 +277,10 @@
       <widget class="QLabel" name="subtitulo">
        <property name="font">
         <font>
-         <pointsize>12</pointsize>
+         <family>Segoe UI</family>
+         <pointsize>16</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
         </font>
        </property>
        <property name="acceptDrops">
@@ -145,10 +305,10 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>220</x>
-      <y>100</y>
-      <width>341</width>
-      <height>231</height>
+      <x>270</x>
+      <y>190</y>
+      <width>311</width>
+      <height>321</height>
      </rect>
     </property>
     <property name="frameShape">
@@ -163,10 +323,10 @@
     <widget class="QWidget" name="verticalLayoutWidget">
      <property name="geometry">
       <rect>
-       <x>19</x>
-       <y>19</y>
-       <width>311</width>
-       <height>191</height>
+       <x>9</x>
+       <y>9</y>
+       <width>291</width>
+       <height>301</height>
       </rect>
      </property>
      <layout class="QVBoxLayout" name="grafica_torta"/>
@@ -175,8 +335,8 @@
    <widget class="QLabel" name="notificacion">
     <property name="geometry">
      <rect>
-      <x>390</x>
-      <y>330</y>
+      <x>420</x>
+      <y>520</y>
       <width>161</width>
       <height>20</height>
      </rect>
@@ -201,6 +361,28 @@
     </property>
     <property name="textInteractionFlags">
      <set>Qt::LinksAccessibleByMouse|Qt::TextEditable</set>
+    </property>
+   </widget>
+   <widget class="Line" name="line">
+    <property name="geometry">
+     <rect>
+      <x>60</x>
+      <y>150</y>
+      <width>511</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="frameShadow">
+     <enum>QFrame::Sunken</enum>
+    </property>
+    <property name="lineWidth">
+     <number>0</number>
+    </property>
+    <property name="midLineWidth">
+     <number>1</number>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Horizontal</enum>
     </property>
    </widget>
   </widget>

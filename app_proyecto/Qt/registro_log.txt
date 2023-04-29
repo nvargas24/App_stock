@@ -28,3 +28,10 @@ Se ingresÛ un nuevo registro Fecha: 20/04/23 Hora: 15:38:56
 Se modificÛ un registro Fecha: 20/04/23 Hora: 15:39:19
 Se modificÛ un registro Fecha: 20/04/23 Hora: 15:39:37
 Se modificÛ un registro Fecha: 20/04/23 Hora: 15:40:00
+Se ingres√≥ un nuevo registro Fecha: 29/04/23 Hora: 16:31:37
+Se ingres√≥ un nuevo registro Fecha: 29/04/23 Hora: 16:33:55
+Se ingres√≥ un nuevo registro Fecha: 29/04/23 Hora: 16:34:12
+Se ingres√≥ un nuevo registro Fecha: 29/04/23 Hora: 16:54:57
+Se modific√≥ un registro Fecha: 29/04/23 Hora: 16:55:15
+Se ingres√≥ un nuevo registro Fecha: 29/04/23 Hora: 19:34:08
+Se modific√≥ un registro Fecha: 29/04/23 Hora: 20:00:26

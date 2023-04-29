@@ -64,7 +64,7 @@ class Opciones():
 class Canvas_grafica(FigureCanvas):
     def __init__(self, ):
         # Asigno un espacio para ubicar el grafico de matplotlib usando Canvas
-        self.fig, self.ax = plt.subplots(1, dpi=70, figsize=(9,9), sharey=True, facecolor='none')
+        self.fig, self.ax = plt.subplots(1, dpi=70, figsize=(12,12), sharey=True, facecolor='none')
         super().__init__(self.fig)
         
     def upgrade_graph(self, componentes, cantidad):
@@ -85,7 +85,7 @@ class Canvas_grafica(FigureCanvas):
         valor_real = lambda pct: "{:.0f}".format((pct * sum(list(map(int, self.tamanio)))) / 100) #pasaje de porcentaje a valor real en bd
 
         self.ax.pie(self.tamanio, explode=self.explotar, labels=self.nombres, colors=self.colores,
-                    autopct=valor_real, pctdistance=0.8, shadow=True, startangle=90, radius=1.2, labeldistance=1.1)
+                    autopct=valor_real, pctdistance=0.8, shadow=True, startangle=90, radius=1.2, labeldistance=1.1, textprops={'fontsize': 18})
 
         self.ax.axis('equal')
         self.draw() # para actualizar grafico de ventana
@@ -115,10 +115,10 @@ class WindowAgregar(QDialog):
         self.ui.setupUi(self,)
         self.obj_f = obj_f # Objeto Crud
 
-        self.ui.btns_option.accepted.connect(self.new_load)
-        self.ui.btns_option.rejected.connect(self.close)
+        self.ui.btn_aceptar.clicked.connect(self.new_load)
+        self.ui.btn_cancelar.clicked.connect(self.close)
 
-    def new_load(self, obj_f):
+    def new_load(self, ):
         mje = self.obj_f.agreg(
                     self.ui.in_nombre, 
                     self.ui.in_cant, 
@@ -137,8 +137,8 @@ class WindowEliminar(QDialog):
         self.ui.setupUi(self,)
         self.obj_f = obj_f
 
-        self.ui.btns_option.accepted.connect(self.delete)
-        self.ui.btns_option.rejected.connect(self.close)
+        self.ui.btn_aceptar.clicked.connect(self.delete)
+        self.ui.btn_cancelar.clicked.connect(self.close)
     
     def delete(self, ):
         mje = self.obj_f.elim(
@@ -156,8 +156,8 @@ class WindowModificar(QDialog):
         self.ui.setupUi(self,)
         self.obj_f = obj_f
 
-        self.ui.btns_option.accepted.connect(self.modificated)
-        self.ui.btns_option.rejected.connect(self.close)
+        self.ui.btn_aceptar.clicked.connect(self.modificated)
+        self.ui.btn_cancelar.clicked.connect(self.close)
 
     def modificated(self, ):
         mje = self.obj_f.modif(
@@ -184,12 +184,13 @@ class WindowConsulta(QWidget):
         self.ui.btn_volver.clicked.connect(self.close)
 
         #--- Ajusto ancho de columnas de la tabla ---#
+        """
         self.ui.catalogo_list.setColumnWidth(0, 40)
         self.ui.catalogo_list.setColumnWidth(1, 120)
         self.ui.catalogo_list.setColumnWidth(2, 80)
         self.ui.catalogo_list.setColumnWidth(3, 80)
         self.ui.catalogo_list.setColumnWidth(4, 160)  
-
+        """
     def insert(self, id, nom, cant, prec, descrip):
         self.frame = []
         self.frame.append((id, nom, cant, prec, descrip))
