@@ -361,7 +361,7 @@ class Crud(BaseDatos,Sujeto):
                     self.agregar_db(nom, cant, prec, descrip)
 
                     # Notifico al observador
-                    self.notificar("agreg",nom,cant,prec,descrip)
+                    self.notificar(nom,cant,prec,descrip)
                     return "cargado"
             else:
                 raise ValueError(
@@ -390,7 +390,7 @@ class Crud(BaseDatos,Sujeto):
                 self.eliminar_db(nom)
 
                 # Notifico al observador
-                self.notificar("elim",nom)
+                self.notificar(nom)
                 return "eliminado"
             else:
                 return "no encontrado"
@@ -457,7 +457,7 @@ class Crud(BaseDatos,Sujeto):
                         self.actualizar_db(nom, cant, prec, descrip)
 
                         # Notifico al observador
-                        self.notificar("modif", nom, flag_c, cant, flag_p, prec, flag_d, descrip)
+                        self.notificar(nom, flag_c, cant, flag_p, prec, flag_d, descrip)
 
                         flag_c = 0
                         flag_p = 0
