@@ -39,7 +39,7 @@ class Ui_Agregar(object):
         self.notificacion.setFont(font1)
         self.notificacion.setLayoutDirection(Qt.LeftToRight)
         self.notificacion.setStyleSheet(u"color: #aa0000")
-        self.notificacion.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.notificacion.setAlignment(Qt.AlignCenter)
         self.notificacion.setTextInteractionFlags(Qt.LinksAccessibleByMouse|Qt.TextEditable)
         self.layoutWidget_2 = QWidget(Agregar)
         self.layoutWidget_2.setObjectName(u"layoutWidget_2")

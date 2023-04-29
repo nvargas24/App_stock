@@ -130,7 +130,7 @@ QLineEdit:focus {
   <widget class="QLabel" name="notificacion">
    <property name="geometry">
     <rect>
-     <x>90</x>
+     <x>100</x>
      <y>170</y>
      <width>161</width>
      <height>20</height>
@@ -152,7 +152,7 @@ QLineEdit:focus {
     <string/>
    </property>
    <property name="alignment">
-    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    <set>Qt::AlignCenter</set>
    </property>
    <property name="textInteractionFlags">
     <set>Qt::LinksAccessibleByMouse|Qt::TextEditable</set>

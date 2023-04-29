@@ -35,3 +35,7 @@ Se ingresó un nuevo registro Fecha: 29/04/23 Hora: 16:54:57
 Se modificó un registro Fecha: 29/04/23 Hora: 16:55:15
 Se ingresó un nuevo registro Fecha: 29/04/23 Hora: 19:34:08
 Se modificó un registro Fecha: 29/04/23 Hora: 20:00:26
+Se ingresó un nuevo registro Fecha: 29/04/23 Hora: 20:05:37
+Se ingresó un nuevo registro Fecha: 29/04/23 Hora: 20:23:16
+Se modificó un registro Fecha: 29/04/23 Hora: 20:23:47
+Se modificó un registro Fecha: 29/04/23 Hora: 20:24:19

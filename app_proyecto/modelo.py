@@ -289,8 +289,8 @@ class Crud(Sujeto):
                 and self.obj_val.val_entry(prec, "prec")
                 and self.obj_val.val_entry(descrip, "descrip")
             ):
-                self.notificar(nom,cant,prec,descrip)  # Notifico al observador
-                return "Articulo agregado"
+                mje=self.notificar(nom,cant,prec,descrip)  # Notifico al observador
+                return mje
             else:
                 return "Campos incorrectos"
                 raise ValueError(
@@ -314,8 +314,8 @@ class Crud(Sujeto):
 
         # Chequeo que el campo nombre no esté vacío.
         if self.obj_val.empty_entry(nom, "nom"):
-            self.notificar(nom)  # Notifico al observador
-            return "Articulo eliminado"
+            mje=self.notificar(nom)  # Notifico al observador
+            return mje
         else:
             return "Campo vacio"
 
@@ -374,13 +374,13 @@ class Crud(Sujeto):
                 # los datos que hayan sido ingresados en los campos correspondientes.
                 if flag_e == 0:
                     if flag_c or flag_p or flag_d:  # Si se ingresó un dato a modificar
-                        self.notificar(nom, flag_c, cant, flag_p, prec, flag_d, descrip)
+                        mje=self.notificar(nom, flag_c, cant, flag_p, prec, flag_d, descrip)
 
                         flag_c = 0
                         flag_p = 0
                         flag_d = 0
 
-                        return "Articulo modificado"
+                        return mje
                     else:
                         # No se completó ningún campo a modificar
                         return "Articulo sin modificar"

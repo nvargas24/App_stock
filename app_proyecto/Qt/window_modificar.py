@@ -271,7 +271,7 @@ class Ui_Modificar(object):
         self.notificacion.setFont(font4)
         self.notificacion.setLayoutDirection(Qt.LeftToRight)
         self.notificacion.setStyleSheet(u"color: #aa0000")
-        self.notificacion.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.notificacion.setAlignment(Qt.AlignCenter)
         self.notificacion.setTextInteractionFlags(Qt.LinksAccessibleByMouse|Qt.TextEditable)
 
         self.retranslateUi(Modificar)
