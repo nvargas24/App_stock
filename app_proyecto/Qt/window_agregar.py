@@ -228,13 +228,36 @@ class Ui_Agregar(object):
 "    background-color: #88AEF1; /* Color celeste */\n"
 "    border-color: #0078D7; /* Borde celeste */\n"
 "    color: #FFFFFF; /* Color de texto blanco */\n"
+"}\n"
+"QPushButton {\n"
+"    background-color: #F2F2F2; /* Color de fondo */\n"
+"    border: 2px solid #D9D9D9; /* Borde gris claro */\n"
+"    border-radius: 15px; /* Bordes curvos */\n"
+"    padding: 5px 10px; /* Espacio interno para texto */\n"
+"    font-weight: bold; /* Texto en negrita */\n"
+"    font-size: 14px; /* Tama\u00f1o de fuente */\n"
+"    color: #444444; /* Color de texto */\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"    backgroun"
+                        "d-color: #88AEF1; /* Color celeste */\n"
+"    border-color: #0078D7; /* Borde celeste */\n"
+"    color: #FFFFFF; /* Color de texto blanco */\n"
+"}\n"
+"\n"
+"QPushButton:focus {\n"
+"    background-color: #88AEF1; /* Color celeste */\n"
+"    border-color: #0078D7; /* Borde celeste */\n"
+"    color: #FFFFFF; /* Color de texto blanco */\n"
+"	outline: none; /* Elimina el contorno alrededor del QLineEdit al seleccionarlo */\n"
 "}")
         self.btn_aceptar.setInputMethodHints(Qt.ImhSensitiveData|Qt.ImhUppercaseOnly)
         self.btn_aceptar.setCheckable(True)
         self.btn_aceptar.setChecked(True)
         self.btn_aceptar.setAutoRepeat(True)
         self.btn_aceptar.setAutoRepeatDelay(150)
-        self.btn_aceptar.setAutoDefault(False)
+        self.btn_aceptar.setAutoDefault(True)
         self.btn_aceptar.setFlat(False)
 
         self.horizontalLayout.addWidget(self.btn_aceptar)
@@ -259,13 +282,37 @@ class Ui_Agregar(object):
 "    background-color: #88AEF1; /* Color celeste */\n"
 "    border-color: #0078D7; /* Borde celeste */\n"
 "    color: #FFFFFF; /* Color de texto blanco */\n"
+"}\n"
+"\n"
+"QPushButton {\n"
+"    background-color: #F2F2F2; /* Color de fondo */\n"
+"    border: 2px solid #D9D9D9; /* Borde gris claro */\n"
+"    border-radius: 15px; /* Bordes curvos */\n"
+"    padding: 5px 10px; /* Espacio interno para texto */\n"
+"    font-weight: bold; /* Texto en negrita */\n"
+"    font-size: 14px; /* Tama\u00f1o de fuente */\n"
+"    color: #444444; /* Color de texto */\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"    back"
+                        "ground-color: #88AEF1; /* Color celeste */\n"
+"    border-color: #0078D7; /* Borde celeste */\n"
+"    color: #FFFFFF; /* Color de texto blanco */\n"
+"}\n"
+"\n"
+"QPushButton:focus {\n"
+"    background-color: #88AEF1; /* Color celeste */\n"
+"    border-color: #0078D7; /* Borde celeste */\n"
+"    color: #FFFFFF; /* Color de texto blanco */\n"
+"	outline: none; /* Elimina el contorno alrededor del QLineEdit al seleccionarlo */\n"
 "}")
         self.btn_cancelar.setInputMethodHints(Qt.ImhSensitiveData|Qt.ImhUppercaseOnly)
         self.btn_cancelar.setCheckable(True)
         self.btn_cancelar.setChecked(True)
         self.btn_cancelar.setAutoRepeat(True)
         self.btn_cancelar.setAutoRepeatDelay(150)
-        self.btn_cancelar.setAutoDefault(False)
+        self.btn_cancelar.setAutoDefault(True)
         self.btn_cancelar.setFlat(False)
 
         self.horizontalLayout.addWidget(self.btn_cancelar)

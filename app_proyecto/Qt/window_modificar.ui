@@ -415,6 +415,28 @@ QPushButton:hover {
     background-color: #88AEF1; /* Color celeste */
     border-color: #0078D7; /* Borde celeste */
     color: #FFFFFF; /* Color de texto blanco */
+}
+QPushButton {
+    background-color: #F2F2F2; /* Color de fondo */
+    border: 2px solid #D9D9D9; /* Borde gris claro */
+    border-radius: 15px; /* Bordes curvos */
+    padding: 5px 10px; /* Espacio interno para texto */
+    font-weight: bold; /* Texto en negrita */
+    font-size: 14px; /* Tamaño de fuente */
+    color: #444444; /* Color de texto */
+}
+
+QPushButton:hover {
+    background-color: #88AEF1; /* Color celeste */
+    border-color: #0078D7; /* Borde celeste */
+    color: #FFFFFF; /* Color de texto blanco */
+}
+
+QPushButton:focus {
+    background-color: #88AEF1; /* Color celeste */
+    border-color: #0078D7; /* Borde celeste */
+    color: #FFFFFF; /* Color de texto blanco */
+	outline: none; /* Elimina el contorno alrededor del QLineEdit al seleccionarlo */
 }</string>
       </property>
       <property name="inputMethodHints">
@@ -436,7 +458,7 @@ QPushButton:hover {
        <number>150</number>
       </property>
       <property name="autoDefault">
-       <bool>false</bool>
+       <bool>true</bool>
       </property>
       <property name="default">
        <bool>false</bool>
@@ -480,6 +502,29 @@ QPushButton:hover {
     background-color: #88AEF1; /* Color celeste */
     border-color: #0078D7; /* Borde celeste */
     color: #FFFFFF; /* Color de texto blanco */
+}
+
+QPushButton {
+    background-color: #F2F2F2; /* Color de fondo */
+    border: 2px solid #D9D9D9; /* Borde gris claro */
+    border-radius: 15px; /* Bordes curvos */
+    padding: 5px 10px; /* Espacio interno para texto */
+    font-weight: bold; /* Texto en negrita */
+    font-size: 14px; /* Tamaño de fuente */
+    color: #444444; /* Color de texto */
+}
+
+QPushButton:hover {
+    background-color: #88AEF1; /* Color celeste */
+    border-color: #0078D7; /* Borde celeste */
+    color: #FFFFFF; /* Color de texto blanco */
+}
+
+QPushButton:focus {
+    background-color: #88AEF1; /* Color celeste */
+    border-color: #0078D7; /* Borde celeste */
+    color: #FFFFFF; /* Color de texto blanco */
+	outline: none; /* Elimina el contorno alrededor del QLineEdit al seleccionarlo */
 }</string>
       </property>
       <property name="inputMethodHints">
@@ -501,7 +546,7 @@ QPushButton:hover {
        <number>150</number>
       </property>
       <property name="autoDefault">
-       <bool>false</bool>
+       <bool>true</bool>
       </property>
       <property name="default">
        <bool>false</bool>

@@ -42,6 +42,9 @@ background-color: #EAEAEA;
      <pointsize>12</pointsize>
     </font>
    </property>
+   <property name="focusPolicy">
+    <enum>Qt::WheelFocus</enum>
+   </property>
    <property name="autoFillBackground">
     <bool>false</bool>
    </property>
@@ -54,12 +57,12 @@ background-color: #EAEAEA;
 QHeaderView::section {
     background-color: #0078D7; /* Tono celeste medio oscuro */
     color: white; /* Texto en blanco */
-    selection-color: white; /* Texto en blanco al seleccionar */
 }
 
 QTableWidget::item:selected {
     background-color: #8CB8E6; /* Color de fondo de celda seleccionada */
     color: #ffffff; /* Color de texto de celda seleccionada */
+    outline: none; /* Elimina el contorno alrededor de la celda seleccionada */
 }
 
 QScrollBar:vertical {
@@ -68,14 +71,17 @@ QScrollBar:vertical {
     width: 10px;
     margin: 0px 0 0px 0;
 }
+
 QScrollBar::handle:vertical {
     background: #e1e1e1;
     min-height: 20px;
     border-radius: 5px;
 }
+
 QScrollBar::handle:vertical:hover {
     background: #c2c2c2;
 }
+
 QScrollBar::add-line:vertical {
     border: none;
     background: #ffffff;
@@ -83,6 +89,7 @@ QScrollBar::add-line:vertical {
     subcontrol-position: bottom;
     subcontrol-origin: margin;
 }
+
 QScrollBar::sub-line:vertical {
     border: none;
     background: #ffffff;
@@ -90,6 +97,7 @@ QScrollBar::sub-line:vertical {
     subcontrol-position: top;
     subcontrol-origin: margin;
 }
+
 QScrollBar::up-arrow:vertical, QScrollBar::down-arrow:vertical {
     border: none;
     background: none;
@@ -97,18 +105,26 @@ QScrollBar::up-arrow:vertical, QScrollBar::down-arrow:vertical {
     margin: 0px 0 0px 0;
     padding: 0px;
 }
+
 QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
     background: none;
-}</string>
+}
+</string>
    </property>
    <property name="frameShadow">
     <enum>QFrame::Raised</enum>
+   </property>
+   <property name="sizeAdjustPolicy">
+    <enum>QAbstractScrollArea::AdjustToContentsOnFirstShow</enum>
    </property>
    <property name="autoScroll">
     <bool>true</bool>
    </property>
    <property name="editTriggers">
     <set>QAbstractItemView::NoEditTriggers</set>
+   </property>
+   <property name="tabKeyNavigation">
+    <bool>false</bool>
    </property>
    <property name="alternatingRowColors">
     <bool>true</bool>
@@ -138,7 +154,7 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
     <bool>true</bool>
    </property>
    <property name="rowCount">
-    <number>10</number>
+    <number>15</number>
    </property>
    <attribute name="horizontalHeaderVisible">
     <bool>true</bool>
@@ -182,6 +198,11 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
    <attribute name="verticalHeaderStretchLastSection">
     <bool>true</bool>
    </attribute>
+   <row/>
+   <row/>
+   <row/>
+   <row/>
+   <row/>
    <row/>
    <row/>
    <row/>
@@ -335,6 +356,9 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
         <bold>true</bold>
        </font>
       </property>
+      <property name="focusPolicy">
+       <enum>Qt::StrongFocus</enum>
+      </property>
       <property name="styleSheet">
        <string notr="true">QPushButton {
     background-color: #F2F2F2; /* Color de fondo */
@@ -350,6 +374,13 @@ QPushButton:hover {
     background-color: #88AEF1; /* Color celeste */
     border-color: #0078D7; /* Borde celeste */
     color: #FFFFFF; /* Color de texto blanco */
+}
+
+QPushButton:focus {
+    background-color: #88AEF1; /* Color celeste */
+    border-color: #0078D7; /* Borde celeste */
+    color: #FFFFFF; /* Color de texto blanco */
+	outline: none; /* Elimina el contorno alrededor del QLineEdit al seleccionarlo */
 }</string>
       </property>
       <property name="inputMethodHints">
@@ -371,7 +402,7 @@ QPushButton:hover {
        <number>150</number>
       </property>
       <property name="autoDefault">
-       <bool>false</bool>
+       <bool>true</bool>
       </property>
       <property name="default">
        <bool>false</bool>
@@ -397,6 +428,9 @@ QPushButton:hover {
         <bold>true</bold>
        </font>
       </property>
+      <property name="focusPolicy">
+       <enum>Qt::StrongFocus</enum>
+      </property>
       <property name="styleSheet">
        <string notr="true">QPushButton {
     background-color: #F2F2F2; /* Color de fondo */
@@ -412,10 +446,20 @@ QPushButton:hover {
     background-color: #88AEF1; /* Color celeste */
     border-color: #0078D7; /* Borde celeste */
     color: #FFFFFF; /* Color de texto blanco */
+}
+
+QPushButton:focus {
+    background-color: #88AEF1; /* Color celeste */
+    border-color: #0078D7; /* Borde celeste */
+    color: #FFFFFF; /* Color de texto blanco */
+	outline: none; /* Elimina el contorno alrededor del QLineEdit al seleccionarlo */
 }</string>
       </property>
       <property name="text">
        <string>Volver</string>
+      </property>
+      <property name="autoDefault">
+       <bool>true</bool>
       </property>
      </widget>
     </item>
@@ -657,6 +701,18 @@ QLineEdit:focus {
         <bold>true</bold>
        </font>
       </property>
+      <property name="mouseTracking">
+       <bool>false</bool>
+      </property>
+      <property name="tabletTracking">
+       <bool>false</bool>
+      </property>
+      <property name="focusPolicy">
+       <enum>Qt::StrongFocus</enum>
+      </property>
+      <property name="contextMenuPolicy">
+       <enum>Qt::NoContextMenu</enum>
+      </property>
       <property name="styleSheet">
        <string notr="true">QPushButton {
     background-color: #F2F2F2; /* Color de fondo */
@@ -672,10 +728,23 @@ QPushButton:hover {
     background-color: #88AEF1; /* Color celeste */
     border-color: #0078D7; /* Borde celeste */
     color: #FFFFFF; /* Color de texto blanco */
+}
+
+QPushButton:focus {
+    background-color: #88AEF1; /* Color celeste */
+    border-color: #0078D7; /* Borde celeste */
+    color: #FFFFFF; /* Color de texto blanco */
+	outline: none; /* Elimina el contorno alrededor del QLineEdit al seleccionarlo */
 }</string>
       </property>
       <property name="text">
        <string>Buscar</string>
+      </property>
+      <property name="icon">
+       <iconset theme="buscar"/>
+      </property>
+      <property name="shortcut">
+       <string>Ctrl+B</string>
       </property>
       <property name="checkable">
        <bool>false</bool>
@@ -687,6 +756,15 @@ QPushButton:hover {
        <bool>false</bool>
       </property>
       <property name="autoExclusive">
+       <bool>false</bool>
+      </property>
+      <property name="autoDefault">
+       <bool>true</bool>
+      </property>
+      <property name="default">
+       <bool>false</bool>
+      </property>
+      <property name="flat">
        <bool>false</bool>
       </property>
      </widget>

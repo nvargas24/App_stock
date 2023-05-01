@@ -53,8 +53,8 @@ class Ui_Consulta(object):
         __qtablewidgetitem4.setTextAlignment(Qt.AlignCenter);
         __qtablewidgetitem4.setFont(font1);
         self.catalogo_list.setHorizontalHeaderItem(4, __qtablewidgetitem4)
-        if (self.catalogo_list.rowCount() < 10):
-            self.catalogo_list.setRowCount(10)
+        if (self.catalogo_list.rowCount() < 15):
+            self.catalogo_list.setRowCount(15)
         font2 = QFont()
         font2.setPointSize(12)
         font2.setKerning(True)
@@ -67,6 +67,7 @@ class Ui_Consulta(object):
         self.catalogo_list.setGeometry(QRect(31, 116, 671, 301))
         self.catalogo_list.setMinimumSize(QSize(521, 0))
         self.catalogo_list.setFont(font1)
+        self.catalogo_list.setFocusPolicy(Qt.WheelFocus)
         self.catalogo_list.setAutoFillBackground(False)
         self.catalogo_list.setStyleSheet(u"QTableWidget {\n"
 "    background-color: #ffffff; /* Color de fondo de la tabla */\n"
@@ -76,12 +77,12 @@ class Ui_Consulta(object):
 "QHeaderView::section {\n"
 "    background-color: #0078D7; /* Tono celeste medio oscuro */\n"
 "    color: white; /* Texto en blanco */\n"
-"    selection-color: white; /* Texto en blanco al seleccionar */\n"
 "}\n"
 "\n"
 "QTableWidget::item:selected {\n"
 "    background-color: #8CB8E6; /* Color de fondo de celda seleccionada */\n"
 "    color: #ffffff; /* Color de texto de celda seleccionada */\n"
+"    outline: none; /* Elimina el contorno alrededor de la celda seleccionada */\n"
 "}\n"
 "\n"
 "QScrollBar:vertical {\n"
@@ -90,22 +91,26 @@ class Ui_Consulta(object):
 "    width: 10px;\n"
 "    margin: 0px 0 0px 0;\n"
 "}\n"
+"\n"
 "QScrollBar::handle:vertical {\n"
 "    background: #e1e1e1;\n"
 "    min-height: 20px;\n"
 "    border-radius: 5px;\n"
 "}\n"
+"\n"
 "QScrollBar::handle:vertical:hover {\n"
 "    background: #c2c2c2;\n"
 "}\n"
+"\n"
 "QScrollBar::add-line:vertical {\n"
 "    border: none;\n"
 "    background: #ffffff;\n"
-"    height: 0px;\n"
-"    subcontrol-positi"
-                        "on: bottom;\n"
+"    height: "
+                        "0px;\n"
+"    subcontrol-position: bottom;\n"
 "    subcontrol-origin: margin;\n"
 "}\n"
+"\n"
 "QScrollBar::sub-line:vertical {\n"
 "    border: none;\n"
 "    background: #ffffff;\n"
@@ -113,6 +118,7 @@ class Ui_Consulta(object):
 "    subcontrol-position: top;\n"
 "    subcontrol-origin: margin;\n"
 "}\n"
+"\n"
 "QScrollBar::up-arrow:vertical, QScrollBar::down-arrow:vertical {\n"
 "    border: none;\n"
 "    background: none;\n"
@@ -120,12 +126,16 @@ class Ui_Consulta(object):
 "    margin: 0px 0 0px 0;\n"
 "    padding: 0px;\n"
 "}\n"
+"\n"
 "QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {\n"
 "    background: none;\n"
-"}")
+"}\n"
+"")
         self.catalogo_list.setFrameShadow(QFrame.Raised)
+        self.catalogo_list.setSizeAdjustPolicy(QAbstractScrollArea.AdjustToContentsOnFirstShow)
         self.catalogo_list.setAutoScroll(True)
         self.catalogo_list.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        self.catalogo_list.setTabKeyNavigation(False)
         self.catalogo_list.setAlternatingRowColors(True)
         self.catalogo_list.setSelectionMode(QAbstractItemView.SingleSelection)
         self.catalogo_list.setSelectionBehavior(QAbstractItemView.SelectRows)
@@ -135,7 +145,7 @@ class Ui_Consulta(object):
         self.catalogo_list.setSortingEnabled(True)
         self.catalogo_list.setWordWrap(True)
         self.catalogo_list.setCornerButtonEnabled(True)
-        self.catalogo_list.setRowCount(10)
+        self.catalogo_list.setRowCount(15)
         self.catalogo_list.horizontalHeader().setVisible(True)
         self.catalogo_list.horizontalHeader().setCascadingSectionResizes(False)
         self.catalogo_list.horizontalHeader().setMinimumSectionSize(30)
@@ -179,6 +189,7 @@ class Ui_Consulta(object):
         font4.setBold(True)
         font4.setWeight(75)
         self.btn_cat_full.setFont(font4)
+        self.btn_cat_full.setFocusPolicy(Qt.StrongFocus)
         self.btn_cat_full.setStyleSheet(u"QPushButton {\n"
 "    background-color: #F2F2F2; /* Color de fondo */\n"
 "    border: 2px solid #D9D9D9; /* Borde gris claro */\n"
@@ -193,13 +204,20 @@ class Ui_Consulta(object):
 "    background-color: #88AEF1; /* Color celeste */\n"
 "    border-color: #0078D7; /* Borde celeste */\n"
 "    color: #FFFFFF; /* Color de texto blanco */\n"
+"}\n"
+"\n"
+"QPushButton:focus {\n"
+"    background-color: #88AEF1; /* Color celeste */\n"
+"    border-color: #0078D7; /* Borde celeste */\n"
+"    color: #FFFFFF; /* Color de texto blanco */\n"
+"	outline: none; /* Elimina el contorno alrededor del QLineEdit al seleccionarlo */\n"
 "}")
         self.btn_cat_full.setInputMethodHints(Qt.ImhSensitiveData|Qt.ImhUppercaseOnly)
         self.btn_cat_full.setCheckable(True)
         self.btn_cat_full.setChecked(True)
         self.btn_cat_full.setAutoRepeat(True)
         self.btn_cat_full.setAutoRepeatDelay(150)
-        self.btn_cat_full.setAutoDefault(False)
+        self.btn_cat_full.setAutoDefault(True)
         self.btn_cat_full.setFlat(False)
 
         self.horizontalLayout_1.addWidget(self.btn_cat_full)
@@ -209,6 +227,7 @@ class Ui_Consulta(object):
         sizePolicy.setHeightForWidth(self.btn_volver.sizePolicy().hasHeightForWidth())
         self.btn_volver.setSizePolicy(sizePolicy)
         self.btn_volver.setFont(font4)
+        self.btn_volver.setFocusPolicy(Qt.StrongFocus)
         self.btn_volver.setStyleSheet(u"QPushButton {\n"
 "    background-color: #F2F2F2; /* Color de fondo */\n"
 "    border: 2px solid #D9D9D9; /* Borde gris claro */\n"
@@ -223,7 +242,15 @@ class Ui_Consulta(object):
 "    background-color: #88AEF1; /* Color celeste */\n"
 "    border-color: #0078D7; /* Borde celeste */\n"
 "    color: #FFFFFF; /* Color de texto blanco */\n"
+"}\n"
+"\n"
+"QPushButton:focus {\n"
+"    background-color: #88AEF1; /* Color celeste */\n"
+"    border-color: #0078D7; /* Borde celeste */\n"
+"    color: #FFFFFF; /* Color de texto blanco */\n"
+"	outline: none; /* Elimina el contorno alrededor del QLineEdit al seleccionarlo */\n"
 "}")
+        self.btn_volver.setAutoDefault(True)
 
         self.horizontalLayout_1.addWidget(self.btn_volver)
 
@@ -342,6 +369,10 @@ class Ui_Consulta(object):
         sizePolicy3.setHeightForWidth(self.btn_buscar.sizePolicy().hasHeightForWidth())
         self.btn_buscar.setSizePolicy(sizePolicy3)
         self.btn_buscar.setFont(font4)
+        self.btn_buscar.setMouseTracking(False)
+        self.btn_buscar.setTabletTracking(False)
+        self.btn_buscar.setFocusPolicy(Qt.StrongFocus)
+        self.btn_buscar.setContextMenuPolicy(Qt.NoContextMenu)
         self.btn_buscar.setStyleSheet(u"QPushButton {\n"
 "    background-color: #F2F2F2; /* Color de fondo */\n"
 "    border: 2px solid #D9D9D9; /* Borde gris claro */\n"
@@ -356,11 +387,22 @@ class Ui_Consulta(object):
 "    background-color: #88AEF1; /* Color celeste */\n"
 "    border-color: #0078D7; /* Borde celeste */\n"
 "    color: #FFFFFF; /* Color de texto blanco */\n"
+"}\n"
+"\n"
+"QPushButton:focus {\n"
+"    background-color: #88AEF1; /* Color celeste */\n"
+"    border-color: #0078D7; /* Borde celeste */\n"
+"    color: #FFFFFF; /* Color de texto blanco */\n"
+"	outline: none; /* Elimina el contorno alrededor del QLineEdit al seleccionarlo */\n"
 "}")
+        icon = QIcon(QIcon.fromTheme(u"buscar"))
+        self.btn_buscar.setIcon(icon)
         self.btn_buscar.setCheckable(False)
         self.btn_buscar.setChecked(False)
         self.btn_buscar.setAutoRepeat(False)
         self.btn_buscar.setAutoExclusive(False)
+        self.btn_buscar.setAutoDefault(True)
+        self.btn_buscar.setFlat(False)
 
         self.horizontalLayout_2.addWidget(self.btn_buscar)
 
@@ -368,6 +410,7 @@ class Ui_Consulta(object):
         self.retranslateUi(Consulta)
 
         self.btn_cat_full.setDefault(False)
+        self.btn_buscar.setDefault(False)
 
 
         QMetaObject.connectSlotsByName(Consulta)
@@ -403,5 +446,8 @@ class Ui_Consulta(object):
         self.in_descrip.setText("")
         self.in_descrip.setPlaceholderText(QCoreApplication.translate("Consulta", u"Ingrese descripcion", None))
         self.btn_buscar.setText(QCoreApplication.translate("Consulta", u"Buscar", None))
+#if QT_CONFIG(shortcut)
+        self.btn_buscar.setShortcut(QCoreApplication.translate("Consulta", u"Ctrl+B", None))
+#endif // QT_CONFIG(shortcut)
     # retranslateUi
 

@@ -120,13 +120,20 @@ class Ui_Eliminar(object):
 "    background-color: #88AEF1; /* Color celeste */\n"
 "    border-color: #0078D7; /* Borde celeste */\n"
 "    color: #FFFFFF; /* Color de texto blanco */\n"
+"}\n"
+"\n"
+"QPushButton:focus {\n"
+"    background-color: #88AEF1; /* Color celeste */\n"
+"    border-color: #0078D7; /* Borde celeste */\n"
+"    color: #FFFFFF; /* Color de texto blanco */\n"
+"	outline: none; /* Elimina el contorno alrededor del QLineEdit al seleccionarlo */\n"
 "}")
         self.btn_aceptar.setInputMethodHints(Qt.ImhSensitiveData|Qt.ImhUppercaseOnly)
         self.btn_aceptar.setCheckable(True)
         self.btn_aceptar.setChecked(True)
         self.btn_aceptar.setAutoRepeat(True)
         self.btn_aceptar.setAutoRepeatDelay(150)
-        self.btn_aceptar.setAutoDefault(False)
+        self.btn_aceptar.setAutoDefault(True)
         self.btn_aceptar.setFlat(False)
 
         self.horizontalLayout.addWidget(self.btn_aceptar)
@@ -151,13 +158,20 @@ class Ui_Eliminar(object):
 "    background-color: #88AEF1; /* Color celeste */\n"
 "    border-color: #0078D7; /* Borde celeste */\n"
 "    color: #FFFFFF; /* Color de texto blanco */\n"
+"}\n"
+"\n"
+"QPushButton:focus {\n"
+"    background-color: #88AEF1; /* Color celeste */\n"
+"    border-color: #0078D7; /* Borde celeste */\n"
+"    color: #FFFFFF; /* Color de texto blanco */\n"
+"	outline: none; /* Elimina el contorno alrededor del QLineEdit al seleccionarlo */\n"
 "}")
         self.btn_cancelar.setInputMethodHints(Qt.ImhSensitiveData|Qt.ImhUppercaseOnly)
         self.btn_cancelar.setCheckable(True)
         self.btn_cancelar.setChecked(True)
         self.btn_cancelar.setAutoRepeat(True)
         self.btn_cancelar.setAutoRepeatDelay(150)
-        self.btn_cancelar.setAutoDefault(False)
+        self.btn_cancelar.setAutoDefault(True)
         self.btn_cancelar.setFlat(False)
 
         self.horizontalLayout.addWidget(self.btn_cancelar)

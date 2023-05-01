@@ -125,10 +125,20 @@ QPushButton:hover {
     background-color: #88AEF1; /* Color celeste */
     border-color: #0078D7; /* Borde celeste */
     color: #FFFFFF; /* Color de texto blanco */
+}
+
+QPushButton:focus {
+    background-color: #88AEF1; /* Color celeste */
+    border-color: #0078D7; /* Borde celeste */
+    color: #FFFFFF; /* Color de texto blanco */
+	outline: none; /* Elimina el contorno alrededor del QLineEdit al seleccionarlo */
 }</string>
        </property>
        <property name="text">
         <string>Agregar articulo</string>
+       </property>
+       <property name="autoDefault">
+        <bool>true</bool>
        </property>
       </widget>
      </item>
@@ -162,10 +172,21 @@ QPushButton:hover {
     background-color: #88AEF1; /* Color celeste */
     border-color: #0078D7; /* Borde celeste */
     color: #FFFFFF; /* Color de texto blanco */
-}</string>
+}
+
+QPushButton:focus {
+    background-color: #88AEF1; /* Color celeste */
+    border-color: #0078D7; /* Borde celeste */
+    color: #FFFFFF; /* Color de texto blanco */
+	outline: none; /* Elimina el contorno alrededor del QLineEdit al seleccionarlo */
+}
+</string>
        </property>
        <property name="text">
         <string>Eliminar articulo</string>
+       </property>
+       <property name="autoDefault">
+        <bool>true</bool>
        </property>
       </widget>
      </item>
@@ -199,10 +220,20 @@ QPushButton:hover {
     background-color: #88AEF1; /* Color celeste */
     border-color: #0078D7; /* Borde celeste */
     color: #FFFFFF; /* Color de texto blanco */
+}
+
+QPushButton:focus {
+    background-color: #88AEF1; /* Color celeste */
+    border-color: #0078D7; /* Borde celeste */
+    color: #FFFFFF; /* Color de texto blanco */
+	outline: none; /* Elimina el contorno alrededor del QLineEdit al seleccionarlo */
 }</string>
        </property>
        <property name="text">
         <string>Modificar articulo</string>
+       </property>
+       <property name="autoDefault">
+        <bool>true</bool>
        </property>
       </widget>
      </item>
@@ -236,10 +267,20 @@ QPushButton:hover {
     background-color: #88AEF1; /* Color celeste */
     border-color: #0078D7; /* Borde celeste */
     color: #FFFFFF; /* Color de texto blanco */
+}
+
+QPushButton:focus {
+    background-color: #88AEF1; /* Color celeste */
+    border-color: #0078D7; /* Borde celeste */
+    color: #FFFFFF; /* Color de texto blanco */
+	outline: none; /* Elimina el contorno alrededor del QLineEdit al seleccionarlo */
 }</string>
        </property>
        <property name="text">
         <string>Consultar Stock</string>
+       </property>
+       <property name="autoDefault">
+        <bool>true</bool>
        </property>
       </widget>
      </item>

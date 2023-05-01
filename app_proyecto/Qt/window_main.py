@@ -76,7 +76,15 @@ class Ui_MainWindow(object):
 "    background-color: #88AEF1; /* Color celeste */\n"
 "    border-color: #0078D7; /* Borde celeste */\n"
 "    color: #FFFFFF; /* Color de texto blanco */\n"
+"}\n"
+"\n"
+"QPushButton:focus {\n"
+"    background-color: #88AEF1; /* Color celeste */\n"
+"    border-color: #0078D7; /* Borde celeste */\n"
+"    color: #FFFFFF; /* Color de texto blanco */\n"
+"	outline: none; /* Elimina el contorno alrededor del QLineEdit al seleccionarlo */\n"
 "}")
+        self.btn_agregar.setAutoDefault(True)
 
         self.verticalLayout_2.addWidget(self.btn_agregar)
 
@@ -99,7 +107,16 @@ class Ui_MainWindow(object):
 "    background-color: #88AEF1; /* Color celeste */\n"
 "    border-color: #0078D7; /* Borde celeste */\n"
 "    color: #FFFFFF; /* Color de texto blanco */\n"
-"}")
+"}\n"
+"\n"
+"QPushButton:focus {\n"
+"    background-color: #88AEF1; /* Color celeste */\n"
+"    border-color: #0078D7; /* Borde celeste */\n"
+"    color: #FFFFFF; /* Color de texto blanco */\n"
+"	outline: none; /* Elimina el contorno alrededor del QLineEdit al seleccionarlo */\n"
+"}\n"
+"")
+        self.btn_eliminar.setAutoDefault(True)
 
         self.verticalLayout_2.addWidget(self.btn_eliminar)
 
@@ -122,7 +139,15 @@ class Ui_MainWindow(object):
 "    background-color: #88AEF1; /* Color celeste */\n"
 "    border-color: #0078D7; /* Borde celeste */\n"
 "    color: #FFFFFF; /* Color de texto blanco */\n"
+"}\n"
+"\n"
+"QPushButton:focus {\n"
+"    background-color: #88AEF1; /* Color celeste */\n"
+"    border-color: #0078D7; /* Borde celeste */\n"
+"    color: #FFFFFF; /* Color de texto blanco */\n"
+"	outline: none; /* Elimina el contorno alrededor del QLineEdit al seleccionarlo */\n"
 "}")
+        self.btn_modificar.setAutoDefault(True)
 
         self.verticalLayout_2.addWidget(self.btn_modificar)
 
@@ -145,7 +170,15 @@ class Ui_MainWindow(object):
 "    background-color: #88AEF1; /* Color celeste */\n"
 "    border-color: #0078D7; /* Borde celeste */\n"
 "    color: #FFFFFF; /* Color de texto blanco */\n"
+"}\n"
+"\n"
+"QPushButton:focus {\n"
+"    background-color: #88AEF1; /* Color celeste */\n"
+"    border-color: #0078D7; /* Borde celeste */\n"
+"    color: #FFFFFF; /* Color de texto blanco */\n"
+"	outline: none; /* Elimina el contorno alrededor del QLineEdit al seleccionarlo */\n"
 "}")
+        self.btn_consultar.setAutoDefault(True)
 
         self.verticalLayout_2.addWidget(self.btn_consultar)
 
