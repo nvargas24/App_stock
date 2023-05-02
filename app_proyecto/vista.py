@@ -178,7 +178,9 @@ class Menu:
                 self.tree,
             )
 
-        except ValueError as mje:  # Si se genera una excepción, la capturo y muestro mje de error.
+        except (
+            ValueError
+        ) as mje:  # Si se genera una excepción, la capturo y muestro mje de error.
             print(mje)
             showerror("Error en la operación", "Campos cargados incorrectamente")
 
@@ -225,7 +227,9 @@ class Menu:
                 self.var_descrip,
             )
 
-        except ValueError as mje:  # Si se genera una excepción, la capturo y muestro mje de error.
+        except (
+            ValueError
+        ) as mje:  # Si se genera una excepción, la capturo y muestro mje de error.
             print(mje)
             showerror("Error en la operación", "Campos cargados incorrectamente")
 

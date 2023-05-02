@@ -11,6 +11,11 @@ __version__ = "0.0.1"
 from tkinter import Tk
 from vista import Menu
 from observador import ObservadorConcreto
+from servidor import Serv
+import threading
+
+theproc = ""
+
 
 class Controlador:
     """
@@ -32,6 +37,23 @@ class Controlador:
 
         # Creo el observador y le paso el objeto de clase Crud creado en vista.Menu
         self.el_observador = ObservadorConcreto(self.obj_vista.obj_f)
+
+        # -------------------Servidor-----------------------------------
+        # Lanzo servidor
+        if theproc != "":
+            theproc.kill()
+            threading.Thread(
+                target=self.iniciar_servidor, args=(self.obj_vista.obj_f,), daemon=True
+            ).start()
+        else:
+            threading.Thread(
+                target=self.iniciar_servidor, args=(self.obj_vista.obj_f,), daemon=True
+            ).start()
+
+    def iniciar_servidor(self, obj_f):
+        self.servidor = Serv(
+            obj_f
+        )  # Creo objeto de clase Serv cuyo constructor lanza el servidor
 
 
 if __name__ == "__main__":

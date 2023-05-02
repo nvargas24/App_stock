@@ -26,10 +26,11 @@ flag_p = 0
 # Flag utilizado para informar que existe un dato válido para actualizar en el campo descripción.
 flag_d = 0
 
+
 # ---------------------Decoradores-------------------------------
 def decorador_add(metodo):
     def envoltura(*args):
-        archivo = open("registro_log.txt", "a", encoding="utf-8")
+        archivo = open("registro_log_app.txt", "a", encoding="utf-8")
         archivo.write(
             "Se ingresó un nuevo registro "
             + "Fecha: "
@@ -45,7 +46,7 @@ def decorador_add(metodo):
 
 def decorador_del(metodo):
     def envoltura(*args):
-        archivo = open("registro_log.txt", "a", encoding="utf-8")
+        archivo = open("registro_log_app.txt", "a", encoding="utf-8")
         archivo.write(
             "Se eliminó un registro "
             + "Fecha: "
@@ -61,7 +62,7 @@ def decorador_del(metodo):
 
 def decorador_mod(metodo):
     def envoltura(*args):
-        archivo = open("registro_log.txt", "a", encoding="utf-8")
+        archivo = open("registro_log_app.txt", "a", encoding="utf-8")
         archivo.write(
             "Se modificó un registro "
             + "Fecha: "
@@ -182,7 +183,6 @@ class BaseModel(Model):
     """
 
     class Meta:
-
         database = db  # Indico a que base me conecto y su tipo.
 
 
@@ -278,7 +278,7 @@ class BaseDatos:
             reg_actualizar = Componentes.update(cantidad=cant).where(
                 Componentes.nombre == nombre
             )
-            
+
             try:
                 reg_actualizar.execute()  # Actualizo el registro.
             except:
@@ -288,7 +288,7 @@ class BaseDatos:
             reg_actualizar = Componentes.update(precio=prec).where(
                 Componentes.nombre == nombre
             )
-            
+
             try:
                 reg_actualizar.execute()  # Actualizo el registro.
             except:
@@ -298,7 +298,7 @@ class BaseDatos:
             reg_actualizar = Componentes.update(descripcion=descrip).where(
                 Componentes.nombre == nombre
             )
-           
+
             try:
                 reg_actualizar.execute()  # Actualizo el registro.
             except:
@@ -306,7 +306,7 @@ class BaseDatos:
 
 
 # ---------------------Clase que contienen métodos para manejo de datos ingresados--------------------------------
-class Crud(BaseDatos,Sujeto):
+class Crud(BaseDatos, Sujeto):
     """
     Clase que contiene métodos para el manejo de los datos ingresados.
     """
@@ -361,7 +361,7 @@ class Crud(BaseDatos,Sujeto):
                     self.agregar_db(nom, cant, prec, descrip)
 
                     # Notifico al observador
-                    self.notificar(nom,cant,prec,descrip)
+                    self.notificar(nom, cant, prec, descrip)
                     return "cargado"
             else:
                 raise ValueError(
@@ -384,7 +384,6 @@ class Crud(BaseDatos,Sujeto):
 
         # Chequeo que el campo nombre no esté vacío.
         if self.obj_val.empty_entry(nom, "nom"):
-
             # Chequeo si el artículo a eliminar existe.
             if self.leer_db(nom):
                 self.eliminar_db(nom)
@@ -422,10 +421,8 @@ class Crud(BaseDatos,Sujeto):
 
         # Chequeo que el campo nombre no esté vacío.
         if self.obj_val.empty_entry(nom, "nom"):
-
             # Chequeo si el artículo a modificar existe.
             if self.leer_db(nom):
-
                 # Si el campo cantidad no está vacío y cumple con el patrón de regex
                 # se pondrá en '1' el flag_c (dato válido para actualizar).
                 if self.obj_val.empty_entry(cant, "cant"):
@@ -493,7 +490,6 @@ class Crud(BaseDatos,Sujeto):
 
         # Chequeo que el campo nombre no esté vacío.
         if self.obj_val.empty_entry(nom, "nom"):
-
             # Chequeo si el artículo a consultar existe.
             if self.leer_db(nom):
                 data_from_db = self.leer_db(nom)
