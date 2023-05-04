@@ -13,3 +13,6 @@ Se modificó un registro Fecha: 28/04/23 Hora: 12:12:41
 Se ingresó un nuevo registro Fecha: 28/04/23 Hora: 12:13:38
 Se eliminó un registro Fecha: 28/04/23 Hora: 12:13:58
 Se modificó un registro Fecha: 28/04/23 Hora: 12:14:17
+Se ingresó un nuevo registro Fecha: 03/05/23 Hora: 21:56:50
+Se eliminó un registro Fecha: 03/05/23 Hora: 21:59:04
+Se modificó un registro Fecha: 03/05/23 Hora: 21:59:36

@@ -69,7 +69,7 @@ class Opciones():
 class Canvas_grafica(FigureCanvas):
     def __init__(self, ):
         # Asigno un espacio para ubicar el grafico de matplotlib usando Canvas
-        self.fig, self.ax = plt.subplots(1, dpi=70, figsize=(9,9), sharey=True, facecolor='none')
+        self.fig, self.ax = plt.subplots(1, dpi=70, figsize=(12,12), sharey=True, facecolor='none')
         super().__init__(self.fig)
         
     def upgrade_graph(self, componentes, cantidad):
@@ -87,8 +87,12 @@ class Canvas_grafica(FigureCanvas):
             self.explotar.append(0.05)
 
         self.ax.clear()
+        valor_real = lambda pct: "{:.0f}".format((pct * sum(list(map(int, self.tamanio)))) / 100) #pasaje de porcentaje a valor real en bd
+
         self.ax.pie(self.tamanio, explode=self.explotar, labels=self.nombres, colors=self.colores,
-                    autopct='%1.0f%%', pctdistance=0.8, shadow=True, startangle=90, radius=1.2, labeldistance=1.1)
+                    autopct=valor_real, pctdistance=0.8, shadow=True, startangle=90, radius=1.2, labeldistance=1.1, textprops={'fontsize': 18})
+
+
         self.ax.axis('equal')
         self.draw() # para actualizar grafico de ventana
 
