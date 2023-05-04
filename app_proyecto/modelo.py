@@ -29,7 +29,7 @@ flag_d = 0
 def decorador_add(metodo):
     def envoltura(*args):
         print("Se ingresó un nuevo registro")
-        archivo = open("registro_log.txt", "a", encoding="utf-8")
+        archivo = open("registro_log_app.txt", "a", encoding="utf-8")
         archivo.write(
             "Se ingresó un nuevo registro "
             + "Fecha: "
@@ -45,7 +45,7 @@ def decorador_add(metodo):
 def decorador_del(metodo):
     def envoltura(*args):
         print("Se eliminó un registro")
-        archivo = open("registro_log.txt", "a", encoding="utf-8")
+        archivo = open("registro_log_app.txt", "a", encoding="utf-8")
         archivo.write(
             "Se eliminó un registro "
             + "Fecha: "
@@ -61,7 +61,7 @@ def decorador_del(metodo):
 def decorador_mod(metodo):
     def envoltura(*args):
         print("Se modificó un registro")
-        archivo = open("registro_log.txt", "a", encoding="utf-8")
+        archivo = open("registro_log_app.txt", "a", encoding="utf-8")
         archivo.write(
             "Se modificó un registro "
             + "Fecha: "
@@ -298,7 +298,6 @@ class Crud(BaseDatos, Sujeto):
                     return "Nuevo articulo cargado"
                 
             else:
-                return "Campos incorrectos"
                 raise ValueError(
                     "Campos incorrectos"
                 )  # Si se ingresó un dato inválido genero una excepción.
@@ -401,7 +400,6 @@ class Crud(BaseDatos, Sujeto):
                 # no se actualizará ningun campo y se informará del error al usuario.
                 if flag_e:
                     flag_e = 0
-                    return "Campos incorrectos"
                     raise ValueError(
                         "Campos incorrectos"
                     )  # Si se ingresó un dato inválido genero una excepción.

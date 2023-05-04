@@ -137,16 +137,18 @@ class WindowAgregar(QDialog):
         print("Regresa a menu principal")
 
     def new_load(self, obj_f):
-        mje = obj_f.agreg(
-                    self.ui.in_nombre, 
-                    self.ui.in_cant, 
-                    self.ui.in_precio, 
-                    self.ui.in_descrip)
+        try:
+            mje = obj_f.agreg(
+                        self.ui.in_nombre, 
+                        self.ui.in_cant, 
+                        self.ui.in_precio, 
+                        self.ui.in_descrip)
+            self.ui.notificacion.setText(mje) # se muestra accion realizada en label
+        except (
+            ValueError
+        ) as mje:  # Si se genera una excepción, la capturo y muestro mje de error.
 
-        self.ui.notificacion.setText(mje)
-
-        if not mje:
-            self.exit() # Borra ventana
+            self.ui.notificacion.setText(str(mje))
 
 class WindowEliminar(QDialog):
     def __init__(self, obj_f, parent=None):
@@ -167,9 +169,6 @@ class WindowEliminar(QDialog):
 
         self.ui.notificacion.setText(mje)
         
-        if not mje:
-            self.exit() # Borra ventana
-
 class WindowModificar(QDialog):
     def __init__(self, obj_f, parent=None):
         super().__init__()
@@ -184,16 +183,19 @@ class WindowModificar(QDialog):
         self.close()
 
     def modificated(self, obj_f):
-        mje = obj_f.modif(
-                    self.ui.in_nombre, 
-                    self.ui.in_cant, 
-                    self.ui.in_precio, 
-                    self.ui.in_descrip)
+        try:
+            mje = obj_f.modif(
+                        self.ui.in_nombre, 
+                        self.ui.in_cant, 
+                        self.ui.in_precio, 
+                        self.ui.in_descrip)
 
-        self.ui.notificacion.setText(mje)
+            self.ui.notificacion.setText(mje)
         
-        if not mje:
-            self.exit() # Borra ventana
+        except (
+            ValueError
+        ) as mje:  # Si se genera una excepción, la capturo y muestro mje de error.
+            self.ui.notificacion.setText(str(mje))
 
 class WindowConsulta(QWidget):
     def __init__(self, obj_f, obj_win_main, parent=None):
