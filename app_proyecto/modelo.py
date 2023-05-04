@@ -76,9 +76,10 @@ def decorador_mod(metodo):
 
 def decorador_mostrar(metodo):
     def envoltura(*args):
-        #  se realiza un gráfico de torta a partir de dichos datos
-        window_main = args[2]
-        if len(args) == 3:
+        # Si args[2] == True (graf=True) se muestra en consola una tabla de cada componente cargado con su respectiva cantidad
+        # y se realiza un gráfico de torta a partir de dichos datos
+        window_main = args[3]
+        if len(args) == 4 and args[2] == True:
             list_componente, list_cantidad= metodo(*args)
 
             # Se calcula y se muestra en consola una tabla de componentes cargados con sus respectivas cantidades
@@ -127,7 +128,7 @@ class Componentes(BaseModel):
     descripcion = CharField()
 
 
-class BaseDatos():
+class BaseDatos:
     """
     Clase que contiene métodos para conectarme a la base de datos, y para manejar los registros de la misma.
     """
@@ -239,19 +240,18 @@ class BaseDatos():
 
 
 # ---------------------Clase que contienen métodos para manejo de datos ingresados--------------------------------
-class Crud(Sujeto):
+class Crud(BaseDatos, Sujeto):
     """
     Clase que contiene métodos para el manejo de los datos ingresados.
     """
 
-    def __init__(self, obj_db):
+    def __init__(self):
         """
         Constructor que hereda el correspondiente a la clase ``BaseDatos()``,
         y que además crea un objeto ``Validacion()`` para comprobar los campos de entrada.
         """
         super().__init__()
         self.obj_val = Validacion()
-        self.obj_db = obj_db
 
     def agreg(self, nombre, cantidad, precio, descripcion):
         """
@@ -289,9 +289,16 @@ class Crud(Sujeto):
                 and self.obj_val.val_entry(prec, "prec")
                 and self.obj_val.val_entry(descrip, "descrip")
             ):
-                mje=self.notificar(nom,cant,prec,descrip)  # Notifico al observador
-                return mje
+                if self.leer_db(nom):
+                    return "Ya existe el articulo"
+                
+                else:
+                    self.agregar_db(nom, cant, prec, descrip)
+                    self.notificar(nom,cant,prec,descrip)  # Notifico al observador
+                    return "Nuevo articulo cargado"
+                
             else:
+                return "Campos incorrectos"
                 raise ValueError(
                     "Campos incorrectos"
                 )  # Si se ingresó un dato inválido genero una excepción.
@@ -313,8 +320,13 @@ class Crud(Sujeto):
 
         # Chequeo que el campo nombre no esté vacío.
         if self.obj_val.empty_entry(nom, "nom"):
-            mje=self.notificar(nom)  # Notifico al observador
-            return mje
+            # Chequeo si el artículo a eliminar existe.
+            if self.leer_db(nom):
+                self.eliminar_db(nom)
+                self.notificar(nom)  # Notifico al observador
+                return "Articulo eliminado"
+            else:
+                return "Articulo no encontrado"
         else:
             return "Campo vacio"
 
@@ -344,7 +356,8 @@ class Crud(Sujeto):
         # Chequeo que el campo nombre no esté vacío.
         if self.obj_val.empty_entry(nom, "nom"):
             # Chequeo si el artículo a modificar existe.
-            if self.obj_db.leer_db(nom):
+            if self.leer_db(nom):
+
                 # Si el campo cantidad no está vacío y cumple con el patrón de regex
                 # se pondrá en '1' el flag_c (dato válido para actualizar).
                 if self.obj_val.empty_entry(cant, "cant"):
@@ -373,13 +386,14 @@ class Crud(Sujeto):
                 # los datos que hayan sido ingresados en los campos correspondientes.
                 if flag_e == 0:
                     if flag_c or flag_p or flag_d:  # Si se ingresó un dato a modificar
-                        mje=self.notificar(nom, flag_c, cant, flag_p, prec, flag_d, descrip)
+                        self.actualizar_db(nom, cant, prec, descrip)
+                        self.notificar(nom, flag_c, cant, flag_p, prec, flag_d, descrip)
 
                         flag_c = 0
                         flag_p = 0
                         flag_d = 0
 
-                        return mje
+                        return "Articulo modificado"
                     else:
                         # No se completó ningún campo a modificar
                         return "Articulo sin modificar"
@@ -387,6 +401,7 @@ class Crud(Sujeto):
                 # no se actualizará ningun campo y se informará del error al usuario.
                 if flag_e:
                     flag_e = 0
+                    return "Campos incorrectos"
                     raise ValueError(
                         "Campos incorrectos"
                     )  # Si se ingresó un dato inválido genero una excepción.
@@ -411,8 +426,8 @@ class Crud(Sujeto):
         # Chequeo que el campo nombre no esté vacío.
         if self.obj_val.empty_entry(nom, "nom") and not self.obj_val.empty_entry(descrip, "descrip"):
             # Chequeo si el artículo a consultar existe.
-            if self.obj_db.leer_db(nom):
-                data_from_db = self.obj_db.leer_db(nom)
+            if self.leer_db(nom, None):
+                data_from_db = self.leer_db(nom, None)
                 tree.delete()
                 for row in data_from_db:
                     tree.insert(
@@ -429,8 +444,8 @@ class Crud(Sujeto):
         # Chequeo que el campo descripcion no esté vacío.
         elif self.obj_val.empty_entry(descrip, "descrip") and not self.obj_val.empty_entry(nom, "nom"):
             # Chequeo si el artículo a consultar existe.
-            if self.obj_db.leer_db(None, descrip):
-                data_from_db = self.obj_db.leer_db(None, descrip)
+            if self.leer_db(None, descrip):
+                data_from_db = self.leer_db(None, descrip)
                 tree.delete()
                 for row in data_from_db:
                     tree.insert(
@@ -446,8 +461,8 @@ class Crud(Sujeto):
         # Chequeo que el campo nombre y descripcion no esten vacíos.
         elif self.obj_val.empty_entry(nom, "nom") and self.obj_val.empty_entry(descrip, "descrip"):
             # Chequeo si el artículo a consultar existe.
-            if self.obj_db.leer_db(nom, descrip):
-                data_from_db = self.obj_db.leer_db(nom, descrip)
+            if self.leer_db(nom, descrip):
+                data_from_db = self.leer_db(nom, descrip)
                 tree.delete()
                 for row in data_from_db:
                     tree.insert(
@@ -464,7 +479,7 @@ class Crud(Sujeto):
             return "Campos vacios"
         
     @decorador_mostrar
-    def mostrar_cat(self, tree, obj_menu):
+    def mostrar_cat(self, tree, graf, window_main):
         """
         Método que muestra el catálogo completo de componentes cargados hasta el momento.
 
@@ -474,7 +489,7 @@ class Crud(Sujeto):
         x_nom = []  # Lista que almacena los nombres de cada componente cargado
         y_cant = []  # Lista que almacena los cantidades de cada componente cargado
 
-        data_from_db = self.obj_db.leer_db()
+        data_from_db = self.leer_db()
 
         for row in data_from_db:
                 tree.insert(
