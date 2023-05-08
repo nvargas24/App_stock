@@ -63,7 +63,7 @@ class Opciones():
         self.window_consulta.ui.in_descrip.clear()
         self.window_consulta.ui.notificacion.clear()
         
-        self.window_consulta.full_cat(self.obj_f, self) #Obtiene catalogo completo de la DB y la muestra al abrir la ventana
+        self.window_consulta.full_cat() #Obtiene catalogo completo de la DB y la muestra al abrir la ventana
 
 # --- Clase para iteractuar con grafico ---#
 class Canvas_grafica(FigureCanvas):
@@ -116,7 +116,7 @@ class MainWindow(QMainWindow, Opciones):
         self.grafica = Canvas_grafica()
         self.ui.grafica_torta.addWidget(self.grafica)
 
-        self.window_consulta.full_cat(self.obj_f, self) #Obtiene catalogo completo de la DB y la muestra al abrir la ventana
+        self.window_consulta.full_cat() #Obtiene catalogo completo de la DB y la muestra al abrir la ventana
         #--------------- Acciones para botones ------------#
         self.ui.btn_agregar.clicked.connect(self.agregar_dat)
         self.ui.btn_eliminar.clicked.connect(self.eliminar_dat)
@@ -128,17 +128,18 @@ class WindowAgregar(QDialog):
         super().__init__()
         self.ui = Ui_Agregar()
         self.ui.setupUi(self,)
+        self.obj_f = obj_f
 
-        self.ui.btn_aceptar.clicked.connect(lambda: self.new_load(obj_f))
+        self.ui.btn_aceptar.clicked.connect(self.new_load)
         self.ui.btn_cancelar.clicked.connect(self.exit)
 
     def exit(self, ):
         self.close()
         print("Regresa a menu principal")
 
-    def new_load(self, obj_f):
+    def new_load(self, ):
         try:
-            mje = obj_f.agreg(
+            mje = self.obj_f.agreg(
                         self.ui.in_nombre, 
                         self.ui.in_cant, 
                         self.ui.in_precio, 
@@ -155,16 +156,17 @@ class WindowEliminar(QDialog):
         super().__init__()
         self.ui = Ui_Eliminar()
         self.ui.setupUi(self,)
+        self.obj_f = obj_f
 
-        self.ui.btn_aceptar.clicked.connect(lambda: self.delete(obj_f))
+        self.ui.btn_aceptar.clicked.connect(self.delete)
         self.ui.btn_cancelar.clicked.connect(self.exit)
     
     def exit(self, ):
         print("Regresa a menu principal")
         self.close()
 
-    def delete(self, obj_f):
-        mje = obj_f.elim(
+    def delete(self, ):
+        mje = self.obj_f.elim(
             self.ui.in_nombre)
 
         self.ui.notificacion.setText(mje)
@@ -174,17 +176,18 @@ class WindowModificar(QDialog):
         super().__init__()
         self.ui = Ui_Modificar()
         self.ui.setupUi(self,)
-
-        self.ui.btn_aceptar.clicked.connect(lambda: self.modificated(obj_f))
+        self.obj_f = obj_f
+        
+        self.ui.btn_aceptar.clicked.connect(self.modificated)
         self.ui.btn_cancelar.clicked.connect(self.exit)
 
     def exit(self, ):
         print("Regresa a menu principal")
         self.close()
 
-    def modificated(self, obj_f):
+    def modificated(self, ):
         try:
-            mje = obj_f.modif(
+            mje = self.obj_f.modif(
                         self.ui.in_nombre, 
                         self.ui.in_cant, 
                         self.ui.in_precio, 
@@ -203,8 +206,11 @@ class WindowConsulta(QWidget):
 
         self.ui = Ui_Consulta()
         self.ui.setupUi(self,)
-        self.ui.btn_buscar.clicked.connect(lambda: self.search(obj_f))
-        self.ui.btn_cat_full.clicked.connect(lambda: self.full_cat(obj_f, obj_win_main))
+        self.obj_f = obj_f
+        self.obj_win_main = obj_win_main
+
+        self.ui.btn_buscar.clicked.connect(self.search)
+        self.ui.btn_cat_full.clicked.connect(self.full_cat)
         self.ui.btn_volver.clicked.connect(self.exit)
 
         #--- Ajusto ancho de columnas de la tabla ---#
@@ -231,18 +237,15 @@ class WindowConsulta(QWidget):
         self.ui.catalogo_list.clearContents()
 
     def exit(self, ):
-        print("Regresa a menu principal")
         self.ui.catalogo_list.clearContents()
         self.close()
 
-    def search(self, obj_f):
-        print("Buscar articulo")
-        mje = obj_f.consulta(
+    def search(self, ):
+        mje = self.obj_f.consulta(
                     self.ui.in_nombre, self.ui.in_descrip, self)
 
         self.ui.notificacion.setText(mje)
 
-    def full_cat(self, obj_f, obj_win_main):
+    def full_cat(self, ):
         self.ui.catalogo_list.clearContents()  
-        print("Muestra catalogo completo")
-        obj_f.mostrar_cat(self, True, obj_win_main)
+        self.obj_f.mostrar_cat(self, True, self.obj_win_main)
