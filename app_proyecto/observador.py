@@ -1,3 +1,13 @@
+"""
+observador.py:
+    Módulo encargado de notificar modificaciones a la base de datos y registro de usuarios. 
+"""
+__author__ = "Diego Calderón, Nahuel Vargas"
+__maintainer__ = "Diego Calderón, Nahuel Vargas"
+__email__ = "diegoacalderon994@gmail.com, nahuvargas24@gmail.com"
+__copyright__ = "Copyright 2023"
+__version__ = "0.0.2"
+
 class Sujeto:
     observadores = []
 

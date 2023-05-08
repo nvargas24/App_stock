@@ -1,3 +1,13 @@
+"""
+vista.py:
+    Módulo encargado de generar la interfaz gráfica de la app. 
+"""
+__author__ = "Diego Calderón, Nahuel Vargas"
+__maintainer__ = "Diego Calderón, Nahuel Vargas"
+__email__ = "diegoacalderon994@gmail.com, nahuvargas24@gmail.com"
+__copyright__ = "Copyright 2023"
+__version__ = "0.0.2"
+
 import os
 import sys
 from PySide2.QtCore import *
@@ -18,9 +28,14 @@ from modelo import Crud
 import random
 
 #-------- Clases para widgets --------#
-#--- Clase para abrir ventanas secundarias ---#
 class Opciones():
+    """
+    Clase que establece que ventanas mostrar
+    """
     def show_win_agregar(self,):
+        """
+        Método para setear y mostrar ventana de Agregar Articulo
+        """
         self.window_agregar.setWindowTitle("Agregar")
         self.window_agregar.show()
 
@@ -32,6 +47,9 @@ class Opciones():
         self.window_agregar.ui.notificacion.clear()
 
     def show_win_eliminar(self,):
+        """
+        Método para setear y mostrar ventana de Eliminar Articulo
+        """
         self.window_eliminar.setWindowTitle("Eliminar")
         self.window_eliminar.show()
 
@@ -40,6 +58,9 @@ class Opciones():
         self.window_eliminar.ui.notificacion.clear()
 
     def show_win_modificar(self,):
+        """
+        Método para setear y mostrar ventana de Modficar Articulo
+        """
         self.window_modificar.setWindowTitle("Modificar")
         self.window_modificar.show()
 
@@ -51,6 +72,9 @@ class Opciones():
         self.window_modificar.ui.notificacion.clear()
 
     def show_win_consultar(self,):
+        """
+        Método para setear y mostrar ventana de Consultar Articulo
+        """
         self.window_consulta.setWindowTitle("Consulta")
         self.window_consulta.show()
 
@@ -63,18 +87,32 @@ class Opciones():
 
 # --- Clase para iteractuar con grafico ---#
 class Canvas_grafica(FigureCanvas):
+    """
+    Clase que contiene métodos para actualizar y dar estilo a grafico de torta
+    """
     def __init__(self, ):
+        """
+        Constructor que hereda el correspondiente a la clase ``FigureCanvas()``,
+        y que además crea un grafico matplotlib en blanco
+        """
         # Asigno un espacio para ubicar el grafico de matplotlib usando Canvas
         self.fig, self.ax = plt.subplots(1, dpi=70, figsize=(12,12), sharey=True, facecolor='none')
         super().__init__(self.fig)
-        
-    def upgrade_graph(self, componentes, cantidad):
-        self.nombres=componentes
+
+    def upgrade_graph(self, nombre, cantidad):
+        """
+        Método para actulizar nombres y valor cantidad en grafico de torta.
+
+        :param nombre: Nombre del componente.
+        :param cantidad: Cantidad del componente.
+        """
+        # Parametros para nuevo grafico
+        self.nombres=nombre
         self.tamanio=cantidad
         self.colores=[]
         self.explotar=[]
-        
-        # Asigno color aleatorio segun la cantidad de articulos disponibles
+
+        # Asigno color aleatorio claros segun la cantidad de articulos disponibles
         for i in range(len(self.nombres)):
             r = random.randint(150, 255)
             g = random.randint(150, 255)
@@ -82,17 +120,19 @@ class Canvas_grafica(FigureCanvas):
             self.colores.append('#%02x%02x%02x' % (r, g, b))
             self.explotar.append(0.05)
 
+        # Borro grafico viejo
         self.ax.clear()
-        valor_real = lambda pct: "{:.0f}".format((pct * sum(list(map(int, self.tamanio)))) / 100) #pasaje de porcentaje a valor real en bd
-
+        # Pasaje de porcentaje a valor real en bd
+        valor_real = lambda pct: "{:.0f}".format((pct * sum(list(map(int, self.tamanio)))) / 100) 
+        # Asigno nuevos parametros a grafico
         self.ax.pie(self.tamanio, explode=self.explotar, labels=self.nombres, colors=self.colores,
                     autopct=valor_real, pctdistance=0.8, shadow=True, startangle=90, radius=1.2, labeldistance=1.1, textprops={'fontsize': 18})
 
         self.ax.axis('equal')
-        self.draw() # para actualizar grafico de ventana
+        # Actualizo grafico
+        self.draw() 
 
 #-------- Clases para ventanas -------#
-
 class MainWindow(QMainWindow, Opciones):
     def __init__(self, parent=None):
         super().__init__() # Acccedo a constructor de la clase QMainWindow

@@ -6,7 +6,7 @@ __author__ = "Diego Calderón, Nahuel Vargas"
 __maintainer__ = "Diego Calderón, Nahuel Vargas"
 __email__ = "diegoacalderon994@gmail.com, nahuvargas24@gmail.com"
 __copyright__ = "Copyright 2023"
-__version__ = "0.0.1"
+__version__ = "0.0.2"
 
 from peewee import *
 from validar import Validacion
@@ -79,7 +79,7 @@ def decorador_mostrar(metodo):
         # Si args[2] == True (graf=True) se muestra en consola una tabla de cada componente cargado con su respectiva cantidad
         # y se realiza un gráfico de torta a partir de dichos datos
         window_main = args[2]
-        print(args)
+
         if len(args) == 3:
             list_componente, list_cantidad= metodo(*args)
 
