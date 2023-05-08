@@ -220,4 +220,4 @@ class WindowConsulta(QWidget):
 
     def full_cat(self, ):
         self.ui.catalogo_list.clearContents()  
-        self.obj_f.mostrar_cat(self, True, self.obj_win_main)
+        self.obj_f.mostrar_cat(self, self.obj_win_main)

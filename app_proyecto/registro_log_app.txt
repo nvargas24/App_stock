@@ -4,3 +4,4 @@ Se ingresó un nuevo registro Fecha: 08/05/23 Hora: 19:16:40
 Se ingresó un nuevo registro Fecha: 08/05/23 Hora: 19:16:42
 Se ingresó un nuevo registro Fecha: 08/05/23 Hora: 19:18:38
 Se ingresó un nuevo registro Fecha: 08/05/23 Hora: 19:28:37
+Se modificó un registro Fecha: 08/05/23 Hora: 19:35:43

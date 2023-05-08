@@ -78,8 +78,9 @@ def decorador_mostrar(metodo):
     def envoltura(*args):
         # Si args[2] == True (graf=True) se muestra en consola una tabla de cada componente cargado con su respectiva cantidad
         # y se realiza un gráfico de torta a partir de dichos datos
-        window_main = args[3]
-        if len(args) == 4 and args[2] == True:
+        window_main = args[2]
+        print(args)
+        if len(args) == 3:
             list_componente, list_cantidad= metodo(*args)
 
             # Se calcula y se muestra en consola una tabla de componentes cargados con sus respectivas cantidades
@@ -477,7 +478,7 @@ class Crud(BaseDatos, Sujeto):
             return "Campos vacios"
         
     @decorador_mostrar
-    def mostrar_cat(self, tree, graf, window_main):
+    def mostrar_cat(self, tree, window_main):
         """
         Método que muestra el catálogo completo de componentes cargados hasta el momento.
 
