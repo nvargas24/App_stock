@@ -20,8 +20,7 @@ import random
 #-------- Clases para widgets --------#
 #--- Clase para abrir ventanas secundarias ---#
 class Opciones():
-    def agregar_dat(self,):
-        print("Agregar articulo nuevo")
+    def show_win_agregar(self,):
         self.window_agregar.setWindowTitle("Agregar")
         self.window_agregar.show()
 
@@ -32,8 +31,7 @@ class Opciones():
         self.window_agregar.ui.in_descrip.clear()
         self.window_agregar.ui.notificacion.clear()
 
-    def eliminar_dat(self,):
-        print("Eliminar articulo")
+    def show_win_eliminar(self,):
         self.window_eliminar.setWindowTitle("Eliminar")
         self.window_eliminar.show()
 
@@ -41,8 +39,7 @@ class Opciones():
         self.window_eliminar.ui.in_nombre.clear()
         self.window_eliminar.ui.notificacion.clear()
 
-    def modificar_dat(self,):
-        print("Modificar articulo")
+    def show_win_modificar(self,):
         self.window_modificar.setWindowTitle("Modificar")
         self.window_modificar.show()
 
@@ -53,8 +50,7 @@ class Opciones():
         self.window_modificar.ui.in_descrip.clear()
         self.window_modificar.ui.notificacion.clear()
 
-    def consultar_dat(self,):
-        print("Consultar articulo")
+    def show_win_consultar(self,):
         self.window_consulta.setWindowTitle("Consulta")
         self.window_consulta.show()
 
@@ -92,7 +88,6 @@ class Canvas_grafica(FigureCanvas):
         self.ax.pie(self.tamanio, explode=self.explotar, labels=self.nombres, colors=self.colores,
                     autopct=valor_real, pctdistance=0.8, shadow=True, startangle=90, radius=1.2, labeldistance=1.1, textprops={'fontsize': 18})
 
-
         self.ax.axis('equal')
         self.draw() # para actualizar grafico de ventana
 
@@ -118,10 +113,10 @@ class MainWindow(QMainWindow, Opciones):
 
         self.window_consulta.full_cat() #Obtiene catalogo completo de la DB y la muestra al abrir la ventana
         #--------------- Acciones para botones ------------#
-        self.ui.btn_agregar.clicked.connect(self.agregar_dat)
-        self.ui.btn_eliminar.clicked.connect(self.eliminar_dat)
-        self.ui.btn_modificar.clicked.connect(self.modificar_dat)
-        self.ui.btn_consultar.clicked.connect(self.consultar_dat)
+        self.ui.btn_agregar.clicked.connect(self.show_win_agregar)
+        self.ui.btn_eliminar.clicked.connect(self.show_win_eliminar)
+        self.ui.btn_modificar.clicked.connect(self.show_win_modificar)
+        self.ui.btn_consultar.clicked.connect(self.show_win_consultar)
 
 class WindowAgregar(QDialog):
     def __init__(self, obj_f, parent=None):
@@ -131,11 +126,7 @@ class WindowAgregar(QDialog):
         self.obj_f = obj_f
 
         self.ui.btn_aceptar.clicked.connect(self.new_load)
-        self.ui.btn_cancelar.clicked.connect(self.exit)
-
-    def exit(self, ):
-        self.close()
-        print("Regresa a menu principal")
+        self.ui.btn_cancelar.clicked.connect(self.close)
 
     def new_load(self, ):
         try:
@@ -159,12 +150,8 @@ class WindowEliminar(QDialog):
         self.obj_f = obj_f
 
         self.ui.btn_aceptar.clicked.connect(self.delete)
-        self.ui.btn_cancelar.clicked.connect(self.exit)
+        self.ui.btn_cancelar.clicked.connect(self.close)
     
-    def exit(self, ):
-        print("Regresa a menu principal")
-        self.close()
-
     def delete(self, ):
         mje = self.obj_f.elim(
             self.ui.in_nombre)
@@ -179,11 +166,7 @@ class WindowModificar(QDialog):
         self.obj_f = obj_f
         
         self.ui.btn_aceptar.clicked.connect(self.modificated)
-        self.ui.btn_cancelar.clicked.connect(self.exit)
-
-    def exit(self, ):
-        print("Regresa a menu principal")
-        self.close()
+        self.ui.btn_cancelar.clicked.connect(self.close)
 
     def modificated(self, ):
         try:
@@ -211,14 +194,7 @@ class WindowConsulta(QWidget):
 
         self.ui.btn_buscar.clicked.connect(self.search)
         self.ui.btn_cat_full.clicked.connect(self.full_cat)
-        self.ui.btn_volver.clicked.connect(self.exit)
-
-        #--- Ajusto ancho de columnas de la tabla ---#
-        self.ui.catalogo_list.setColumnWidth(0, 40)
-        self.ui.catalogo_list.setColumnWidth(1, 120)
-        self.ui.catalogo_list.setColumnWidth(2, 80)
-        self.ui.catalogo_list.setColumnWidth(3, 80)
-        self.ui.catalogo_list.setColumnWidth(4, 160)  
+        self.ui.btn_volver.clicked.connect(self.close)
 
     def insert(self, id, nom, cant, prec, descrip):
         self.frame = []
@@ -235,10 +211,6 @@ class WindowConsulta(QWidget):
 
     def delete(self, ):
         self.ui.catalogo_list.clearContents()
-
-    def exit(self, ):
-        self.ui.catalogo_list.clearContents()
-        self.close()
 
     def search(self, ):
         mje = self.obj_f.consulta(
