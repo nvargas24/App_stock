@@ -9,6 +9,9 @@ __copyright__ = "Copyright 2023"
 __version__ = "0.0.2"
 
 class Sujeto:
+    """
+    Clase que contiene métodos para crear, quitar y notificar por observador.
+    """
     observadores = []
 
     def agregar(self, obj):
@@ -23,11 +26,17 @@ class Sujeto:
 
 
 class Observador:
+    """
+    Clase que contiene método para capturar excepcion de observador.
+    """
     def update(self):
         raise NotImplementedError("Delegación de actualización")
 
 
 class ObservadorConcreto(Observador):
+    """
+    Clase que contiene métodos actualizar frames por medio de observador.
+    """
     def __init__(self, obj):
         self.observado = obj
         self.observado.agregar(self)

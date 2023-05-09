@@ -53,9 +53,6 @@ class Controlador:
             obj_f
         )  # Creo objeto de clase Serv cuyo constructor lanza el servidor
 
-
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    QApplication.setStyle("fusion")
-
     obj_controlador = Controlador()
