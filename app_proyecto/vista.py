@@ -39,7 +39,7 @@ class Opciones():
         self.window_agregar.setWindowTitle("Agregar")
         self.window_agregar.show()
 
-        #--- Limpia celdas  ---#
+        # Limpia celdas
         self.window_agregar.ui.in_nombre.clear()
         self.window_agregar.ui.in_cant.clear()
         self.window_agregar.ui.in_precio.clear()
@@ -53,7 +53,7 @@ class Opciones():
         self.window_eliminar.setWindowTitle("Eliminar")
         self.window_eliminar.show()
 
-        #--- Limpia celdas  ---#
+        # Limpia celdas
         self.window_eliminar.ui.in_nombre.clear()
         self.window_eliminar.ui.notificacion.clear()
 
@@ -64,7 +64,7 @@ class Opciones():
         self.window_modificar.setWindowTitle("Modificar")
         self.window_modificar.show()
 
-        #--- Limpia celdas  ---#
+        # Limpia celdas
         self.window_modificar.ui.in_nombre.clear()
         self.window_modificar.ui.in_cant.clear()
         self.window_modificar.ui.in_precio.clear()
@@ -78,7 +78,7 @@ class Opciones():
         self.window_consulta.setWindowTitle("Consulta")
         self.window_consulta.show()
 
-        #--- Limpia celdas  ---#
+        # Limpia celdas
         self.window_consulta.ui.in_nombre.clear()
         self.window_consulta.ui.in_descrip.clear()
         self.window_consulta.ui.notificacion.clear()
@@ -134,130 +134,213 @@ class Canvas_grafica(FigureCanvas):
 
 #-------- Clases para ventanas -------#
 class MainWindow(QMainWindow, Opciones):
+    """
+    Clase que contiene métodos para la interaccion en la ventana principal.
+    """
     def __init__(self, parent=None):
-        super().__init__() # Acccedo a constructor de la clase QMainWindow
-        self.ui = Ui_MainWindow() # Creo objeto de la clase en QT para crear widgets
-        self.ui.setupUi(self,) # Se acccede al metodo setupUi que crea widgets
-
-        self.obj_f = Crud()  # Creo un objeto de clase Crud.
+        """
+        Constructor que hereda el correspondiente a la clase ''QMainWindow()'' para acceder widgets,
+        y ''Opciones'' para acceder a las ventanas secundarias. Que además crea un objeto ''Crud()'' 
+        para el manejo de datos.
+        """
+        super().__init__()
+        # Creo objeto de la clase en QT para crear widgets
+        self.ui = Ui_MainWindow() 
+        # Se acccede al metodo setupUi que crea widgets
+        self.ui.setupUi(self,)
+        self.obj_f = Crud()  
         
-        #-------------- Ventanas secundarias --------------#
+        # Creo objetos window para acceder a las ventanas secundarias y estas a la principal
         self.window_agregar = WindowAgregar(self.obj_f)
         self.window_eliminar = WindowEliminar(self.obj_f)
         self.window_modificar = WindowModificar(self.obj_f)
         self.window_consulta = WindowConsulta(self.obj_f, self) 
 
-        #------------- Grafico de torta -------------------#
+        # Creo objeto grafica para crear y actualizar grafico matplotlib
         self.grafica = Canvas_grafica()
         self.ui.grafica_torta.addWidget(self.grafica)
 
-        self.window_consulta.full_cat() #Obtiene catalogo completo de la DB y la muestra al abrir la ventana
-        #--------------- Acciones para botones ------------#
+        # Obtengo y muestro catalogo completo en grafico de torta al iniciar
+        self.window_consulta.full_cat()
+        
+        # Callback de widgets Button para abrir ventanas secundarias
         self.ui.btn_agregar.clicked.connect(self.show_win_agregar)
         self.ui.btn_eliminar.clicked.connect(self.show_win_eliminar)
         self.ui.btn_modificar.clicked.connect(self.show_win_modificar)
         self.ui.btn_consultar.clicked.connect(self.show_win_consultar)
 
 class WindowAgregar(QDialog):
-    def __init__(self, obj_f, parent=None):
+    """
+    Clase que contiene métodos para la interaccion en la ventana Agregar.
+    """
+    def __init__(self, obj_f):
+        """
+        Constructor que hereda el correspondiente a la clase ''QDialog()'' para acceder widgets.
+        :param obj_f: Objeto Crud.
+        """
         super().__init__()
+        # Creo objeto de la clase en QT para crear widgets
         self.ui = Ui_Agregar()
+        # Se acccede al metodo setupUi que crea widgets
         self.ui.setupUi(self,)
+        # Sedo accedo a objeto Crud desde cualquier metodo de esta clase
         self.obj_f = obj_f
 
+        # Callback de widgets Button
         self.ui.btn_aceptar.clicked.connect(self.new_load)
         self.ui.btn_cancelar.clicked.connect(self.close)
 
     def new_load(self, ):
+        """
+        Método para agregar un nuevo articulo.
+        """
         try:
             mje = self.obj_f.agreg(
                         self.ui.in_nombre, 
                         self.ui.in_cant, 
                         self.ui.in_precio, 
                         self.ui.in_descrip)
-            self.ui.notificacion.setText(mje) # se muestra accion realizada en label
+            # Informa en la ventana estado del nuevo articulo
+            self.ui.notificacion.setText(mje)
         except (
             ValueError
-        ) as mje:  # Si se genera una excepción, la capturo y muestro mje de error.
-
+        ) as mje:
+            # Informa en la ventana la excepcion
             self.ui.notificacion.setText(str(mje))
 
 class WindowEliminar(QDialog):
-    def __init__(self, obj_f, parent=None):
+    """
+    Clase que contiene métodos para la interaccion en la ventana Eliminar.
+    """
+    def __init__(self, obj_f):
+        """
+        Constructor que hereda el correspondiente a la clase ''QDialog()'' para acceder widgets.
+        :param obj_f: Objeto Crud.
+        """
         super().__init__()
+        # Creo objeto de la clase en QT para crear widgets
         self.ui = Ui_Eliminar()
+        # Se acccede al metodo setupUi que crea widgets
         self.ui.setupUi(self,)
+        # Sedo accedo a objeto Crud desde cualquier metodo de esta clase        
         self.obj_f = obj_f
 
+        # Callback de widgets Button
         self.ui.btn_aceptar.clicked.connect(self.delete)
         self.ui.btn_cancelar.clicked.connect(self.close)
     
     def delete(self, ):
+        """
+        Método para eliminar un articulo existente.
+        """
         mje = self.obj_f.elim(
             self.ui.in_nombre)
 
+        # Informa en la ventana estado del nuevo articulo
         self.ui.notificacion.setText(mje)
         
 class WindowModificar(QDialog):
-    def __init__(self, obj_f, parent=None):
+    """
+    Clase que contiene métodos para la interaccion en la ventana Modificar.
+    """
+    def __init__(self, obj_f):
+        """
+        Constructor que hereda el correspondiente a la clase ''QDialog()'' para acceder widgets.
+        :param obj_f: Objeto Crud.
+        """
         super().__init__()
+        # Creo objeto de la clase en QT para crear widgets
         self.ui = Ui_Modificar()
+        # Se acccede al metodo setupUi que crea widgets
         self.ui.setupUi(self,)
+        # Sedo accedo a objeto Crud desde cualquier metodo de esta clase
         self.obj_f = obj_f
-        
+
+        # Callback de widgets Button
         self.ui.btn_aceptar.clicked.connect(self.modificated)
         self.ui.btn_cancelar.clicked.connect(self.close)
 
     def modificated(self, ):
+        """
+        Método para modificar un articulo existente.
+        """
         try:
             mje = self.obj_f.modif(
                         self.ui.in_nombre, 
                         self.ui.in_cant, 
                         self.ui.in_precio, 
                         self.ui.in_descrip)
-
+            # Informa en la ventana estado del nuevo articulo
             self.ui.notificacion.setText(mje)
-        
         except (
             ValueError
-        ) as mje:  # Si se genera una excepción, la capturo y muestro mje de error.
+        ) as mje:
+            # Informa en la ventana la excepcion
             self.ui.notificacion.setText(str(mje))
 
 class WindowConsulta(QWidget):
-    def __init__(self, obj_f, obj_win_main, parent=None):
+    """
+    Clase que contiene métodos para la interaccion en la ventana Consulta.
+    """
+    def __init__(self, obj_f, obj_win_main):
+        """
+        Constructor que hereda el correspondiente a la clase ''QWidget()'' para acceder widgets.
+        :param obj_f: Objeto Crud.
+        :param obj_win_main: Objeto para acceder atributos/metodos de ventana principal
+        """
         super().__init__()
-
+        # Creo objeto de la clase en QT para crear widgets
         self.ui = Ui_Consulta()
+        # Se acccede al metodo setupUi que crea widgets
         self.ui.setupUi(self,)
+        # Sedo accedo a objeto Crud desde cualquier metodo de esta clase
         self.obj_f = obj_f
+        # Sedo accedo a objeto MainWindow desde cualquier metodo de esta clase
         self.obj_win_main = obj_win_main
 
+        # Callback de widgets Button
         self.ui.btn_buscar.clicked.connect(self.search)
         self.ui.btn_cat_full.clicked.connect(self.full_cat)
         self.ui.btn_volver.clicked.connect(self.close)
 
     def insert(self, id, nom, cant, prec, descrip):
+        """
+        Método para agregar un articulo nuevo en la tabla.
+        """
         self.frame = []
         self.frame.append((id, nom, cant, prec, descrip))
 
         fila=0        
         for registro in self.frame:
             columna=0            
-            self.ui.catalogo_list.insertRow(fila) # se debe crear filas cada vez que se cargan dato
+            # Creo fila nueva cada vez que se lee un nuevo frame (todos los parametros de un articulo)
+            self.ui.catalogo_list.insertRow(fila) 
             for elemento in registro:
+                # Cargo cada parametro en la columna correspondiente, por orden.
                 self.ui.catalogo_list.setItem(fila, columna, QTableWidgetItem(elemento))
                 columna+=1
             fila+=1
 
     def delete(self, ):
+        """
+        Método para limpiar celdas de la tabla.
+        """
         self.ui.catalogo_list.clearContents()
 
     def search(self, ):
+        """
+        Método para buscar y mostrar articulo en la tabla.
+        """
         mje = self.obj_f.consulta(
                     self.ui.in_nombre, self.ui.in_descrip, self)
 
+        # Informa en la ventana estado del nuevo articulo
         self.ui.notificacion.setText(mje)
 
     def full_cat(self, ):
+        """
+        Método para mostrar todos los articulos en la tabla
+        """
         self.ui.catalogo_list.clearContents()  
+        # Actualizo tabla y grafico de torta
         self.obj_f.mostrar_cat(self, self.obj_win_main)
