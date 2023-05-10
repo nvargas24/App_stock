@@ -1,3 +1,13 @@
+"""
+cliente.py:
+    Módulo encargado de inicializar un cliente e interactuar con el servidor
+"""
+__author__ = "Diego Calderón, Nahuel Vargas"
+__maintainer__ = "Diego Calderón, Nahuel Vargas"
+__email__ = "diegoacalderon994@gmail.com, nahuvargas24@gmail.com"
+__copyright__ = "Copyright 2023"
+__version__ = "0.0.1"
+
 import socket
 import json
 
@@ -7,6 +17,7 @@ puerto = 9999
 clientsocket.connect((host, puerto))
 mensaje = clientsocket.recv(4096)
 print(mensaje.decode("UTF-8"))
+
 while True:
     mensaje = clientsocket.recv(4096)
     opcion = input(mensaje.decode("UTF-8"))

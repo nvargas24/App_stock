@@ -1,14 +1,34 @@
+"""
+servidor.py:
+    Módulo encargado de iniciar servidor. 
+"""
+__author__ = "Diego Calderón, Nahuel Vargas"
+__maintainer__ = "Diego Calderón, Nahuel Vargas"
+__email__ = "diegoacalderon994@gmail.com, nahuvargas24@gmail.com"
+__copyright__ = "Copyright 2023"
+__version__ = "0.0.1"
+
 import socket
 import json
 import datetime
 
-
 class Serv:
+    """
+    Clase que contiene metodos para inicializar el servidor
+    """
     def __init__(self, obj):
+        """
+        Constructor que llama a metodo que lanza al servidor
+        param obj: objeto Crud que se crea en la ventana MainWindow
+        """
         self.obj_c = obj
         self.lanza_servidor()
 
     def lanza_servidor(self):
+        """
+        Metodo que se encarga de inicializar el host y port del servidor, establecer conexion
+        e interactuar con el cliente
+        """
         serversocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         host = "localhost"  # Esta es la IP del servidor
         puerto = 9999  # Puerto en el cual estoy escuchado
