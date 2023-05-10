@@ -39,6 +39,8 @@ class Opciones():
         self.close_all_window()
         self.window_agregar.setWindowTitle("Agregar")
         self.window_agregar.show()
+        # Mueve la ventana a la derecha de la ventana principal
+        self.window_agregar.move(self.geometry().right() + 10, self.geometry().top()) 
         self.opened_windows.append(self.window_agregar)
 
         # Limpia celdas
@@ -55,6 +57,8 @@ class Opciones():
         self.close_all_window()
         self.window_eliminar.setWindowTitle("Eliminar")
         self.window_eliminar.show()
+        # Mueve la ventana a la derecha de la ventana principal
+        self.window_eliminar.move(self.geometry().right() + 10, self.geometry().top()) 
         self.opened_windows.append(self.window_eliminar)
 
         # Limpia celdas
@@ -68,6 +72,8 @@ class Opciones():
         self.close_all_window()
         self.window_modificar.setWindowTitle("Modificar")
         self.window_modificar.show()
+        # Mueve la ventana a la derecha de la ventana principal
+        self.window_modificar.move(self.geometry().right() + 10, self.geometry().top()) 
         self.opened_windows.append(self.window_modificar)
 
         # Limpia celdas
@@ -84,6 +90,8 @@ class Opciones():
         self.close_all_window()
         self.window_consulta.setWindowTitle("Consulta")
         self.window_consulta.show()
+        # Mueve la ventana a la derecha de la ventana principal
+        self.window_consulta.move(self.geometry().right() + 10, self.geometry().top()) 
         self.opened_windows.append(self.window_consulta)
 
         # Limpia celdas

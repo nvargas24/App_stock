@@ -260,7 +260,7 @@ class Ui_MainWindow(object):
         self.btn_eliminar.setText(QCoreApplication.translate("MainWindow", u"Eliminar articulo", None))
         self.btn_modificar.setText(QCoreApplication.translate("MainWindow", u"Modificar articulo", None))
         self.btn_consultar.setText(QCoreApplication.translate("MainWindow", u"Consultar Stock", None))
-        self.titulo.setText(QCoreApplication.translate("MainWindow", u"Electronica del oeste", None))
+        self.titulo.setText(QCoreApplication.translate("MainWindow", u"Electr\u00f3nica del oeste", None))
         self.subtitulo.setText(QCoreApplication.translate("MainWindow", u"Bienvenido, seleccione la opcion a realizar", None))
         self.notificacion.setText("")
     # retranslateUi

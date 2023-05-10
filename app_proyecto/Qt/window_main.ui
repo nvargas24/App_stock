@@ -307,7 +307,7 @@ QPushButton:focus {
         </font>
        </property>
        <property name="text">
-        <string>Electronica del oeste</string>
+        <string>Electrónica del oeste</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
