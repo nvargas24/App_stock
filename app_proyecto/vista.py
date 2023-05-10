@@ -36,8 +36,10 @@ class Opciones():
         """
         Método para setear y mostrar ventana de Agregar Articulo
         """
+        self.close_all_window()
         self.window_agregar.setWindowTitle("Agregar")
         self.window_agregar.show()
+        self.opened_windows.append(self.window_agregar)
 
         # Limpia celdas
         self.window_agregar.ui.in_nombre.clear()
@@ -50,8 +52,10 @@ class Opciones():
         """
         Método para setear y mostrar ventana de Eliminar Articulo
         """
+        self.close_all_window()
         self.window_eliminar.setWindowTitle("Eliminar")
         self.window_eliminar.show()
+        self.opened_windows.append(self.window_eliminar)
 
         # Limpia celdas
         self.window_eliminar.ui.in_nombre.clear()
@@ -61,8 +65,10 @@ class Opciones():
         """
         Método para setear y mostrar ventana de Modficar Articulo
         """
+        self.close_all_window()
         self.window_modificar.setWindowTitle("Modificar")
         self.window_modificar.show()
+        self.opened_windows.append(self.window_modificar)
 
         # Limpia celdas
         self.window_modificar.ui.in_nombre.clear()
@@ -75,8 +81,10 @@ class Opciones():
         """
         Método para setear y mostrar ventana de Consultar Articulo
         """
+        self.close_all_window()
         self.window_consulta.setWindowTitle("Consulta")
         self.window_consulta.show()
+        self.opened_windows.append(self.window_consulta)
 
         # Limpia celdas
         self.window_consulta.ui.in_nombre.clear()
@@ -84,6 +92,14 @@ class Opciones():
         self.window_consulta.ui.notificacion.clear()
         
         self.window_consulta.full_cat() #Obtiene catalogo completo de la DB y la muestra al abrir la ventana
+    
+    def close_all_window(self, ):
+        """
+        Método para cerrar todas las ventanas secundarias abiertas
+        """
+        for window in self.opened_windows:
+            window.close()
+        self.opened_windows = []  # vaciar la lista de ventanas abiertas
 
 # --- Clase para iteractuar con grafico ---#
 class Canvas_grafica(FigureCanvas):
@@ -155,6 +171,9 @@ class MainWindow(QMainWindow, Opciones):
         self.window_eliminar = WindowEliminar(self.obj_f)
         self.window_modificar = WindowModificar(self.obj_f)
         self.window_consulta = WindowConsulta(self.obj_f, self) 
+
+        # Lista de ventanas abiertas
+        self.opened_windows=[]
 
         # Creo objeto grafica para crear y actualizar grafico matplotlib
         self.grafica = Canvas_grafica()
