@@ -23,15 +23,21 @@ from vista import *
 from observador import ObservadorConcreto
 
 class Controlador:
-    def __init__(self, ):    
-        self.obj_win_main = MainWindow() # Creo objeto de la clase MainWindow
+    """
+    Clase que crea un objeto de clase ``Menu()`` para la configuración de la interfaz gráfica.
+    """
+    def __init__(self, ):
+        """
+        Constructor que crea un objeto de clase ``MainWindow()`` (que importa de ``vista.py``)
+        También crea un observador que seguirá las acciones del objeto de clase Crud creado en vista.Menu
+        """
+        self.obj_win_main = MainWindow()
         # Los metodos utilizados son los heredados de la clase QMainWindow
         self.obj_win_main.setWindowTitle("App Stock")
         self.obj_win_main.show()
-
         self.observador_win_agregar=ObservadorConcreto(self.obj_win_main.obj_f)
 
-        # -------------------Servidor-----------------------------------
+        # ----------------- Servidor ----------------- #
         # Lanzo servidor
         if theproc != "":
             theproc.kill()
@@ -42,16 +48,20 @@ class Controlador:
             threading.Thread(
                 target=self.iniciar_servidor, args=(self.obj_win_main.obj_f,), daemon=True
             ).start()
-
+        # --------------------------------------------- #
         try:
-            sys.exit(app.exec_())    # Mantiene abierta la app
+            # Mantiene abierta la app
+            sys.exit(app.exec_())    
         except SystemExit:
             print("Cierro menu de app_stock")
 
     def iniciar_servidor(self, obj_f):
+        """
+        Metodo que crea objeto ''Serv'' para lanzar al servidor
+        """
         self.servidor = Serv(
             obj_f
-        )  # Creo objeto de clase Serv cuyo constructor lanza el servidor
+        )  
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
