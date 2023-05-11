@@ -276,35 +276,33 @@ class Crud(BaseDatos, Sujeto):
         prec = precio.text()
         descrip = descripcion.text()
 
-        # Chequeo que los campos esten completos.
-        if (
+        # Chequeo que el campo nombre, cantidad, precio y descripcion no esten vacíos.
+        if not (
             self.obj_val.empty_entry(nom, "nom")
             and self.obj_val.empty_entry(cant, "cant")
             and self.obj_val.empty_entry(prec, "prec")
             and self.obj_val.empty_entry(descrip, "descrip")
         ):
-            # Valido los campos con regex.
-            if (
-                self.obj_val.val_entry(nom, "nom")
-                and self.obj_val.val_entry(cant, "cant")
-                and self.obj_val.val_entry(prec, "prec")
-                and self.obj_val.val_entry(descrip, "descrip")
-            ):
-                if self.leer_db(nom):
-                    return "Ya existe el articulo"
-                
-                else:
-                    self.agregar_db(nom, cant, prec, descrip)
-                    self.notificar(nom,cant,prec,descrip)  # Notifico al observador
-                    return "Nuevo articulo cargado"
-                
-            else:
-                raise ValueError(
-                    "Campos incorrectos"
-                )  # Si se ingresó un dato inválido genero una excepción.
-
-        else:
             return "Campos vacios"
+
+        # Si se ingresó un dato inválido genero una excepción.
+        if not (
+            self.obj_val.val_entry(nom, "nom")
+            and self.obj_val.val_entry(cant, "cant")
+            and self.obj_val.val_entry(prec, "prec")
+            and self.obj_val.val_entry(descrip, "descrip")
+        ):
+            raise ValueError(
+                "Campos incorrectos"
+            )  
+
+        # Cargo en la base de datos y notifico al observador
+        if not self.leer_db(nom):
+            self.agregar_db(nom, cant, prec, descrip)        
+            self.notificar(nom,cant,prec,descrip)  
+            return "Nuevo articulo cargado"
+        
+        return "Ya existe el articulo"
 
     def elim(self, nombre):
         """
@@ -319,16 +317,17 @@ class Crud(BaseDatos, Sujeto):
         nom = nombre.text()
 
         # Chequeo que el campo nombre no esté vacío.
-        if self.obj_val.empty_entry(nom, "nom"):
-            # Chequeo si el artículo a eliminar existe.
-            if self.leer_db(nom):
-                self.eliminar_db(nom)
-                self.notificar(nom)  # Notifico al observador
-                return "Articulo eliminado"
-            else:
-                return "Articulo no encontrado"
-        else:
+        if not self.obj_val.empty_entry(nom, "nom"):
             return "Campo vacio"
+
+        # Chequeo si el artículo a eliminar existe.
+        if not self.leer_db(nom):
+            return "Articulo no encontrado"
+        
+        # Elimino de la base de datos y notifico al observador
+        self.eliminar_db(nom)
+        self.notificar(nom)  
+        return "Articulo eliminado"
 
     def modif(self, nombre, cantidad, precio, descripcion):
         """
@@ -354,60 +353,60 @@ class Crud(BaseDatos, Sujeto):
         descrip = descripcion.text()
 
         # Chequeo que el campo nombre no esté vacío.
-        if self.obj_val.empty_entry(nom, "nom"):
-            # Chequeo si el artículo a modificar existe.
-            if self.leer_db(nom):
-
-                # Si el campo cantidad no está vacío y cumple con el patrón de regex
-                # se pondrá en '1' el flag_c (dato válido para actualizar).
-                if self.obj_val.empty_entry(cant, "cant"):
-                    if self.obj_val.val_entry(cant, "cant"):
-                        flag_c = 1
-                    else:
-                        flag_e = 1
-
-                # Si el campo precio no está vacío y cumple con el patrón de regex
-                # se pondrá en '1' el flag_p (dato válido para actualizar).
-                if self.obj_val.empty_entry(prec, "prec"):
-                    if self.obj_val.val_entry(prec, "prec"):
-                        flag_p = 1
-                    else:
-                        flag_e = 1
-
-                # Si el campo descripción no está vacío y cumple con el patrón de regex
-                # se pondrá en '1' el flag_p (dato válido para actualizar).
-                if self.obj_val.empty_entry(descrip, "descrip"):
-                    if self.obj_val.val_entry(descrip, "descrip"):
-                        flag_d = 1
-                    else:
-                        flag_e = 1
-
-                # Si no hubo error en la validación de datos (flag_e == 0) se actualizarán
-                # los datos que hayan sido ingresados en los campos correspondientes.
-                if flag_e == 0:
-                    if flag_c or flag_p or flag_d:  # Si se ingresó un dato a modificar
-                        self.actualizar_db(nom, cant, prec, descrip)
-                        self.notificar(nom, flag_c, cant, flag_p, prec, flag_d, descrip)
-
-                        flag_c = 0
-                        flag_p = 0
-                        flag_d = 0
-
-                        return "Articulo modificado"
-                    else:
-                        # No se completó ningún campo a modificar
-                        return "Articulo sin modificar"
-                # Si hubo error en la validación de datos (flag == 1)
-                # no se actualizará ningun campo y se informará del error al usuario.
-                if flag_e:
-                    flag_e = 0
-                    raise ValueError(
-                        "Campos incorrectos"
-                    )  # Si se ingresó un dato inválido genero una excepción.
-            else:
-                return "Articulo no existe"
-        else:
+        if not self.obj_val.empty_entry(nom, "nom"):
             return "Campo vacio"
+
+        # Chequeo si el artículo a modificar existe.
+        if not self.leer_db(nom):
+            return "Articulo no existe"
+        
+        # Si el campo cantidad no está vacío y cumple con el patrón de regex
+        # se pondrá en '1' el flag_c (dato válido para actualizar).
+        if self.obj_val.empty_entry(cant, "cant"):
+            if self.obj_val.val_entry(cant, "cant"):
+                flag_c = 1
+            else:
+                flag_e = 1
+
+        # Si el campo precio no está vacío y cumple con el patrón de regex
+        # se pondrá en '1' el flag_p (dato válido para actualizar).
+        if self.obj_val.empty_entry(prec, "prec"):
+            if self.obj_val.val_entry(prec, "prec"):
+                flag_p = 1
+            else:
+                flag_e = 1
+
+        # Si el campo descripción no está vacío y cumple con el patrón de regex
+        # se pondrá en '1' el flag_p (dato válido para actualizar).
+        if self.obj_val.empty_entry(descrip, "descrip"):
+            if self.obj_val.val_entry(descrip, "descrip"):
+                flag_d = 1
+            else:
+                flag_e = 1
+
+        # Si no hubo error en la validación de datos (flag_e == 0) se actualizarán
+        # los datos que hayan sido ingresados en los campos correspondientes.
+        if not flag_e:
+            if not (flag_c or flag_p or flag_d):  # Si se ingresó un dato a modificar
+                # No se completó ningún campo a modificar
+                return "Articulo sin modificar"
+
+            self.actualizar_db(nom, cant, prec, descrip)
+            self.notificar(nom, flag_c, cant, flag_p, prec, flag_d, descrip)
+
+            flag_c = 0
+            flag_p = 0
+            flag_d = 0
+
+            return "Articulo modificado"
+
+        # Si hubo error en la validación de datos (flag == 1)
+        # no se actualizará ningun campo y se informará del error al usuario.
+        flag_e = 0 # como ya se detecto un error se lo vuelve a setear para el siguiente
+        raise ValueError(
+            "Campos incorrectos"
+        )  # Si se ingresó un dato inválido genero una excepción.
+
 
     def consulta(self, nombre, descrip, tree):
         """
