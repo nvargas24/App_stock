@@ -421,61 +421,45 @@ class Crud(BaseDatos, Sujeto):
         descrip = descrip.text()
 
         # Busqueda por nombre
-        # Chequeo que el campo nombre no esté vacío.
-        if self.obj_val.empty_entry(nom, "nom") and not self.obj_val.empty_entry(descrip, "descrip"):
-            # Chequeo si el artículo a consultar existe.
-            if self.leer_db(nom, None):
-                data_from_db = self.leer_db(nom, None)
-                tree.delete()
-                for row in data_from_db:
-                    tree.insert(
-                        str(row.id),
-                        row.nombre,
-                        row.cantidad,
-                        row.precio,
-                        row.descripcion,
-                    )
-            else:
+        if (
+            self.obj_val.empty_entry(nom, "nom") and 
+            not self.obj_val.empty_entry(descrip, "descrip")
+        ):
+            data_from_db = self.leer_db(nom, None)
+            if not data_from_db:
                 return "Articulo no encontrado por nombre"
-
+                
         # Busqueda por descripcion
-        # Chequeo que el campo descripcion no esté vacío.
-        elif self.obj_val.empty_entry(descrip, "descrip") and not self.obj_val.empty_entry(nom, "nom"):
-            # Chequeo si el artículo a consultar existe.
-            if self.leer_db(None, descrip):
-                data_from_db = self.leer_db(None, descrip)
-                tree.delete()
-                for row in data_from_db:
-                    tree.insert(
-                        str(row.id),
-                        row.nombre,
-                        row.cantidad,
-                        row.precio,
-                        row.descripcion,
-                    )
-            else:
+        elif (
+            not self.obj_val.empty_entry(nom, "nom") and 
+            self.obj_val.empty_entry(descrip, "descrip")
+        ):
+            data_from_db = self.leer_db(None, descrip)
+            if not data_from_db:
                 return "Articulo no encontrado por descripcion"
+        
         # Busqueda por nombre y descripcion
-        # Chequeo que el campo nombre y descripcion no esten vacíos.
-        elif self.obj_val.empty_entry(nom, "nom") and self.obj_val.empty_entry(descrip, "descrip"):
-            # Chequeo si el artículo a consultar existe.
-            if self.leer_db(nom, descrip):
-                data_from_db = self.leer_db(nom, descrip)
-                tree.delete()
-                for row in data_from_db:
-                    tree.insert(
-                        str(row.id),
-                        row.nombre,
-                        row.cantidad,
-                        row.precio,
-                        row.descripcion,
-                    )
-            else:
+        elif (
+            self.obj_val.empty_entry(nom, "nom") and 
+            self.obj_val.empty_entry(descrip, "descrip")
+        ):
+            data_from_db = self.leer_db(nom, descrip)
+            if not data_from_db:
                 return "Articulo no encontrado"
 
-        elif not self.obj_val.empty_entry(nom, "nom") and not self.obj_val.empty_entry(descrip, "descrip"):
+        else:
             return "Campos vacios"
-        
+
+        tree.delete()
+        for row in data_from_db:
+            tree.insert(
+                str(row.id),
+                row.nombre,
+                row.cantidad,
+                row.precio,
+                row.descripcion,
+            )
+
     @decorador_mostrar
     def mostrar_cat(self, tree, window_main):
         """
