@@ -1,6 +1,6 @@
 """
 servidor.py:
-    Módulo encargado de iniciar servidor. 
+    Módulo encargado de iniciar servidor y atender las conexiones entrantes. 
 """
 __author__ = "Diego Calderón, Nahuel Vargas"
 __maintainer__ = "Diego Calderón, Nahuel Vargas"
@@ -12,32 +12,43 @@ import socket
 import json
 import datetime
 
+
 class Serv:
     """
-    Clase que contiene metodos para inicializar el servidor
+    Clase que contiene métodos para inicializar el servidor y manejar las conexiones entrantes.
     """
+
     def __init__(self, obj):
         """
-        Constructor que llama a metodo que lanza al servidor
-        param obj: objeto Crud que se crea en la ventana MainWindow
+        Constructor que llama a método que enciende el servidor
+
+        param obj: objeto de clase ``Crud()`` que se crea en la ventana ``MainWindow()``
         """
         self.obj_c = obj
         self.lanza_servidor()
 
     def lanza_servidor(self):
         """
-        Metodo que se encarga de inicializar el host y port del servidor, establecer conexion
-        e interactuar con el cliente
+        Metodo que se encarga de inicializar el host y port del servidor, establecer conexión
+        e interactuar con el cliente.
         """
+
+        # Creo un socket que utilizará IPs de la familia IPv4 con protocolo TCP.
         serversocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        host = "localhost"  # Esta es la IP del servidor
-        puerto = 9999  # Puerto en el cual estoy escuchado
+
+        host = "localhost"  # Esta es la IP del servidor.
+        puerto = 9999  # Puerto en el cual estoy escuchado.
         print("Iniciando servidor desde: ", host)
+
+        # Asocio el socket con el host y puerto indicado.
         serversocket.bind((host, puerto))
+
+        # Pongo al servidor en modo de escucha, con una cola de hasta 3 conexiones entrantes.
         serversocket.listen(3)
 
         while True:
-            # Inicia la conexión
+            # Acepto una conexión entrante.
+            # Recibo socket por el cual el cliente se conectó y los datos sobre su conexión.
             clientsocket, address = serversocket.accept()
             ipcl, numcon = address
             print(
@@ -47,6 +58,7 @@ class Serv:
                 + str(numcon)
             )
 
+            # Codifico y envío mensaje al cliente.
             mensaje = "Hola, Bienvenido al servidor de Electronica del oeste"
             clientsocket.send(mensaje.encode("UTF-8"))
 
@@ -64,19 +76,26 @@ class Serv:
                     + "Opción: "
                 )
                 clientsocket.send(mensaje.encode("UTF-8"))
+
+                # Recibo y decodifico opción enviada por el cliente.
                 mjerec = clientsocket.recv(1024)
+
+                # Si seleccionó la primera opción envío una lista con el stock total de componentes.
                 if mjerec.decode("UTF-8") == "1":
                     data_from_db = self.obj_c.leer_db(None)
                     for row in data_from_db:
-                        mensaje = (
+                        registro = (
                             row.nombre,
                             row.cantidad,
                             row.precio,
                             row.descripcion,
                         )
-                        self.lista.append(mensaje)
-                    # json.dumps convierte la lista a una cadena como si fuese un string
+                        self.lista.append(registro)
+
+                    # json.dumps convierte la lista a una cadena como si fuese un string.
+                    # Envío la información solicitada por el socket empleado por el cliente.
                     clientsocket.send(json.dumps(self.lista).encode("UTF-8"))
+
                     # Notifico a observador
                     self.obj_c.notificar(
                         "Consulta",
@@ -86,6 +105,7 @@ class Serv:
                         datetime.datetime.today().strftime("%H:%M:%S"),
                     )
 
+                # Si seleccionó la segunda opción envío los datos del componente solicitado.
                 elif mjerec.decode("UTF-8") == "2":
                     mensaje = "Ingrese el nombre del componente: "
                     clientsocket.send(mensaje.encode("UTF-8"))
@@ -95,16 +115,19 @@ class Serv:
                     if self.obj_c.leer_db(nom):
                         data_from_db = self.obj_c.leer_db(nom)
                         for row in data_from_db:
-                            mensaje = (
+                            registro = (
                                 row.nombre,
                                 row.cantidad,
                                 row.precio,
                                 row.descripcion,
                             )
-                            self.lista.append(mensaje)
-                        # json.dumps convierte la lista a una cadena como si fuese un string
+                            self.lista.append(registro)
+
+                        # json.dumps convierte la lista a una cadena como si fuese un string.
+                        # Envío la información solicitada por el socket empleado por el cliente.
                         clientsocket.send(json.dumps(self.lista).encode("UTF-8"))
                     else:
+                        # Si no se encontró el componente solicitado se informará al cliente.
                         mensaje = "Componente no encontrado"
                         clientsocket.send(mensaje.encode("UTF-8"))
 
@@ -118,6 +141,7 @@ class Serv:
                         datetime.datetime.today().strftime("%H:%M:%S"),
                     )
 
+                # Si seleccionó la tercera opción se cierra conexión con el cliente.
                 elif mjerec.decode("UTF-8") == "3":
                     mensaje = "Conexión terminada"
                     clientsocket.send(mensaje.encode("UTF-8"))
@@ -132,4 +156,5 @@ class Serv:
                     )
                     break
 
+            # Cierro conexión con el cliente.
             clientsocket.close()

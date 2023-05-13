@@ -1,5 +1,0 @@
-Se ingresó un nuevo registro Fecha: 03/05/23 Hora: 22:42:31
-Se ingresó un nuevo registro Fecha: 03/05/23 Hora: 22:44:27
-Se eliminó un registro Fecha: 03/05/23 Hora: 22:45:25
-Se modificó un registro Fecha: 03/05/23 Hora: 22:48:32
-Se eliminó un registro Fecha: 09/05/23 Hora: 21:41:56

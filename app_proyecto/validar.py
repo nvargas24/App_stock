@@ -6,7 +6,7 @@ __author__ = "Diego Calderón, Nahuel Vargas"
 __maintainer__ = "Diego Calderón, Nahuel Vargas"
 __email__ = "diegoacalderon994@gmail.com, nahuvargas24@gmail.com"
 __copyright__ = "Copyright 2023"
-__version__ = "0.0.1"
+__version__ = "0.0.2"
 
 import re
 
@@ -49,29 +49,13 @@ class Validacion:
         :returns: ``0`` Si el campo está vacío.
         :returns: ``1`` Si en el campo se ingresó un dato.
         """
-        if (
-            name_entry == "nom"
-            and data_entry
-            and data_entry != "Escriba el nombre del artículo"
-        ):
+        if name_entry == "nom" and data_entry:
             return 1
-        elif (
-            name_entry == "cant"
-            and data_entry
-            and data_entry != "Escriba un valor numérico"
-        ):
+        elif name_entry == "cant" and data_entry:
             return 1
-        elif (
-            name_entry == "prec"
-            and data_entry
-            and data_entry != "Escriba un valor numérico"
-        ):
+        elif name_entry == "prec" and data_entry:
             return 1
-        elif (
-            name_entry == "descrip"
-            and data_entry
-            and data_entry != "Agregue una breve descrip. del art."
-        ):
+        elif name_entry == "descrip" and data_entry:
             return 1
         else:
             return 0
