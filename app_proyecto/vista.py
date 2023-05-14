@@ -165,7 +165,7 @@ class Canvas_grafica(FigureCanvas):
             startangle=90,
             radius=1.2,
             labeldistance=1.1,
-            textprops={"fontsize": 18},
+            textprops={"fontsize": 14},
         )
 
         self.ax.axis("equal")

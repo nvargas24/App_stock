@@ -364,9 +364,9 @@ QPushButton:focus {
     <widget class="QWidget" name="verticalLayoutWidget">
      <property name="geometry">
       <rect>
-       <x>9</x>
+       <x>29</x>
        <y>9</y>
-       <width>291</width>
+       <width>271</width>
        <height>301</height>
       </rect>
      </property>
