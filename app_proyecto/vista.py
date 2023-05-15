@@ -122,7 +122,7 @@ class Canvas_grafica(FigureCanvas):
         """
         # Asigno un espacio para ubicar el gráfico de matplotlib usando Canvas.
         self.fig, self.ax = plt.subplots(
-            1, dpi=70, figsize=(12, 12), sharey=True, facecolor="none"
+            1, dpi=80, figsize=(12, 12), sharey=True, facecolor="none"
         )
         super().__init__(self.fig)
 
@@ -133,6 +133,9 @@ class Canvas_grafica(FigureCanvas):
         :param nombre: Nombre del componente.
         :param cantidad: Cantidad del componente.
         """
+        # Borro gráfico antiguo.
+        self.ax.clear()
+
         # Parámetros para nuevo gráfico.
         self.nombres = nombre
         self.tamanio = cantidad
@@ -147,8 +150,6 @@ class Canvas_grafica(FigureCanvas):
             self.colores.append("#%02x%02x%02x" % (r, g, b))
             self.explotar.append(0.05)
 
-        # Borro gráfico antiguo.
-        self.ax.clear()
         # Pasaje de porcentaje a valor real en bd.
         valor_real = lambda pct: "{:.0f}".format(
             (pct * sum(list(map(int, self.tamanio)))) / 100
@@ -163,12 +164,11 @@ class Canvas_grafica(FigureCanvas):
             pctdistance=0.8,
             shadow=True,
             startangle=90,
-            radius=1.2,
+            radius=0.7,
             labeldistance=1.1,
-            textprops={"fontsize": 14},
+            textprops={"fontsize": 12},
         )
-
-        self.ax.axis("equal")
+        #self.ax.set_aspect('equal') 
         # Actualizo gráfico.
         self.draw()
 

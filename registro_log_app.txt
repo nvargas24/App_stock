@@ -1,0 +1,8 @@
+Se ingresó un nuevo registro Fecha: 14/05/23 Hora: 20:45:07
+Se ingresó un nuevo registro Fecha: 14/05/23 Hora: 20:45:27
+Se ingresó un nuevo registro Fecha: 14/05/23 Hora: 20:45:45
+Se ingresó un nuevo registro Fecha: 14/05/23 Hora: 20:46:07
+Se ingresó un nuevo registro Fecha: 14/05/23 Hora: 20:46:32
+Se ingresó un nuevo registro Fecha: 14/05/23 Hora: 20:50:36
+Se eliminó un registro Fecha: 14/05/23 Hora: 21:23:11
+Se ingresó un nuevo registro Fecha: 14/05/23 Hora: 21:24:54

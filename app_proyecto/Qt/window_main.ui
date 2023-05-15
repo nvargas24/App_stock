@@ -348,7 +348,7 @@ QPushButton:focus {
      <rect>
       <x>270</x>
       <y>190</y>
-      <width>311</width>
+      <width>341</width>
       <height>321</height>
      </rect>
     </property>
@@ -364,10 +364,10 @@ QPushButton:focus {
     <widget class="QWidget" name="verticalLayoutWidget">
      <property name="geometry">
       <rect>
-       <x>29</x>
-       <y>9</y>
-       <width>271</width>
-       <height>301</height>
+       <x>0</x>
+       <y>0</y>
+       <width>341</width>
+       <height>321</height>
       </rect>
      </property>
      <layout class="QVBoxLayout" name="grafica_torta"/>
