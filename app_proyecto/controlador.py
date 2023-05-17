@@ -31,7 +31,7 @@ class Controlador:
         También se encarga de activar el servidor que atenderá las conexiones entrantes.
         """
         self.obj_win_main = MainWindow()
-        # Los metodos utilizados son los heredados de la clase QMainWindow().
+        # Los métodos utilizados son los heredados de la clase QMainWindow().
         self.obj_win_main.setWindowTitle("App Stock")
         self.obj_win_main.show()
         self.obj_win_main.move(400, 200)

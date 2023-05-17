@@ -168,7 +168,7 @@ class Canvas_grafica(FigureCanvas):
             labeldistance=1.1,
             textprops={"fontsize": 12},
         )
-        #self.ax.set_aspect('equal') 
+        # self.ax.set_aspect('equal')
         # Actualizo gráfico.
         self.draw()
 

@@ -78,10 +78,10 @@ class Serv:
                 clientsocket.send(mensaje.encode("UTF-8"))
 
                 # Recibo y decodifico opción enviada por el cliente.
-                mjerec = clientsocket.recv(1024)
+                mjedec = clientsocket.recv(1024).decode("UTF-8")
 
                 # Si seleccionó la primera opción envío una lista con el stock total de componentes.
-                if mjerec.decode("UTF-8") == "1":
+                if mjedec == "1":
                     data_from_db = self.obj_c.leer_db(None)
                     for row in data_from_db:
                         registro = (
@@ -96,7 +96,7 @@ class Serv:
                     # Envío la información solicitada por el socket empleado por el cliente.
                     clientsocket.send(json.dumps(self.lista).encode("UTF-8"))
 
-                    # Notifico a observador
+                    # Notifico a observador.
                     self.obj_c.notificar(
                         "Consulta",
                         ipcl,
@@ -106,7 +106,7 @@ class Serv:
                     )
 
                 # Si seleccionó la segunda opción envío los datos del componente solicitado.
-                elif mjerec.decode("UTF-8") == "2":
+                elif mjedec == "2":
                     mensaje = "Ingrese el nombre del componente: "
                     clientsocket.send(mensaje.encode("UTF-8"))
                     mjerec = clientsocket.recv(1024)
@@ -131,7 +131,7 @@ class Serv:
                         mensaje = "Componente no encontrado"
                         clientsocket.send(mensaje.encode("UTF-8"))
 
-                    # Notifico a observador
+                    # Notifico a observador.
                     self.obj_c.notificar(
                         "Consultacomp",
                         nom,
@@ -142,11 +142,11 @@ class Serv:
                     )
 
                 # Si seleccionó la tercera opción se cierra conexión con el cliente.
-                elif mjerec.decode("UTF-8") == "3":
+                elif mjedec == "3":
                     mensaje = "Conexión terminada"
                     clientsocket.send(mensaje.encode("UTF-8"))
 
-                    # Notifico a observador
+                    # Notifico a observador.
                     self.obj_c.notificar(
                         "Cierro",
                         ipcl,
@@ -156,5 +156,25 @@ class Serv:
                     )
                     break
 
+                # Si seleccionó otra opción distinta a las indicadas, se enviará mensaje de error.
+                else:
+                    mensaje = "Opción incorrecta, intente nuevamente.\n"
+                    clientsocket.send(mensaje.encode("UTF-8"))
+
+                    # Notifico a observador.
+                    self.obj_c.notificar(
+                        "Error",
+                        ipcl,
+                        numcon,
+                        datetime.datetime.today().strftime("%d/%m/%y"),
+                        datetime.datetime.today().strftime("%H:%M:%S"),
+                    )
+
             # Cierro conexión con el cliente.
             clientsocket.close()
+            print(
+                "Cierro la conexión con IP: "
+                + str(ipcl)
+                + ", y número de conexión: "
+                + str(numcon)
+            )

@@ -120,7 +120,7 @@ class ObservadorConcreto(Observador):
             print("---" * 23)
 
         # Si el cliente, conectado al servidor, consulta el stock total de componentes
-        # escribe en un archivo de log dicha acción junto con la información de conexión del cliente.
+        # se escribe en un archivo de log dicha acción junto con la información de conexión del cliente.
         elif args[0][0] == "Consulta":
             ipcl, numcon, fecha, hora = args[0][1:]
             archivo = open("registro_log_serv.txt", "a", encoding="utf-8")
@@ -138,7 +138,7 @@ class ObservadorConcreto(Observador):
             )
 
         # Si el cliente, conectado al servidor, consulta el stock de un componente
-        # escribe en un archivo de log dicha acción junto con la información de conexión del cliente.
+        # se escribe en un archivo de log dicha acción junto con la información de conexión del cliente.
         elif args[0][0] == "Consultacomp":
             nom, ipcl, numcon, fecha, hora = args[0][1:]
             archivo = open("registro_log_serv.txt", "a", encoding="utf-8")
@@ -157,7 +157,7 @@ class ObservadorConcreto(Observador):
             )
 
         # Si el cliente, conectado al servidor, finaliza la conexión
-        # escribe en un archivo de log dicha acción junto con la información de conexión del cliente.
+        # se escribe en un archivo de log dicha acción junto con la información de conexión del cliente.
         elif args[0][0] == "Cierro":
             ipcl, numcon, fecha, hora = args[0][1:]
             archivo = open("registro_log_serv.txt", "a", encoding="utf-8")
@@ -167,6 +167,24 @@ class ObservadorConcreto(Observador):
                 + " y número de conexión: "
                 + str(numcon)
                 + ", cerró conexión, "
+                + "Fecha: "
+                + str(fecha)
+                + ", Hora: "
+                + str(hora)
+                + "\n"
+            )
+
+        # Si el cliente, conectado al servidor, elije una opción distinta a las indicadas
+        # se escribe en un archivo de log dicha acción junto con la información de conexión del cliente.
+        elif args[0][0] == "Error":
+            ipcl, numcon, fecha, hora = args[0][1:]
+            archivo = open("registro_log_serv.txt", "a", encoding="utf-8")
+            archivo.write(
+                "El cliente con la siguiente ip:"
+                + str(ipcl)
+                + " y número de conexión: "
+                + str(numcon)
+                + ", eligió una opción incorrecta, "
                 + "Fecha: "
                 + str(fecha)
                 + ", Hora: "

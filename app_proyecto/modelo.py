@@ -144,14 +144,14 @@ def decorador_mostrar(metodo):
         window_main = args[2]
 
         list_componente, list_cantidad = metodo(*args)
-
-        # Se calcula y se muestra en consola una tabla de componentes cargados con sus respectivas cantidades.
-        print("---" * 23)
-        print("Lista de stock")
-        dataset = {"Componente": list_componente, "Cantidad": list_cantidad}
-        df = pd.DataFrame(dataset)
-        print(df)
-        print("---" * 23)
+        if list_componente and list_cantidad:
+            # Se calcula y se muestra en consola una tabla de componentes cargados con sus respectivas cantidades.
+            print("---" * 23)
+            print("Lista de stock")
+            dataset = {"Componente": list_componente, "Cantidad": list_cantidad}
+            df = pd.DataFrame(dataset)
+            print(df)
+            print("---" * 23)
 
         # Se realiza un gráfico de torta del total de componentes cargados con sus respectivas cantidades.
         window_main.grafica.upgrade_graph(list_componente, list_cantidad)
@@ -338,14 +338,14 @@ class Crud(BaseDatos, Sujeto):
         prec = precio.text()
         descrip = descripcion.text()
 
-        # Chequeo que el campo nombre, cantidad, precio y descripcion no esten vacíos.
+        # Chequeo que el campo nombre, cantidad, precio y descripción no se encuentren vacíos.
         if not (
             self.obj_val.empty_entry(nom, "nom")
             and self.obj_val.empty_entry(cant, "cant")
             and self.obj_val.empty_entry(prec, "prec")
             and self.obj_val.empty_entry(descrip, "descrip")
         ):
-            return "Campos vacios"
+            return "Campos vacíos"
 
         # Si se ingresó un dato inválido genero una excepción.
         if not (
@@ -360,9 +360,9 @@ class Crud(BaseDatos, Sujeto):
         if not self.leer_db(nom):
             self.agregar_db(nom, cant, prec, descrip)
             self.notificar(nom, cant, prec, descrip)
-            return "Nuevo articulo cargado"
+            return "Nuevo artículo cargado"
 
-        return "Ya existe el articulo"
+        return "Ya existe el artículo"
 
     def elim(self, nombre):
         """
@@ -378,16 +378,16 @@ class Crud(BaseDatos, Sujeto):
 
         # Chequeo que el campo nombre no esté vacío.
         if not self.obj_val.empty_entry(nom, "nom"):
-            return "Campo vacio"
+            return "Campo vacío"
 
         # Chequeo si el artículo a eliminar existe.
         if not self.leer_db(nom):
-            return "Articulo no encontrado"
+            return "Artículo no encontrado"
 
         # Elimino de la base de datos y notifico al observador.
         self.eliminar_db(nom)
         self.notificar(nom)
-        return "Articulo eliminado"
+        return "Artículo eliminado"
 
     def modif(self, nombre, cantidad, precio, descripcion):
         """
@@ -418,11 +418,11 @@ class Crud(BaseDatos, Sujeto):
 
         # Chequeo que el campo nombre no esté vacío.
         if not self.obj_val.empty_entry(nom, "nom"):
-            return "Campo vacio"
+            return "Campo Nombre vacío"
 
         # Chequeo si el artículo a modificar existe.
         if not self.leer_db(nom):
-            return "Articulo no existe"
+            return "Artículo no existente"
 
         # Si el campo cantidad no está vacío y cumple con el patrón de regex
         # se pondrá en '1' el flag_c (dato válido para actualizar).
@@ -453,7 +453,7 @@ class Crud(BaseDatos, Sujeto):
         if not flag_e:
             # Si no se ingresó ningún dato a modificar.
             if not (flag_c or flag_p or flag_d):
-                return "Articulo sin modificar"
+                return "No se modificó artículo"
 
             # Si se ingresó un dato modifico el componente y notifico al observador.
             self.actualizar_db(nom, cant, prec, descrip)
@@ -463,7 +463,7 @@ class Crud(BaseDatos, Sujeto):
             flag_p = 0
             flag_d = 0
 
-            return "Articulo modificado"
+            return "Artículo modificado"
 
         # Si hubo error en la validación de datos (flag == 1)
         # no se actualizará ningun campo y se informará del error al usuario.
@@ -495,7 +495,7 @@ class Crud(BaseDatos, Sujeto):
         ):
             data_from_db = self.leer_db(nom, None)
             if not data_from_db:
-                return "Articulo no encontrado por nombre"
+                return "Artículo no encontrado por nombre"
 
         # Búsqueda por descripción.
         elif not self.obj_val.empty_entry(nom, "nom") and self.obj_val.empty_entry(
@@ -503,7 +503,7 @@ class Crud(BaseDatos, Sujeto):
         ):
             data_from_db = self.leer_db(None, descrip)
             if not data_from_db:
-                return "Articulo no encontrado por descripcion"
+                return "Artículo no encontrado por descripción"
 
         # Búsqueda por nombre y descripción.
         elif self.obj_val.empty_entry(nom, "nom") and self.obj_val.empty_entry(
@@ -511,10 +511,10 @@ class Crud(BaseDatos, Sujeto):
         ):
             data_from_db = self.leer_db(nom, descrip)
             if not data_from_db:
-                return "Articulo no encontrado"
+                return "Artículo no encontrado"
 
         else:
-            return "Campos vacios"
+            return "Campos vacíos"
 
         # Borro las filas de la tabla que contiene la ventana de Consulta.
         window_consulta.delete()
