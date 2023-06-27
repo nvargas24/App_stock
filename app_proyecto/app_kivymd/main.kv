@@ -1,4 +1,10 @@
 #:import C kivy.utils.get_color_from_hex
+<IconListItem>
+    IconLeftWidget:
+        ripple_scale: 0
+        icon: root.icon
+        theme_text_color: "Custom"
+        text_color: app.theme_cls.opposite_bg_darkest
 
 <ButtonCard@MDCard>
     padding: 4
@@ -54,6 +60,7 @@
                     id: buttonadd
                     MDBoxLayout:
                         orientation:"vertical"
+                        padding:0,0,0,15
                         MDLabel:
                             text:"Agregar un artículo"
                             halign:"center"
@@ -68,11 +75,12 @@
                             text_color: app.theme_cls.opposite_bg_darkest
                             pos_hint:{"center_x":0.5,"center_y":0.5}
                             font_size: "48sp"
-                            padding:15        
+                            #padding:15
                 ButtonCard:
                     id: buttondel
                     MDBoxLayout:
                         orientation:"vertical"
+                        padding:0,0,0,15
                         MDLabel:
                             text:"Eliminar un artículo"
                             halign:"center"
@@ -87,11 +95,12 @@
                             text_color: app.theme_cls.opposite_bg_darkest
                             pos_hint:{"center_x":0.5,"center_y":0.5}
                             font_size: "48sp"
-                            padding:15
+                            #padding:15
                 ButtonCard:
                     id: buttonedit
                     MDBoxLayout:
                         orientation:"vertical"
+                        padding:0,0,0,15
                         MDLabel:
                             text:"Modificar un artículo"
                             halign:"center"
@@ -106,11 +115,12 @@
                             text_color: app.theme_cls.opposite_bg_darkest
                             pos_hint:{"center_x":0.5,"center_y":0.5}
                             font_size: "48sp"
-                            padding:15
+                            #padding:15
                 ButtonCard:
                     id: buttonsearch
                     MDBoxLayout:
                         orientation:"vertical"
+                        padding:0,0,0,15
                         MDLabel:
                             text:"Consultar stock"
                             halign:"center"
@@ -125,4 +135,4 @@
                             text_color: app.theme_cls.opposite_bg_darkest
                             pos_hint:{"center_x":0.5,"center_y":0.5}
                             font_size: "48sp"
-                            padding:15
+                            #padding: 15

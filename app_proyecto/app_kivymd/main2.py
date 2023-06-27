@@ -44,19 +44,19 @@ class MisPantallas(MDScreenManager):
             self.menu.dismiss()
             self.app.theme_cls.primary_palette = "LightBlue"
             self.app.theme_cls.theme_style = "Light"
-            self.ids.buttonadd.md_bg_color = "#C7C7C7"
-            self.ids.buttondel.md_bg_color = "#C7C7C7"
-            self.ids.buttonedit.md_bg_color = "#C7C7C7"
-            self.ids.buttonsearch.md_bg_color = "#C7C7C7"
+            # self.ids.buttonadd.md_bg_color = "#C7C7C7"
+            # self.ids.buttondel.md_bg_color = "#C7C7C7"
+            # self.ids.buttonedit.md_bg_color = "#C7C7C7"
+            # self.ids.buttonsearch.md_bg_color = "#C7C7C7"
             self.update_menu_text_color()
         else:
             self.menu.dismiss()
             self.app.theme_cls.primary_palette = "Orange"
             self.app.theme_cls.theme_style = "Dark"
-            self.ids.buttonadd.md_bg_color = "#404040"
-            self.ids.buttondel.md_bg_color = "#404040"
-            self.ids.buttonedit.md_bg_color = "#404040"
-            self.ids.buttonsearch.md_bg_color = "#404040"
+            # self.ids.buttonadd.md_bg_color = "#404040"
+            # self.ids.buttondel.md_bg_color = "#404040"
+            # self.ids.buttonedit.md_bg_color = "#404040"
+            # self.ids.buttonsearch.md_bg_color = "#404040"
             self.update_menu_text_color()
 
     def update_menu_text_color(self):
@@ -86,7 +86,7 @@ class MisPantallas(MDScreenManager):
         )
 
 
-class Main(MDApp):
+class Main2(MDApp):
     def build(self):
         self.theme_cls.material_style = "M3"
         self.theme_cls.primary_palette = "Orange"
@@ -97,4 +97,4 @@ class Main(MDApp):
         print("Hola")
 
 
-Main().run()
+Main2().run()
