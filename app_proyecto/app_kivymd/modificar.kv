@@ -1,0 +1,138 @@
+<Modificar@MDBoxLayout>:
+    orientation:"vertical"
+    MDBoxLayout:
+        md_bg_color: app.theme_cls.primary_color
+        size_hint_y:0.1
+        MDIconButton:
+            id:button
+            pos_hint:{"center_y":0.5}
+            size_hint_x:0.1
+            icon: "dots-vertical"
+            theme_text_color:"Custom"
+            text_color: 0,0,0,1
+            on_release:app.root.menu.open()
+        MDLabel:
+            id: toplabel
+            text: "Modificar artículo"
+            font_style:"H5"
+            halign:"center"
+            theme_text_color:"Custom"
+            text_color: 0,0,0,1
+        MDIconButton:
+            id:buttonhome
+            pos_hint:{"center_y":0.5}
+            size_hint_x:0.1
+            icon: "home"
+            font_size:"48sp"
+            theme_text_color:"Custom"
+            text_color: 0,0,0,1
+            on_release:app.root.current="Home"
+
+    MDWidget:
+        size_hint_y:0.1
+        md_bg_color: app.theme_cls.bg_darkest
+    
+    GridLayout:
+        cols: 2
+        rows: 4 
+        size_hint_y:0.6
+        spacing:dp(20)
+        padding:dp(20)
+
+        MDLabel:
+            id: label_nombre_mod
+            text: 'Producto'
+            halign:"center"
+            theme_text_color:"Custom"
+            text_color: 0,0,0,1
+            size_hint_y: .1
+            md_bg_color: app.theme_cls.primary_color
+                
+        MDTextField:
+            id: input_nombre_mod
+            hint_text: "Ingrese el nombre del producto a modificar"
+            hint_text_color_normal: app.theme_cls.opposite_bg_darkest
+            hint_text_color_focus: app.theme_cls.primary_color
+            text_color_focus: app.theme_cls.opposite_bg_darkest
+            line_color_normal: app.theme_cls.primary_color
+            line_color_focus: app.theme_cls.primary_color
+            mode: "rectangle"
+            size_hint_y:.1
+
+        MDLabel:
+            id: label_cantidad_mod
+            text: 'Cantidad'
+            halign:"center"
+            theme_text_color:"Custom"
+            text_color: 0,0,0,1
+            size_hint_y: .1
+            md_bg_color: app.theme_cls.primary_color
+            
+        MDTextField:
+            id: input_cantidad_mod
+            hint_text: "Ingrese un valor numérico"
+            hint_text_color_normal: app.theme_cls.opposite_bg_darkest
+            hint_text_color_focus: app.theme_cls.primary_color
+            text_color_focus: app.theme_cls.opposite_bg_darkest
+            line_color_normal: app.theme_cls.primary_color
+            line_color_focus: app.theme_cls.primary_color
+            mode: "rectangle"
+            size_hint_y:.1
+
+        MDLabel:
+            id: label_precio_mod
+            text: 'Precio'
+            halign:"center"
+            theme_text_color:"Custom"
+            text_color: 0,0,0,1
+            size_hint_y: .1
+            md_bg_color: app.theme_cls.primary_color
+            
+        MDTextField:
+            id: input_precio_mod
+            hint_text: "Ingrese un valor numérico"
+            hint_text_color_normal: app.theme_cls.opposite_bg_darkest
+            hint_text_color_focus: app.theme_cls.primary_color
+            text_color_focus: app.theme_cls.opposite_bg_darkest
+            line_color_normal: app.theme_cls.primary_color
+            line_color_focus: app.theme_cls.primary_color
+            mode: "rectangle"
+            size_hint_y:.1
+
+        MDLabel:
+            id: label_descrip_mod
+            text: 'Descripción'
+            halign:"center"
+            theme_text_color:"Custom"
+            text_color: 0,0,0,1
+            size_hint_y: .1
+            md_bg_color: app.theme_cls.primary_color
+            
+
+        MDTextField:
+            id: input_descrip_mod
+            hint_text: "Ingrese una nueva descripción"
+            hint_text_color_normal: app.theme_cls.opposite_bg_darkest
+            hint_text_color_focus: app.theme_cls.primary_color
+            text_color_focus: app.theme_cls.opposite_bg_darkest
+            line_color_normal: app.theme_cls.primary_color
+            line_color_focus: app.theme_cls.primary_color
+            mode: "rectangle"
+            size_hint_y:.1
+
+    MDWidget:
+        size_hint_y:0.1
+        md_bg_color: app.theme_cls.bg_darkest
+    
+    MDFloatLayout:
+        size_hint_y:0.1
+        MDRoundFlatIconButton:
+            text: "Guardar cambios"
+            icon: "pencil-circle"
+            md_bg_color: app.theme_cls.primary_color
+            text_color: 0,0,0,1
+            theme_icon_color: "Custom"
+            icon_color: 0,0,0,1
+            line_width:dp(1.5)
+            pos_hint:{"center_x":0.5,"center_y":0.5}
+               

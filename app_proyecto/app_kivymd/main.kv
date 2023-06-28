@@ -7,13 +7,12 @@
         text_color: app.theme_cls.opposite_bg_darkest
 
 <ButtonCard@MDCard>
-    padding: 4
+    padding: dp(4)
     size_hint: 0.1,0.1
     pos_hint: {"center_x": .5, "center_y": .5}
     md_bg_color: C("#404040")
     line_color:app.theme_cls.primary_color
     ripple_behavior: True
-    on_press:app.imprimir()
 
 <MisPantallas>:
     MDScreen:
@@ -54,10 +53,11 @@
                 size_hint_y:0.8
                 rows:2
                 cols:2
-                padding:25
-                spacing:25            
+                padding:dp(25)
+                spacing:dp(25)            
                 ButtonCard:
                     id: buttonadd
+                    on_release:root.current="Agregar"
                     MDBoxLayout:
                         orientation:"vertical"
                         padding:0,0,0,15
@@ -75,9 +75,11 @@
                             text_color: app.theme_cls.opposite_bg_darkest
                             pos_hint:{"center_x":0.5,"center_y":0.5}
                             font_size: "48sp"
-                            #padding:15
+                        
+                           
                 ButtonCard:
                     id: buttondel
+                    on_release:root.current="Eliminar"
                     MDBoxLayout:
                         orientation:"vertical"
                         padding:0,0,0,15
@@ -95,9 +97,10 @@
                             text_color: app.theme_cls.opposite_bg_darkest
                             pos_hint:{"center_x":0.5,"center_y":0.5}
                             font_size: "48sp"
-                            #padding:15
+                            
                 ButtonCard:
                     id: buttonedit
+                    on_release:root.current="Modificar"
                     MDBoxLayout:
                         orientation:"vertical"
                         padding:0,0,0,15
@@ -115,7 +118,7 @@
                             text_color: app.theme_cls.opposite_bg_darkest
                             pos_hint:{"center_x":0.5,"center_y":0.5}
                             font_size: "48sp"
-                            #padding:15
+                            
                 ButtonCard:
                     id: buttonsearch
                     MDBoxLayout:
@@ -135,4 +138,12 @@
                             text_color: app.theme_cls.opposite_bg_darkest
                             pos_hint:{"center_x":0.5,"center_y":0.5}
                             font_size: "48sp"
-                            #padding: 15
+    MDScreen:
+        name:"Agregar"
+        Agregar
+    MDScreen:
+        name:"Eliminar"
+        Eliminar
+    MDScreen:
+        name:"Modificar"
+        Modificar
