@@ -16,6 +16,9 @@ from kivymd.uix.menu import MDDropdownMenu
 from kivymd.uix.list import OneLineIconListItem
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivy.properties import StringProperty
+from kivymd.uix.dialog import MDDialog
+from kivymd.uix.button import MDFlatButton
+from kivymd.uix.label import MDLabel
 
 
 class Home(MDBoxLayout):
@@ -99,10 +102,86 @@ class MisPantallas(MDScreenManager):
             width_mult=dp(3),
         )
 
-    def call(self):
+    def call_agreg(self):
         nombre = self.obj_agregar.ids.input_nombre_add
         cantidad = self.obj_agregar.ids.input_cantidad_add
         precio = self.obj_agregar.ids.input_precio_add
         descripcion = self.obj_agregar.ids.input_descrip_add
-        mje = self.obj_c.agreg(nombre, cantidad, precio, descripcion)
-        print(mje)
+        try:
+            mje = self.obj_c.agreg(nombre, cantidad, precio, descripcion)
+        except ValueError as mje:
+            print(mje)
+            self.show_msg_popup("Campos incorrectos")
+        else:
+            self.show_msg_popup(mje)
+
+    def call_elim(self):
+        nombre = self.obj_eliminar.ids.input_nombre_elim
+
+        mje = self.obj_c.elim(nombre)
+        self.show_msg_popup(mje)
+
+    def call_modif(self):
+        nombre = self.obj_modificar.ids.input_nombre_mod
+        cantidad = self.obj_modificar.ids.input_cantidad_mod
+        precio = self.obj_modificar.ids.input_precio_mod
+        descripcion = self.obj_modificar.ids.input_descrip_mod
+        try:
+            mje = self.obj_c.modif(nombre, cantidad, precio, descripcion)
+        except ValueError as mje:
+            print(mje)
+            self.show_msg_popup("Campos incorrectos")
+        else:
+            self.show_msg_popup(mje)
+
+    def show_msg_popup(self, mje):
+        if mje == "Nuevo artículo cargado":
+            titulo = "Operación exitosa"
+            texto = "Artículo cargado correctamente"
+        elif mje == "Ya existe el artículo":
+            titulo = "Error en la operación"
+            texto = "Artículo ya existente"
+        elif mje == "Campos vacíos":
+            titulo = "Error en la operación"
+            texto = "No se han completado todos los campos"
+        elif mje == "Campos incorrectos":
+            titulo = "Error en la operación"
+            texto = "Campos cargados incorrectamente"
+        elif mje == "Artículo eliminado":
+            titulo = "Operación exitosa"
+            texto = "Artículo eliminado correctamente"
+        elif mje == "Artículo no encontrado":
+            titulo = "Error en la operación"
+            texto = "Artículo no encontrado"
+        elif mje == "Campo vacío":
+            titulo = "Error en la operación"
+            texto = "No se ha ingresado ningun nombre"
+        elif mje == "Artículo modificado":
+            titulo = "Operación exitosa"
+            texto = "Artículo modificado correctamente"
+        elif mje == "No se modificó artículo":
+            titulo = "Error en la operación"
+            texto = "No se ha modificado el artículo"
+
+        self.dialog = MDDialog(
+            title=titulo,
+            type="custom",
+            content_cls=MDLabel(
+                text=texto,
+                theme_text_color="Custom",
+                text_color=self.obj_app.theme_cls.opposite_bg_darkest,
+            ),
+            buttons=[
+                MDFlatButton(
+                    text="Aceptar",
+                    theme_text_color="Custom",
+                    text_color=self.obj_app.theme_cls.primary_color,
+                    on_release=self.close_msg_popup,
+                ),
+            ],
+        )
+
+        self.dialog.open()
+
+    def close_msg_popup(self, obj):
+        self.dialog.dismiss()

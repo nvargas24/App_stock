@@ -21,68 +21,7 @@ flag_p = 0
 # Flag utilizado para informar que existe un dato válido para actualizar en el campo descripción.
 flag_d = 0
 
-
-class Evento:
-    """
-    Clase que integra los métodos asociados a los eventos de los campos de entrada.
-    """
-
-    def click(self, event, campo, var, entry):
-        """
-        Método que borra el texto escrito por defecto de acuerdo al campo donde se hizo click.
-
-        :param event: Evento ``<<Button-1>>`` que recibe como argumento.
-        :param campo: Tipo de campo de entrada donde se realizó click.
-        :param var: Variable asociada al campo de entrada.
-        :param entry: Campo de entrada donde se realizó click.
-        """
-        if campo == "nom":
-            if var.get() == "Escriba el nombre del artículo":
-                entry.delete(0, "end")
-                entry.config(foreground="black")
-        elif campo == "cant":
-            if var.get() == "Escriba un valor numérico":
-                entry.delete(0, "end")
-                entry.config(foreground="black")
-        elif campo == "precio":
-            if var.get() == "Escriba un valor numérico":
-                entry.delete(0, "end")
-                entry.config(foreground="black")
-        elif campo == "descrip":
-            if var.get() == "Agregue una breve descrip. del art.":
-                entry.delete(0, "end")
-                entry.config(foreground="black")
-
-    def focus_out(self, event, campo, var, entry):
-        """
-        Método que reescribe el texto por defecto de acuerdo al campo que se encuentre vacío
-        y si no se está posicionado sobre el mismo.
-
-        :param event: Evento ``<<FocusOut>>`` que recibe como argumento.
-        :param campo: Tipo de campo de entrada donde ocurrió el evento.
-        :param var: Variable asociada al campo de entrada.
-        :param entry: Campo de entrada donde se produjo el evento.
-        """
-        if campo == "nom":
-            if var.get() == "":
-                entry.insert(0, "Escriba el nombre del artículo")
-                entry.config(foreground="grey")
-        elif campo == "cant":
-            if var.get() == "":
-                entry.insert(0, "Escriba un valor numérico")
-                entry.config(foreground="grey")
-        elif campo == "precio":
-            if var.get() == "":
-                entry.insert(0, "Escriba un valor numérico")
-                entry.config(foreground="grey")
-        elif campo == "descrip":
-            if var.get() == "":
-                entry.insert(0, "Agregue una breve descrip. del art.")
-                entry.config(foreground="grey")
-
-
 # ---------------------Clases que contienen métodos para base de datos--------------------------------
-
 try:
     db = SqliteDatabase(
         "base_stock.db"
@@ -160,50 +99,69 @@ class BaseDatos:
         except:
             print("No se pudo eliminar el registro")
 
-    def leer_db(self, nombre):
+    def leer_db(self, nombre=None, descrip=None):
         """
-        Método para seleccionar una o varias filas de la tabla usando como referencia el campo **Nombre**.
+        Método para seleccionar una o varias filas de la tabla usando como referencia
+        el campo **Nombre** y/o el campo **Descripción**.
 
         :param nombre: Nombre del componente.
+        :param descrip: Descripcion del componente.
 
         :returns: Fila/s encontrada/s de acuerdo a la referencia.
         """
-        if nombre == None:
+
+        if nombre == None and descrip == None:
             rows = Componentes.select()
-        else:
+        elif nombre != None and descrip == None:
             rows = Componentes.select().where(Componentes.nombre == nombre)
+        elif nombre == None and descrip != None:
+            rows = Componentes.select().where(Componentes.descripcion == descrip)
+        elif nombre != None and descrip != None:
+            rows = Componentes.select().where(
+                (Componentes.nombre == nombre) & (Componentes.descripcion == descrip)
+            )
 
         return rows
 
-    def actualizar_db(self, nombre, param, data2mod):
+    def actualizar_db(self, nombre, cant, prec, descrip):
         """
         Método para actualizar uno o varios campos de una fila de la tabla.
 
         :param nombre: Nombre del componente.
-        :param param: Nuevo valor del campo.
-        :param data2mod: Campo a modificar.
+        :param cant: Nuevo valor del campo cantidad (si existe un dato válido).
+        :param prec: Nuevo valor del campo precio (si existe un dato válido).
+        :param descrip: Nuevo valor del campo descripción (si existe un dato válido).
         """
-        if data2mod == "cant":
-            reg_actualizar = Componentes.update(cantidad=param).where(
+
+        if flag_c == 1:  # Si existe un dato cantidad válido.
+            reg_actualizar = Componentes.update(cantidad=cant).where(
                 Componentes.nombre == nombre
             )
+            try:
+                reg_actualizar.execute()  # Actualizo el registro.
+            except:
+                print("No se pudo actualizar el registro")
 
-        elif data2mod == "prec":
-            reg_actualizar = Componentes.update(precio=param).where(
+        if flag_p == 1:  # Si existe un dato precio válido.
+            reg_actualizar = Componentes.update(precio=prec).where(
                 Componentes.nombre == nombre
             )
+            try:
+                reg_actualizar.execute()  # Actualizo el registro.
+            except:
+                print("No se pudo actualizar el registro")
 
-        elif data2mod == "descrip":
-            reg_actualizar = Componentes.update(descripcion=param).where(
+        if flag_d == 1:  # Si existe un dato descripción válido.
+            reg_actualizar = Componentes.update(descripcion=descrip).where(
                 Componentes.nombre == nombre
             )
+            try:
+                reg_actualizar.execute()  # Actualizo el registro.
+            except:
+                print("No se pudo actualizar el registro")
 
-        try:
-            reg_actualizar.execute()  # Actualizo el registro.
-        except:
-            print("No se pudo actualizar el registro")
 
-
+# ---------------------Clase que contienen métodos para manejo de datos ingresados--------------------------------
 class Crud(BaseDatos):
     """
     Clase que contiene métodos para el manejo de los datos ingresados.
@@ -213,8 +171,9 @@ class Crud(BaseDatos):
         """
         Constructor que hereda el correspondiente a la clase ``BaseDatos()``,
         y que además crea un objeto ``Validacion()`` para comprobar los campos de entrada.
+        También hereda de la clase ``Sujeto()`` para el manejo de observadores.
         """
-        super(Crud, self).__init__()
+        super().__init__()
         self.obj_val = Validacion()
 
     def agreg(self, nombre, cantidad, precio, descripcion):
@@ -225,11 +184,10 @@ class Crud(BaseDatos):
         :param cantidad: Cantidad del componente.
         :param precio: Precio del componente.
         :param descripcion: Descripción del componente.
-        :param tree: Treeview de la interfaz.
 
-        :returns: ``"campos vacíos"`` si no se completaron todos los campos.
-        :returns: ``"existe"`` si el componente que se quiere ingresar ya se encontraba cargado.
-        :returns: ``"cargado"`` si el componente fue ingresado exitosamente.
+        :returns: ``"Campos vacios"`` si no se completaron todos los campos.
+        :returns: ``"Ya existe el articulo"`` si el componente que se quiere ingresar ya se encontraba cargado.
+        :returns: ``"Nuevo articulo cargado"`` si el componente fue ingresado exitosamente.
 
         Si en algunos de los campos se ingresó un dato inválido (no cumple regex)
         se generará una excepción.
@@ -239,32 +197,30 @@ class Crud(BaseDatos):
         prec = precio.text
         descrip = descripcion.text
 
-        # Chequeo que los campos esten completos.
-        if (
+        # Chequeo que el campo nombre, cantidad, precio y descripción no se encuentren vacíos.
+        if not (
             self.obj_val.empty_entry(nom, "nom")
             and self.obj_val.empty_entry(cant, "cant")
             and self.obj_val.empty_entry(prec, "prec")
             and self.obj_val.empty_entry(descrip, "descrip")
         ):
-            # Valido los campos con regex.
-            if (
-                self.obj_val.val_entry(nom, "nom")
-                and self.obj_val.val_entry(cant, "cant")
-                and self.obj_val.val_entry(prec, "prec")
-                and self.obj_val.val_entry(descrip, "descrip")
-            ):
-                if self.leer_db(nom):
-                    return "existe"
-                else:
-                    self.agregar_db(nom, cant, prec, descrip)
+            return "Campos vacíos"
 
-                    return "cargado"
-            else:
-                raise ValueError(
-                    "campos incorrectos"
-                )  # Si se ingresó un dato inválido genero una excepción.
-        else:
-            return "campos vacios"
+        # Si se ingresó un dato inválido genero una excepción.
+        if not (
+            self.obj_val.val_entry(nom, "nom")
+            and self.obj_val.val_entry(cant, "cant")
+            and self.obj_val.val_entry(prec, "prec")
+            and self.obj_val.val_entry(descrip, "descrip")
+        ):
+            raise ValueError("Campos incorrectos")
+
+        # Cargo en la base de datos y notifico al observador
+        if not self.leer_db(nom):
+            self.agregar_db(nom, cant, prec, descrip)
+            return "Nuevo artículo cargado"
+
+        return "Ya existe el artículo"
 
     def elim(self, nombre):
         """
@@ -272,32 +228,37 @@ class Crud(BaseDatos):
 
         :param nombre: Nombre del componente.
 
-        :returns: ``"campo vacio"`` si no se ingresó ningún nombre.
-        :returns: ``"no encontrado"`` si el componente a eliminar no se encuentra ingresado.
-        :returns: ``"eliminado"`` si el componente fue eliminado exitosamente.
+        :returns: ``"Campo vacio"`` si no se ingresó ningún nombre.
+        :returns: ``"Articulo no encontrado"`` si el componente a eliminar no se encuentra ingresado.
+        :returns: ``"Articulo eliminado"`` si el componente fue eliminado exitosamente.
         """
-        nom = nombre.get()
+        nom = nombre.text
 
         # Chequeo que el campo nombre no esté vacío.
-        if self.obj_val.empty_entry(nom, "nom"):
-            # Chequeo si el artículo a eliminar existe.
-            if self.leer_db(nom):
-                self.eliminar_db(nom)
-                return "eliminado"
-            else:
-                return "no encontrado"
-        else:
-            return "campo vacio"
+        if not self.obj_val.empty_entry(nom, "nom"):
+            return "Campo vacío"
+
+        # Chequeo si el artículo a eliminar existe.
+        if not self.leer_db(nom):
+            return "Artículo no encontrado"
+
+        # Elimino de la base de datos y notifico al observador.
+        self.eliminar_db(nom)
+        return "Artículo eliminado"
 
     def modif(self, nombre, cantidad, precio, descripcion):
         """
         Método para modificar un componente ingresado (lo busco por el nombre).
 
         :param nombre: Nombre del componente.
+        :param cantidad: Cantidad del componente.
+        :param precio: Precio del componente.
+        :param descripcion: Descripción del componente.
 
-        :returns: ``"campo vacio"`` si no se ingresó ningún nombre.
-        :returns: ``"no existe"`` si el componente a modificar no se encuentra ingresado.
-        :returns: ``"modificado"`` si el componente fue modificado exitosamente.
+        :returns: ``"Campo vacio"`` si no se ingresó ningún nombre.
+        :returns: ``"Articulo no existe"`` si el componente a modificar no se encuentra ingresado.
+        :returns: ``"Articulo sin modificar"`` si no se ingresó ningún parámetro a modificar del componente.
+        :returns: ``"Articulo modificado"`` si el componente fue modificado exitosamente.
 
         Si en algunos de los campos se ingresó un dato inválido (no cumple regex)
         se generará una excepción.
@@ -307,119 +268,150 @@ class Crud(BaseDatos):
         global flag_p
         global flag_d
 
-        nom = nombre.get()
-        cant = cantidad.get()
-        prec = precio.get()
-        descrip = descripcion.get()
+        nom = nombre.text
+        cant = cantidad.text
+        prec = precio.text
+        descrip = descripcion.text
 
         # Chequeo que el campo nombre no esté vacío.
-        if self.obj_val.empty_entry(nom, "nom"):
-            # Chequeo si el artículo a modificar existe.
-            if self.leer_db(nom):
-                # Si el campo cantidad no está vacío y cumple con el patrón de regex
-                # se pondrá en '1' el flag_c (dato válido para actualizar).
-                if self.obj_val.empty_entry(cant, "cant"):
-                    if self.obj_val.val_entry(cant, "cant"):
-                        flag_c = 1
-                    else:
-                        flag_e = 1
+        if not self.obj_val.empty_entry(nom, "nom"):
+            return "Campo vacío"
 
-                # Si el campo precio no está vacío y cumple con el patrón de regex
-                # se pondrá en '1' el flag_p (dato válido para actualizar).
-                if self.obj_val.empty_entry(prec, "prec"):
-                    if self.obj_val.val_entry(prec, "prec"):
-                        flag_p = 1
-                    else:
-                        flag_e = 1
+        # Chequeo si el artículo a modificar existe.
+        if not self.leer_db(nom):
+            return "Artículo no encontrado"
 
-                # Si el campo descripción no está vacío y cumple con el patrón de regex
-                # se pondrá en '1' el flag_p (dato válido para actualizar).
-                if self.obj_val.empty_entry(descrip, "descrip"):
-                    if self.obj_val.val_entry(descrip, "descrip"):
-                        flag_d = 1
-                    else:
-                        flag_e = 1
-
-                # Si no hubo error en la validación de datos (flag_e == 0) se actualizarán
-                # los datos que hayan sido ingresados en los campos correspondientes.
-                if flag_e == 0:
-                    if flag_c:
-                        self.actualizar_db(nom, cant, "cant")
-                        flag_c = 0
-                    if flag_p:
-                        self.actualizar_db(nom, prec, "prec")
-                        flag_p = 0
-                    if flag_d:
-                        self.actualizar_db(nom, descrip, "descrip")
-                        flag_d = 0
-
-                    return "modificado"
-
-                # Si hubo error en la validación de datos (flag == 1)
-                # no se actualizará ningun campo y se informará del error al usuario.
-                if flag_e:
-                    flag_e = 0
-                    raise ValueError(
-                        "campos incorrectos"
-                    )  # Si se ingresó un dato inválido genero una excepción.
+        # Si el campo cantidad no está vacío y cumple con el patrón de regex
+        # se pondrá en '1' el flag_c (dato válido para actualizar).
+        if self.obj_val.empty_entry(cant, "cant"):
+            if self.obj_val.val_entry(cant, "cant"):
+                flag_c = 1
             else:
-                return "no existe"
-        else:
-            return "campo vacio"
+                flag_e = 1
 
-    def consulta(self, nombre, tree):
+        # Si el campo precio no está vacío y cumple con el patrón de regex
+        # se pondrá en '1' el flag_p (dato válido para actualizar).
+        if self.obj_val.empty_entry(prec, "prec"):
+            if self.obj_val.val_entry(prec, "prec"):
+                flag_p = 1
+            else:
+                flag_e = 1
+
+        # Si el campo descripción no está vacío y cumple con el patrón de regex
+        # se pondrá en '1' el flag_p (dato válido para actualizar).
+        if self.obj_val.empty_entry(descrip, "descrip"):
+            if self.obj_val.val_entry(descrip, "descrip"):
+                flag_d = 1
+            else:
+                flag_e = 1
+
+        # Si no hubo error en la validación de datos (flag_e == 0) se actualizarán
+        # los datos que hayan sido ingresados en los campos correspondientes.
+        if not flag_e:
+            # Si no se ingresó ningún dato a modificar.
+            if not (flag_c or flag_p or flag_d):
+                return "No se modificó artículo"
+
+            # Si se ingresó un dato modifico el componente y notifico al observador.
+            self.actualizar_db(nom, cant, prec, descrip)
+
+            flag_c = 0
+            flag_p = 0
+            flag_d = 0
+
+            return "Artículo modificado"
+
+        # Si hubo error en la validación de datos (flag == 1)
+        # no se actualizará ningun campo y se informará del error al usuario.
+        flag_e = 0  # Como ya se detecto un error se lo vuelve a setear para la siguiente operación.
+
+        raise ValueError(
+            "Campos incorrectos"
+        )  # Si se ingresó un dato inválido genero una excepción.
+
+    def consulta(self, nombre, descrip, window_consulta):
         """
-        Método para consultar los datos de un componente en particular (lo busco por el nombre).
+        Método para consultar los datos de un componente en particular (lo busco por el nombre y/o descripción).
 
         :param nombre: Nombre del componente.
+        :param descrip: Descripción del componente.
+        :param window_consulta: Objeto de clase ``WindowConsulta()``.
 
-        :returns: ``"campo vacio"`` si no se ingresó ningún nombre.
-        :returns: ``"no encontrado"`` si el componente a consultar no se encuentra ingresado.
+        :returns: ``"Campo vacios"`` si no se ingresó ningún nombre y/o descripción.
+        :returns: ``"Articulo no encontrado por nombre"`` si el componente consultado por nombre no se encuentra ingresado.
+        :returns: ``"Articulo no encontrado por descripcion"`` si el componente consultado por descripción no se encuentra ingresado.
+        :returns: ``"Articulo no encontrado"`` si el componente consultado por nombre y descripción no se encuentra ingresado.
         """
-        nom = nombre.get()
+        nom = nombre.text
+        descrip = descrip.text
 
-        # Chequeo que el campo nombre no esté vacío.
-        if self.obj_val.empty_entry(nom, "nom"):
-            # Chequeo si el artículo a consultar existe.
-            if self.leer_db(nom):
-                data_from_db = self.leer_db(nom)
+        # Búsqueda por nombre.
+        if self.obj_val.empty_entry(nom, "nom") and not self.obj_val.empty_entry(
+            descrip, "descrip"
+        ):
+            data_from_db = self.leer_db(nom, None)
+            if not data_from_db:
+                return "Artículo no encontrado por nombre"
 
-                # Borro todas las filas del treeview para mostrar solo el artículo consultado.
-                tree.delete(*tree.get_children())
-                for row in data_from_db:
-                    tree.insert(
-                        "",
-                        "end",
-                        text=str(row.id),
-                        values=(
-                            row.nombre,
-                            int(row.cantidad),
-                            float(row.precio),
-                            row.descripcion,
-                        ),
-                    )
-            else:
-                return "no encontrado"
+        # Búsqueda por descripción.
+        elif not self.obj_val.empty_entry(nom, "nom") and self.obj_val.empty_entry(
+            descrip, "descrip"
+        ):
+            data_from_db = self.leer_db(None, descrip)
+            if not data_from_db:
+                return "Artículo no encontrado por descripción"
+
+        # Búsqueda por nombre y descripción.
+        elif self.obj_val.empty_entry(nom, "nom") and self.obj_val.empty_entry(
+            descrip, "descrip"
+        ):
+            data_from_db = self.leer_db(nom, descrip)
+            if not data_from_db:
+                return "Artículo no encontrado"
+
         else:
-            return "campo vacio"
+            return "Campos vacíos"
 
-    def mostrar_cat(self, tree):
+        # Borro las filas de la tabla que contiene la ventana de Consulta.
+        window_consulta.delete()
+
+        # Cargo la tabla con la/s fila/s encontradas de acuerdo a la búsqueda.
+        for row in data_from_db:
+            window_consulta.insert(
+                str(row.id),
+                row.nombre,
+                row.cantidad,
+                row.precio,
+                row.descripcion,
+            )
+
+    def mostrar_cat(self, window_consulta, window_main):
         """
         Método que muestra el catálogo completo de componentes cargados hasta el momento.
 
-        :param tree: Treeview de la interfaz.
+        :param window_consulta: Objeto de clase ``WindowConsulta()``.
+        :param window_main: Objeto de clase ``MainWindow()``, utilizado por el decorador vinculado al método.
+
+        :returns: **x_nom**, lista que almacena los nombres de cada componente registrado.
+        :returns: **y_cant**, lista que almacena las cantidades de cada componente registrado.
         """
-        data_from_db = self.leer_db(None)
-        tree.delete(*tree.get_children())
+
+        x_nom = []  # Lista que almacena los nombres de cada componente cargado.
+        y_cant = []  # Lista que almacena las cantidades de cada componente cargado.
+
+        data_from_db = self.leer_db()
+
+        # Cargo la tabla de la ventana Consulta con todos los registros almacenados en la bd.
         for row in data_from_db:
-            tree.insert(
-                "",
-                "end",
-                text=str(row.id),
-                values=(
-                    row.nombre,
-                    int(row.cantidad),
-                    float(row.precio),
-                    row.descripcion,
-                ),
+            window_consulta.insert(
+                str(row.id),
+                row.nombre,
+                row.cantidad,
+                row.precio,
+                row.descripcion,
             )
+
+            x_nom.append(row.nombre)
+            y_cant.append(row.cantidad)
+
+        return x_nom, y_cant
