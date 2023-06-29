@@ -1,0 +1,21 @@
+#:import C kivy.utils.get_color_from_hex
+<IconListItem>
+    IconLeftWidget:
+        ripple_scale: 0
+        icon: root.icon
+        theme_text_color: "Custom"
+        text_color: app.theme_cls.opposite_bg_darkest
+
+<MisPantallas>:
+    MDScreen:
+        name:"Home"
+        id:home
+    MDScreen:
+        name:"Agregar"
+        id:add
+    MDScreen:
+        name:"Eliminar"
+        id:elim
+    MDScreen:
+        name:"Modificar"
+        id:mod
