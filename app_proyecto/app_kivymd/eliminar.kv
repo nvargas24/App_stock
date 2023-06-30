@@ -1,3 +1,9 @@
+<MDIconButton>:
+    pos_hint:{"center_y":0.5}
+    size_hint_x:0.1
+    theme_text_color:"Custom"
+    text_color: 0,0,0,1
+
 <Eliminar@MDBoxLayout>:
     orientation:"vertical"
 
@@ -6,11 +12,7 @@
         size_hint_y:0.1
         MDIconButton:
             id:button
-            pos_hint:{"center_y":0.5}
-            size_hint_x:0.1
             icon: "dots-vertical"
-            theme_text_color:"Custom"
-            text_color: 0,0,0,1
             on_release:app.root.menu.open()
         MDLabel:
             id: toplabel
@@ -21,19 +23,15 @@
             text_color: 0,0,0,1
         MDIconButton:
             id:buttonhome
-            pos_hint:{"center_y":0.5}
-            size_hint_x:0.1
             icon: "home"
             font_size:"48sp"
-            theme_text_color:"Custom"
-            text_color: 0,0,0,1
             on_release:app.root.current="Home"
 
     MDWidget:
         size_hint_y:0.1
         md_bg_color: app.theme_cls.bg_darkest
     
-    GridLayout:
+    MDGridLayout:
         cols: 1
         rows: 2 
         size_hint_y:0.6

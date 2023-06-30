@@ -37,6 +37,10 @@ class Modificar(MDBoxLayout):
     Builder.load_file("modificar.kv")
 
 
+class Consultar(MDBoxLayout):
+    Builder.load_file("consultar.kv")
+
+
 class IconListItem(OneLineIconListItem):
     icon = StringProperty()
 
@@ -49,10 +53,12 @@ class MisPantallas(MDScreenManager):
         self.obj_agregar = Agregar()
         self.obj_eliminar = Eliminar()
         self.obj_modificar = Modificar()
+        self.obj_consultar = Consultar()
         self.ids.home.add_widget(self.obj_home)
         self.ids.add.add_widget(self.obj_agregar)
         self.ids.elim.add_widget(self.obj_eliminar)
         self.ids.mod.add_widget(self.obj_modificar)
+        self.ids.consulta.add_widget(self.obj_consultar)
         self.obj_c = Crud()
         self.crear_menu()
 
