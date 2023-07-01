@@ -117,7 +117,9 @@ class MisPantallas(MDScreenManager):
             mje = self.obj_c.agreg(nombre, cantidad, precio, descripcion)
         except ValueError as mje:
             print(mje)
-            self.show_msg_popup("Campos incorrectos")
+            self.show_msg_popup(
+                ["Error en la operación", "Campos cargados incorrectamente"]
+            )
         else:
             self.show_msg_popup(mje)
 
@@ -136,44 +138,18 @@ class MisPantallas(MDScreenManager):
             mje = self.obj_c.modif(nombre, cantidad, precio, descripcion)
         except ValueError as mje:
             print(mje)
-            self.show_msg_popup("Campos incorrectos")
+            self.show_msg_popup(
+                ["Error en la operación", "Campos cargados incorrectamente"]
+            )
         else:
             self.show_msg_popup(mje)
 
     def show_msg_popup(self, mje):
-        if mje == "Nuevo artículo cargado":
-            titulo = "Operación exitosa"
-            texto = "Artículo cargado correctamente"
-        elif mje == "Ya existe el artículo":
-            titulo = "Error en la operación"
-            texto = "Artículo ya existente"
-        elif mje == "Campos vacíos":
-            titulo = "Error en la operación"
-            texto = "No se han completado todos los campos"
-        elif mje == "Campos incorrectos":
-            titulo = "Error en la operación"
-            texto = "Campos cargados incorrectamente"
-        elif mje == "Artículo eliminado":
-            titulo = "Operación exitosa"
-            texto = "Artículo eliminado correctamente"
-        elif mje == "Artículo no encontrado":
-            titulo = "Error en la operación"
-            texto = "Artículo no encontrado"
-        elif mje == "Campo vacío":
-            titulo = "Error en la operación"
-            texto = "No se ha ingresado ningun nombre"
-        elif mje == "Artículo modificado":
-            titulo = "Operación exitosa"
-            texto = "Artículo modificado correctamente"
-        elif mje == "No se modificó artículo":
-            titulo = "Error en la operación"
-            texto = "No se ha modificado el artículo"
-
         self.dialog = MDDialog(
-            title=titulo,
+            title=mje[0],
             type="custom",
             content_cls=MDLabel(
-                text=texto,
+                text=mje[1],
                 theme_text_color="Custom",
                 text_color=self.obj_app.theme_cls.opposite_bg_darkest,
             ),
@@ -191,3 +167,17 @@ class MisPantallas(MDScreenManager):
 
     def close_msg_popup(self, obj):
         self.dialog.dismiss()
+
+    def limpiar_campos(self, lista_campos):
+        for campo in lista_campos:
+            campo.text = ""
+            campo.error = False
+
+    """
+    def set_error_message(self, instance_text):
+        if instance_text.focus == False:
+            instance_text.required = True
+        else:
+            instance_text.required = True
+            instance_text.error = False
+    """

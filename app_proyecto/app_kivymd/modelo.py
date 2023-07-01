@@ -204,7 +204,7 @@ class Crud(BaseDatos):
             and self.obj_val.empty_entry(prec, "prec")
             and self.obj_val.empty_entry(descrip, "descrip")
         ):
-            return "Campos vacíos"
+            return ["Error en la operación", "No se han completado todos los campos"]
 
         # Si se ingresó un dato inválido genero una excepción.
         if not (
@@ -218,9 +218,9 @@ class Crud(BaseDatos):
         # Cargo en la base de datos y notifico al observador
         if not self.leer_db(nom):
             self.agregar_db(nom, cant, prec, descrip)
-            return "Nuevo artículo cargado"
+            return ["Operación exitosa", "Artículo cargado correctamente"]
 
-        return "Ya existe el artículo"
+        return ["Error en la operación", "Artículo ya existente"]
 
     def elim(self, nombre):
         """
@@ -236,15 +236,15 @@ class Crud(BaseDatos):
 
         # Chequeo que el campo nombre no esté vacío.
         if not self.obj_val.empty_entry(nom, "nom"):
-            return "Campo vacío"
+            return ["Error en la operación", "No se ha ingresado ningun nombre"]
 
         # Chequeo si el artículo a eliminar existe.
         if not self.leer_db(nom):
-            return "Artículo no encontrado"
+            return ["Error en la operación", "Artículo no encontrado"]
 
         # Elimino de la base de datos y notifico al observador.
         self.eliminar_db(nom)
-        return "Artículo eliminado"
+        return ["Operación exitosa", "Artículo eliminado correctamente"]
 
     def modif(self, nombre, cantidad, precio, descripcion):
         """
@@ -275,11 +275,11 @@ class Crud(BaseDatos):
 
         # Chequeo que el campo nombre no esté vacío.
         if not self.obj_val.empty_entry(nom, "nom"):
-            return "Campo vacío"
+            return ["Error en la operación", "No se ha ingresado ningun nombre"]
 
         # Chequeo si el artículo a modificar existe.
         if not self.leer_db(nom):
-            return "Artículo no encontrado"
+            return ["Error en la operación", "Artículo no encontrado"]
 
         # Si el campo cantidad no está vacío y cumple con el patrón de regex
         # se pondrá en '1' el flag_c (dato válido para actualizar).
@@ -310,7 +310,7 @@ class Crud(BaseDatos):
         if not flag_e:
             # Si no se ingresó ningún dato a modificar.
             if not (flag_c or flag_p or flag_d):
-                return "No se modificó artículo"
+                return ["Error en la operación", "No se ha modificado el artículo"]
 
             # Si se ingresó un dato modifico el componente y notifico al observador.
             self.actualizar_db(nom, cant, prec, descrip)
@@ -319,7 +319,7 @@ class Crud(BaseDatos):
             flag_p = 0
             flag_d = 0
 
-            return "Artículo modificado"
+            return ["Operación exitosa", "Artículo modificado correctamente"]
 
         # Si hubo error en la validación de datos (flag == 1)
         # no se actualizará ningun campo y se informará del error al usuario.

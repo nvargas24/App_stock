@@ -4,14 +4,19 @@
     theme_text_color:"Custom"
     text_color: 0,0,0,1
 
-<MDTextField>:
+<MDAddTextField@MDTextField>:
     hint_text_color_normal: app.theme_cls.primary_color
     hint_text_color_focus: app.theme_cls.primary_color
     text_color_normal: app.theme_cls.opposite_bg_darkest
     text_color_focus: app.theme_cls.opposite_bg_darkest
     line_color_normal: app.theme_cls.primary_color
     line_color_focus: app.theme_cls.primary_color
+    error_color:app.theme_cls.primary_color
     mode: "rectangle"
+    helper_text: "*Campo obligatorio"
+    helper_text_mode: "on_error"
+    required: False
+    on_focus: self.required=True
 
 <MDAddLabel@MDLabel>:
     halign:"center"
@@ -20,6 +25,13 @@
     size_hint_y:.1
     md_bg_color: app.theme_cls.primary_color
 
+<MDRoundFlatIconButton>:
+    md_bg_color: app.theme_cls.primary_color
+    text_color: 0,0,0,1
+    theme_icon_color: "Custom"
+    icon_color: 0,0,0,1
+    line_width:dp(1.5)
+    size_hint:0.1,0.5
 
 <Agregar@MDBoxLayout>:
     orientation:"vertical"
@@ -42,8 +54,10 @@
             id:buttonhome
             icon: "home"
             font_size:"48sp"
-            on_release:app.root.current="Home"
-            
+            on_release:
+                app.root.limpiar_campos([root.ids.input_nombre_add,root.ids.input_cantidad_add,root.ids.input_precio_add,root.ids.input_descrip_add])
+                app.root.current="Home"
+                        
     MDWidget:
         size_hint_y:0.1
         md_bg_color: app.theme_cls.bg_darkest
@@ -59,7 +73,7 @@
             id: label_nombre_add
             text: 'Producto'
         
-        MDTextField:
+        MDAddTextField:
             id: input_nombre_add
             hint_text: "Ingrese el nombre del producto"
             size_hint_y:0.1
@@ -68,7 +82,7 @@
             id: label_cantidad_add
             text: 'Cantidad'
  
-        MDTextField:
+        MDAddTextField:
             id: input_cantidad_add
             hint_text: "Ingrese un valor numérico"
             size_hint_y:0.1
@@ -77,7 +91,7 @@
             id: label_precio_add
             text: 'Precio'
 
-        MDTextField:
+        MDAddTextField:
             id: input_precio_add
             hint_text: "Ingrese un valor numérico"
             size_hint_y:0.1
@@ -86,7 +100,7 @@
             id: label_descrip_add
             text: 'Descripción'
 
-        MDTextField:
+        MDAddTextField:
             id: input_descrip_add
             hint_text: "Ingrese una breve descripción"
             size_hint_y:0.1
@@ -100,11 +114,13 @@
         MDRoundFlatIconButton:
             text: "Guardar artículo"
             icon: "content-save"
-            md_bg_color: app.theme_cls.primary_color
-            text_color: 0,0,0,1
-            theme_icon_color: "Custom"
-            icon_color: 0,0,0,1
-            line_width:dp(1.5)
-            pos_hint:{"center_x":0.5,"center_y":0.5}
+            pos_hint:{"center_x":0.4,"center_y":0.5}
             on_release:app.root.call_agreg()
+        
+        MDRoundFlatIconButton:
+            text: "Cancelar"
+            icon: "close-circle"
+            pos_hint:{"center_x":0.6,"center_y":0.5}
+            on_release:app.root.limpiar_campos([root.ids.input_nombre_add,root.ids.input_cantidad_add,root.ids.input_precio_add,root.ids.input_descrip_add])
+                
                

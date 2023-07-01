@@ -4,7 +4,7 @@
     theme_text_color:"Custom"
     text_color: 0,0,0,1
 
-<MDTextField>:
+<MDModTextField@MDTextField>:
     hint_text_color_normal: app.theme_cls.primary_color
     hint_text_color_focus: app.theme_cls.primary_color
     text_color_normal: app.theme_cls.opposite_bg_darkest
@@ -19,6 +19,14 @@
     text_color: 0,0,0,1
     size_hint_y: .1
     md_bg_color: app.theme_cls.primary_color
+
+<MDRoundFlatIconButton>:
+    md_bg_color: app.theme_cls.primary_color
+    text_color: 0,0,0,1
+    theme_icon_color: "Custom"
+    icon_color: 0,0,0,1
+    line_width:dp(1.5)
+    size_hint:0.1,0.5
 
 <Modificar@MDBoxLayout>:
     orientation:"vertical"
@@ -40,7 +48,9 @@
             id:buttonhome
             icon: "home"
             font_size:"48sp"
-            on_release:app.root.current="Home"
+            on_release:
+                app.root.limpiar_campos([root.ids.input_nombre_mod,root.ids.input_cantidad_mod,root.ids.input_precio_mod,root.ids.input_descrip_mod])
+                app.root.current="Home"
 
     MDWidget:
         size_hint_y:0.1
@@ -57,16 +67,21 @@
             id: label_nombre_mod
             text: 'Producto'
 
-        MDTextField:
+        MDModTextField:
             id: input_nombre_mod
             hint_text: "Ingrese el nombre del producto a modificar"
             size_hint_y:0.1
+            error_color:app.theme_cls.primary_color
+            helper_text_mode: "on_error"
+            helper_text: "*Campo obligatorio"
+            required: False
+            on_focus: self.required=True
 
         MDModLabel:
             id: label_cantidad_mod
             text: 'Cantidad'
  
-        MDTextField:
+        MDModTextField:
             id: input_cantidad_mod
             hint_text: "Ingrese un valor numérico"
             size_hint_y:0.1
@@ -75,7 +90,7 @@
             id: label_precio_mod
             text: 'Precio'
             
-        MDTextField:
+        MDModTextField:
             id: input_precio_mod
             hint_text: "Ingrese un valor numérico"
             size_hint_y:0.1
@@ -84,7 +99,7 @@
             id: label_descrip_mod
             text: 'Descripción'
    
-        MDTextField:
+        MDModTextField:
             id: input_descrip_mod
             hint_text: "Ingrese una nueva descripción"
             size_hint_y:0.1
@@ -98,10 +113,11 @@
         MDRoundFlatIconButton:
             text: "Guardar cambios"
             icon: "pencil-circle"
-            md_bg_color: app.theme_cls.primary_color
-            text_color: 0,0,0,1
-            theme_icon_color: "Custom"
-            icon_color: 0,0,0,1
-            line_width:dp(1.5)
-            pos_hint:{"center_x":0.5,"center_y":0.5}
+            pos_hint:{"center_x":0.4,"center_y":0.5}
             on_release:app.root.call_modif()
+        
+        MDRoundFlatIconButton:
+            text: "Cancelar"
+            icon: "close-circle"
+            pos_hint:{"center_x":0.6,"center_y":0.5}
+            on_release:app.root.limpiar_campos([root.ids.input_nombre_mod,root.ids.input_cantidad_mod,root.ids.input_precio_mod,root.ids.input_descrip_mod])

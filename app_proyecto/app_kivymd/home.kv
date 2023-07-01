@@ -6,6 +6,19 @@
     line_color:app.theme_cls.primary_color
     ripple_behavior: True
 
+<MDButtonCardLabel@MDLabel>:
+    halign:"center"
+    font_style:"H6"
+    theme_text_color:"Custom"
+    text_color: app.theme_cls.opposite_bg_darkest
+    bold:True
+    size_hint_y:0.3
+
+<MDButtonCardIcon@MDIcon>:
+    theme_text_color:"Custom"
+    text_color: app.theme_cls.opposite_bg_darkest
+    pos_hint:{"center_x":0.5,"center_y":0.5}
+    font_size: "48sp"
 
 <Home@MDBoxLayout>:
     orientation:"vertical"
@@ -51,21 +64,10 @@
             MDBoxLayout:
                 orientation:"vertical"
                 padding:0,0,0,15
-                MDLabel:
+                MDButtonCardLabel:
                     text:"Agregar un artículo"
-                    halign:"center"
-                    font_style:"H6"
-                    theme_text_color:"Custom"
-                    text_color: app.theme_cls.opposite_bg_darkest
-                    bold:True
-                    size_hint_y:0.3
-                MDIcon:
+                MDButtonCardIcon:
                     icon:"plus-circle"
-                    theme_text_color:"Custom"
-                    text_color: app.theme_cls.opposite_bg_darkest
-                    pos_hint:{"center_x":0.5,"center_y":0.5}
-                    font_size: "48sp"
-                
                     
         ButtonCard:
             id: buttondel
@@ -73,41 +75,21 @@
             MDBoxLayout:
                 orientation:"vertical"
                 padding:0,0,0,15
-                MDLabel:
+                MDButtonCardLabel:
                     text:"Eliminar un artículo"
-                    halign:"center"
-                    font_style:"H6"
-                    theme_text_color:"Custom"
-                    text_color: app.theme_cls.opposite_bg_darkest
-                    bold:True
-                    size_hint_y:0.3
-                MDIcon:
+                MDButtonCardIcon:
                     icon:"trash-can-outline"
-                    theme_text_color:"Custom"
-                    text_color: app.theme_cls.opposite_bg_darkest
-                    pos_hint:{"center_x":0.5,"center_y":0.5}
-                    font_size: "48sp"
-                    
+                         
         ButtonCard:
             id: buttonedit
             on_release:app.root.current="Modificar"
             MDBoxLayout:
                 orientation:"vertical"
                 padding:0,0,0,15
-                MDLabel:
+                MDButtonCardLabel:
                     text:"Modificar un artículo"
-                    halign:"center"
-                    font_style:"H6"
-                    theme_text_color:"Custom"
-                    text_color: app.theme_cls.opposite_bg_darkest
-                    bold:True
-                    size_hint_y:0.3
-                MDIcon:
+                MDButtonCardIcon:
                     icon:"circle-edit-outline"
-                    theme_text_color:"Custom"
-                    text_color: app.theme_cls.opposite_bg_darkest
-                    pos_hint:{"center_x":0.5,"center_y":0.5}
-                    font_size: "48sp"
                     
         ButtonCard:
             id: buttonsearch
@@ -115,17 +97,7 @@
             MDBoxLayout:
                 orientation:"vertical"
                 padding:0,0,0,15
-                MDLabel:
+                MDButtonCardLabel:
                     text:"Consultar stock"
-                    halign:"center"
-                    font_style:"H6"
-                    theme_text_color:"Custom"
-                    text_color: app.theme_cls.opposite_bg_darkest
-                    bold:True
-                    size_hint_y:0.3
-                MDIcon:
-                    icon:"database-search-outline"
-                    theme_text_color:"Custom"
-                    text_color: app.theme_cls.opposite_bg_darkest
-                    pos_hint:{"center_x":0.5,"center_y":0.5}
-                    font_size: "48sp"
+                MDButtonCardIcon:
+                    icon:"database-search-outline" 
