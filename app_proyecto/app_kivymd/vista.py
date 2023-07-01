@@ -195,6 +195,7 @@ class MisPantallas(MDScreenManager):
     def close_msg_popup(self, obj):
         self.dialog.dismiss()
 
+    # Metodos para screen consulta
     def widgets_consulta(self, ):
         self.data_tables = MDDataTable(
             rows_num=10000,            
@@ -250,7 +251,7 @@ class MisPantallas(MDScreenManager):
 
     def show_buscar(self, ): 
         # Toggle widget en layout
-        print(self.obj_consultar.ids.field_search.children)
+        #print(self.obj_consultar.ids.field_search.children)
 
         if self.obj_consultar.ids.field_search.children[0].id=="titulo":
             self.obj_consultar.ids.field_search.clear_widgets()
@@ -258,11 +259,14 @@ class MisPantallas(MDScreenManager):
         elif self.obj_consultar.ids.field_search.children[0].id=="bar_search":
             self.obj_consultar.ids.field_search.clear_widgets()
             self.obj_consultar.ids.field_search.add_widget(self.titulo)
-        self.add_frame()
 
     def on_text_changed(self, instance, value):
         print("Texto cambiado:", value)
 
-    def add_frame(self, ):
-        last_num_row = int(self.data_tables.row_data[-1][0])
-        self.data_tables.add_row((str(last_num_row + 1), "1", "2", "3", "4"))
+    # Accedo a base de datos -> lectura en modelo.py-> carga en vista.py
+    def full_cat(self, ):
+        self.obj_c.mostrar_cat(self) # para que desde modelo.py pueda acceder a add_frame
+
+    # Agrega frame a tabla 
+    def add_frame(self, *args):
+        self.data_tables.add_row((args[0], args[1], args[2], args[3], args[4]))

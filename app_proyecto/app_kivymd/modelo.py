@@ -385,12 +385,13 @@ class Crud(BaseDatos):
                 row.descripcion,
             )
 
-    def mostrar_cat(self, window_consulta, window_main):
+    # NO ES NECESARIO PASAR EL PARAMETRO SDE WINDOWS_MAIN AL DECORADOR
+    # YA QUE SE MUESTRA EN LA VENTANA DE CATALOGO
+    def mostrar_cat(self, window_consulta):
         """
         Método que muestra el catálogo completo de componentes cargados hasta el momento.
 
         :param window_consulta: Objeto de clase ``WindowConsulta()``.
-        :param window_main: Objeto de clase ``MainWindow()``, utilizado por el decorador vinculado al método.
 
         :returns: **x_nom**, lista que almacena los nombres de cada componente registrado.
         :returns: **y_cant**, lista que almacena las cantidades de cada componente registrado.
@@ -403,7 +404,7 @@ class Crud(BaseDatos):
 
         # Cargo la tabla de la ventana Consulta con todos los registros almacenados en la bd.
         for row in data_from_db:
-            window_consulta.insert(
+            window_consulta.add_frame(
                 str(row.id),
                 row.nombre,
                 row.cantidad,

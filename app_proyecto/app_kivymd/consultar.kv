@@ -16,8 +16,13 @@
             icon: "dots-vertical"
             on_release:app.root.menu.open()
         MDIconButton:
+            id:full_cat
+            size_hint: .5, 1
+            icon: "tray-full"
+            on_release:app.root.full_cat()
+        MDIconButton:
             id: buscar
-            size_hint: 1, 1
+            size_hint: .5, 1
             icon: "magnify"
             md_bg_color: app.theme_cls.primary_color
             on_release: app.root.show_buscar()        
@@ -37,10 +42,6 @@
             font_size:"48sp"
             on_release:app.root.current="Home"
 
-    #MDWidget:
-    #    size_hint_y:0.1
-    #    md_bg_color: app.theme_cls.bg_darkest
-    
     MDBoxLayout:
         size_hint: 1, 10
         orientation: 'vertical'
@@ -49,16 +50,9 @@
         MDBoxLayout:
             size_hint: 1, 40                
             id: table
-
-    #MDWidget:
-    #    size_hint_y:0.1
-    #    md_bg_color: app.theme_cls.bg_darkest
-    
     #MDBoxLayout:
     #    size_hint_y:0.1
     #    MDLabel:
     #        text:"Acá va algo"
     #        halign:"center"
     #        pos_hint:{"center_x":0.5,"center_y":0.5}
-        
-        
