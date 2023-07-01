@@ -214,13 +214,13 @@ class MisPantallas(MDScreenManager):
         self.bar_search = MDTextField(
             id="bar_search",
             size_hint_x=1,
-            size_hint_y=.8,
-            pos_hint = {"center_x": .5, "center_y": .5},
+            size_hint_y=1,
+            #pos_hint = {"center_x": .5, "center_y": .5},
             hint_text="Buscar",
-            mode="round",
+            mode="fill",
             max_text_length=20,
-            icon_left= "magnify",
-            font_size="20sp",
+            #icon_left= "magnify",
+            font_size="18sp",
         )
 
         self.titulo = MDLabel(
@@ -235,11 +235,19 @@ class MisPantallas(MDScreenManager):
         
         # Evento para detectar texto en MDTextField
         self.bar_search.bind(text=self.on_text_changed)
+        self.bar_search.bind(focus=self.on_focus)
         # Agrego widgets a layout
         self.obj_consultar.ids.table.add_widget(self.data_tables)
         self.obj_consultar.ids.field_search.add_widget(self.titulo)
 
-    # problema para crear widgets de desde .py, no tocar .kv
+    def on_focus(self, instance, value):
+        print("valor:  ", value)
+        print(self.bar_search.hint_text)
+        if value:
+            self.bar_search.hint_text = ""
+        else:
+            self.bar_search.hint_text = "Buscar"
+
     def show_buscar(self, ): 
         # Toggle widget en layout
         print(self.obj_consultar.ids.field_search.children)
@@ -250,12 +258,11 @@ class MisPantallas(MDScreenManager):
         elif self.obj_consultar.ids.field_search.children[0].id=="bar_search":
             self.obj_consultar.ids.field_search.clear_widgets()
             self.obj_consultar.ids.field_search.add_widget(self.titulo)
-        #self.add_row()
+        self.add_frame()
 
     def on_text_changed(self, instance, value):
         print("Texto cambiado:", value)
 
-    def add_row(self, ):
+    def add_frame(self, ):
         last_num_row = int(self.data_tables.row_data[-1][0])
         self.data_tables.add_row((str(last_num_row + 1), "1", "2", "3", "4"))
-        self.actualizar_numero_filas()
