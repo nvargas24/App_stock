@@ -171,6 +171,21 @@ class MisPantallas(MDScreenManager):
     def close_msg_popup(self, obj):
         self.dialog.dismiss()
 
+    def limpiar_campos(self, lista_campos):
+        for campo in lista_campos:
+            campo.text = ""
+            campo.error = False
+
+    """
+    def set_error_message(self, instance_text):
+        if instance_text.focus == False:
+            instance_text.required = True
+        else:
+            instance_text.required = True
+            instance_text.error = False
+    """
+
+
     # Metodos para screen consulta
     def widgets_consulta(
         self,
