@@ -18,7 +18,9 @@ from kivymd.uix.boxlayout import MDBoxLayout
 from kivy.properties import StringProperty
 from kivymd.uix.dialog import MDDialog
 from kivymd.uix.button import MDFlatButton
+from kivymd.uix.datatables import MDDataTable
 from kivymd.uix.label import MDLabel
+from kivymd.uix.textfield import MDTextField
 
 
 class Home(MDBoxLayout):
@@ -61,6 +63,7 @@ class MisPantallas(MDScreenManager):
         self.ids.consulta.add_widget(self.obj_consultar)
         self.obj_c = Crud()
         self.crear_menu()
+        self.widgets_consulta()
 
     def cambiar_tema(self, value):
         if value == "claro":
@@ -168,6 +171,82 @@ class MisPantallas(MDScreenManager):
     def close_msg_popup(self, obj):
         self.dialog.dismiss()
 
+    # Metodos para screen consulta
+    def widgets_consulta(self, ):
+        self.data_tables = MDDataTable(
+            rows_num=10000,            
+            #use_pagination=True,
+            size_hint=(1, 1),
+            column_data=[
+                ("[size=18][color=#CC742C]ID[/color][/size]", dp(10)),
+                ("[size=18][color=#CC742C]Producto[/color][/size]", dp(30)),
+                ("[size=18][color=#CC742C]Cantidad[/color][/size]", dp(20)),
+                ("[size=18][color=#CC742C]Precio[/color][/size]", dp(30)),
+                ("[size=18][color=#CC742C]Descripcion[/color][/size]", dp(50)),
+            ],
+            row_data=[
+                ("0", "0", "0", "0", "0")
+            ],
+        )
+        self.bar_search = MDTextField(
+            id="bar_search",
+            size_hint_x=1,
+            size_hint_y=1,
+            #pos_hint = {"center_x": .5, "center_y": .5},
+            hint_text="Buscar",
+            mode="fill",
+            max_text_length=20,
+            #icon_left= "magnify",
+            font_size="18sp",
+        )
+
+        self.titulo = MDLabel(
+            id="titulo",
+            size_hint_x=1,
+            size_hint_y=1,
+            halign='center',
+            font_style="H5",
+            theme_text_color="Custom",
+            text="Catalogo"
+        ) # Si asigno 'id' con .kv no lo reconoce dentro del layout, usando children
+        
+        # Evento para detectar texto en MDTextField
+        self.bar_search.bind(text=self.on_text_changed)
+        self.bar_search.bind(focus=self.on_focus)
+        # Agrego widgets a layout
+        self.obj_consultar.ids.table.add_widget(self.data_tables)
+        self.obj_consultar.ids.field_search.add_widget(self.titulo)
+
+    def on_focus(self, instance, value):
+        print("valor:  ", value)
+        print(self.bar_search.hint_text)
+        if value:
+            self.bar_search.hint_text = ""
+        else:
+            self.bar_search.hint_text = "Buscar"
+
+    def show_buscar(self, ): 
+        # Toggle widget en layout
+        #print(self.obj_consultar.ids.field_search.children)
+
+        if self.obj_consultar.ids.field_search.children[0].id=="titulo":
+            self.obj_consultar.ids.field_search.clear_widgets()
+            self.obj_consultar.ids.field_search.add_widget(self.bar_search)
+        elif self.obj_consultar.ids.field_search.children[0].id=="bar_search":
+            self.obj_consultar.ids.field_search.clear_widgets()
+            self.obj_consultar.ids.field_search.add_widget(self.titulo)
+
+    def on_text_changed(self, instance, value):
+        print("Texto cambiado:", value)
+
+    # Accedo a base de datos -> lectura en modelo.py-> carga en vista.py
+    def full_cat(self, ):
+        self.obj_c.mostrar_cat(self) # para que desde modelo.py pueda acceder a add_frame
+
+    # Agrega frame a tabla 
+    def add_frame(self, *args):
+        self.data_tables.add_row((args[0], args[1], args[2], args[3], args[4]))
+        
     def limpiar_campos(self, lista_campos):
         for campo in lista_campos:
             campo.text = ""
