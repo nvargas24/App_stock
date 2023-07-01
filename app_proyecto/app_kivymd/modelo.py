@@ -342,13 +342,14 @@ class Crud(BaseDatos):
         :returns: ``"Articulo no encontrado por descripcion"`` si el componente consultado por descripción no se encuentra ingresado.
         :returns: ``"Articulo no encontrado"`` si el componente consultado por nombre y descripción no se encuentra ingresado.
         """
-        nom = nombre.text
-        descrip = descrip.text
+        nom = nombre
+        descrip = descrip
 
         # Búsqueda por nombre.
         if self.obj_val.empty_entry(nom, "nom") and not self.obj_val.empty_entry(
             descrip, "descrip"
         ):
+            print("busqueda por nombre")
             data_from_db = self.leer_db(nom, None)
             if not data_from_db:
                 return "Artículo no encontrado por nombre"
@@ -357,6 +358,7 @@ class Crud(BaseDatos):
         elif not self.obj_val.empty_entry(nom, "nom") and self.obj_val.empty_entry(
             descrip, "descrip"
         ):
+            print("busqueda por descripcion")
             data_from_db = self.leer_db(None, descrip)
             if not data_from_db:
                 return "Artículo no encontrado por descripción"
@@ -365,6 +367,7 @@ class Crud(BaseDatos):
         elif self.obj_val.empty_entry(nom, "nom") and self.obj_val.empty_entry(
             descrip, "descrip"
         ):
+            print("busqueda por nombre y descripcion")
             data_from_db = self.leer_db(nom, descrip)
             if not data_from_db:
                 return "Artículo no encontrado"
@@ -377,7 +380,7 @@ class Crud(BaseDatos):
 
         # Cargo la tabla con la/s fila/s encontradas de acuerdo a la búsqueda.
         for row in data_from_db:
-            window_consulta.insert(
+            window_consulta.add_frame(
                 str(row.id),
                 row.nombre,
                 row.cantidad,

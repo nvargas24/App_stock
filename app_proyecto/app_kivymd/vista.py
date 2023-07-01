@@ -187,9 +187,7 @@ class MisPantallas(MDScreenManager):
 
 
     # Metodos para screen consulta
-    def widgets_consulta(
-        self,
-    ):
+    def widgets_consulta(self):
         self.data_tables = MDDataTable(
             rows_num=10000,
             # use_pagination=True,
@@ -201,7 +199,6 @@ class MisPantallas(MDScreenManager):
                 ("[size=18][color=#CC742C]Precio[/color][/size]", dp(30)),
                 ("[size=18][color=#CC742C]Descripcion[/color][/size]", dp(50)),
             ],
-            row_data=[("0", "0", "0", "0", "0")],
         )
         self.bar_search = MDTextField(
             id="bar_search",
@@ -232,20 +229,19 @@ class MisPantallas(MDScreenManager):
         self.obj_consultar.ids.table.add_widget(self.data_tables)
         self.obj_consultar.ids.field_search.add_widget(self.titulo)
 
+        self.obj_c.mostrar_cat(self)
+
     def on_focus(self, instance, value):
-        print("valor:  ", value)
-        print(self.bar_search.hint_text)
+        #print("valor:  ", value)
+        #print(self.bar_search.hint_text)
         if value:
             self.bar_search.hint_text = ""
         else:
             self.bar_search.hint_text = "Buscar"
 
-    def show_buscar(
-        self,
-    ):
+    def show_buscar(self):
         # Toggle widget en layout
         # print(self.obj_consultar.ids.field_search.children)
-
         if self.obj_consultar.ids.field_search.children[0].id == "titulo":
             self.obj_consultar.ids.field_search.clear_widgets()
             self.obj_consultar.ids.field_search.add_widget(self.bar_search)
@@ -255,15 +251,15 @@ class MisPantallas(MDScreenManager):
 
     def on_text_changed(self, instance, value):
         print("Texto cambiado:", value)
+        self.obj_c.consulta(value, value, self)
+    
+    def delete(self, ):
+        self.data_tables.row_data=[] # Borro filas
 
     # Accedo a base de datos -> lectura en modelo.py-> carga en vista.py
-    def full_cat(
-        self,
-    ):
-        self.obj_c.mostrar_cat(
-            self
-        )  # para que desde modelo.py pueda acceder a add_frame
-
-    # Agrega frame a tabla
+    def full_cat(self, ):
+        self.delete()
+        self.obj_c.mostrar_cat(self) # para que desde modelo.py pueda acceder a add_frame
+    # Agrega frame a tabla 
     def add_frame(self, *args):
         self.data_tables.add_row((args[0], args[1], args[2], args[3], args[4]))
