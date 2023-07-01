@@ -6,47 +6,59 @@
 
 <Consultar@MDBoxLayout>:
     orientation:"vertical"
-
+    
     MDBoxLayout:
         md_bg_color: app.theme_cls.primary_color
-        size_hint_y:0.1
+        size_hint: 1, 1
         MDIconButton:
             id:button
+            size_hint: 1, 1
             icon: "dots-vertical"
             on_release:app.root.menu.open()
-        MDLabel:
-            id: toplabel
-            text: "Consultar stock"
-            font_style:"H5"
-            halign:"center"
-            theme_text_color:"Custom"
-            text_color: 0,0,0,1
+        MDIconButton:
+            id: buscar
+            size_hint: 1, 1
+            icon: "magnify"
+            md_bg_color: app.theme_cls.primary_color
+            on_release: app.root.show_buscar()        
+        MDBoxLayout:
+            id: field_search
+            size_hint: 8, 1
+        MDIconButton:
+            id:buttongraph
+            size_hint: 1, 1
+            icon: "image"
+            font_size:"48sp"
+            #on_release:app.root.current="Home"
         MDIconButton:
             id:buttonhome
+            size_hint: 1, 1
             icon: "home"
             font_size:"48sp"
             on_release:app.root.current="Home"
 
-    MDWidget:
-        size_hint_y:0.1
-        md_bg_color: app.theme_cls.bg_darkest
+    #MDWidget:
+    #    size_hint_y:0.1
+    #    md_bg_color: app.theme_cls.bg_darkest
     
     MDBoxLayout:
-        size_hint_y:0.6
-        MDLabel:
-            text:"Acá va la tabla super x8"
-            halign:"center"
-            pos_hint:{"center_x":0.5,"center_y":0.5}
+        size_hint: 1, 10
+        orientation: 'vertical'
+        spacing: 20
+        padding: 30
+        MDBoxLayout:
+            size_hint: 1, 40                
+            id: table
 
-    MDWidget:
-        size_hint_y:0.1
-        md_bg_color: app.theme_cls.bg_darkest
+    #MDWidget:
+    #    size_hint_y:0.1
+    #    md_bg_color: app.theme_cls.bg_darkest
     
-    MDBoxLayout:
-        size_hint_y:0.1
-        MDLabel:
-            text:"Acá va algo"
-            halign:"center"
-            pos_hint:{"center_x":0.5,"center_y":0.5}
+    #MDBoxLayout:
+    #    size_hint_y:0.1
+    #    MDLabel:
+    #        text:"Acá va algo"
+    #        halign:"center"
+    #        pos_hint:{"center_x":0.5,"center_y":0.5}
         
         
