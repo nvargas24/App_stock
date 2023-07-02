@@ -23,33 +23,91 @@ from kivymd.uix.label import MDLabel
 from kivymd.uix.textfield import MDTextField
 from kivymd.uix.button import MDIconButton
 from kivymd.uix.selectioncontrol import MDCheckbox
+from kivy.garden.matplotlib.backend_kivyagg import FigureCanvasKivyAgg as FigureCanvas
+import matplotlib.pyplot as plt
+import random
 
 
 class Home(MDBoxLayout):
     Builder.load_file("home.kv")
 
-
 class Agregar(MDBoxLayout):
     Builder.load_file("agregar.kv")
-
 
 class Eliminar(MDBoxLayout):
     Builder.load_file("eliminar.kv")
 
-
 class Modificar(MDBoxLayout):
     Builder.load_file("modificar.kv")
-
 
 class Consultar(MDBoxLayout):
     Builder.load_file("consultar.kv")
 
-
 class IconListItem(OneLineIconListItem):
     icon = StringProperty()
 
+class Canvas_grafica(FigureCanvas):
+    """
+    Clase que contiene métodos para actualizar y dar estilo al gráfico de torta.
+    """
+
+    def __init__(self):
+        """
+        Constructor que hereda el correspondiente a la clase ``FigureCanvas()``,
+        y que además crea un gráfico matplotlib en blanco.
+        """
+        # Asigno un espacio para ubicar el gráfico de matplotlib usando Canvas.
+        self.fig, self.ax = plt.subplots(
+            1, dpi=80, figsize=(12, 12), sharey=True, facecolor="none"
+        )
+        super().__init__(self.fig)
+
+    def upgrade_graph(self, nombre, cantidad):
+        """
+        Método para actualizar nombres y cantidades en gráfico de torta.
+
+        :param nombre: Nombre del componente.
+        :param cantidad: Cantidad del componente.
+        """
+        # Borro gráfico antiguo.
+        self.ax.clear()
+
+        # Parámetros para nuevo gráfico.
+        self.nombres = nombre
+        self.tamanio = cantidad
+        self.colores = []
+        self.explotar = []
+
+        # Asigno color aleatorio claros segun la cantidad de artículos disponibles.
+        for i in range(len(self.nombres)):
+            r = random.randint(150, 255)
+            g = random.randint(150, 255)
+            b = random.randint(150, 255)
+            self.colores.append("#%02x%02x%02x" % (r, g, b))
+            self.explotar.append(0.05)
+
+        # Pasaje de porcentaje a valor real en bd.
+        valor_real = lambda pct: "{:.0f}".format(
+            (pct * sum(list(map(int, self.tamanio)))) / 100
+        )
+        # Asigno nuevos parámetros a gráfico.
+        self.ax.pie(
+            self.tamanio,
+            explode=self.explotar,
+            labels=self.nombres,
+            colors=self.colores,
+            autopct=valor_real,
+            pctdistance=0.8,
+            shadow=True,
+            startangle=90,
+            radius=0.7,
+            labeldistance=1.1,
+            textprops={"fontsize": 12},
+        )
+        self.draw()
 
 class MisPantallas(MDScreenManager):
+
     def __init__(self, app, **kwargs):
         super(MisPantallas, self).__init__(**kwargs)
         self.obj_app = app
@@ -63,10 +121,14 @@ class MisPantallas(MDScreenManager):
         self.ids.elim.add_widget(self.obj_eliminar)
         self.ids.mod.add_widget(self.obj_modificar)
         self.ids.consulta.add_widget(self.obj_consultar)
+
+        self.filter_selected = "Nombre"
+        self.grafica = Canvas_grafica()
+
         self.obj_c = Crud()
         self.crear_menu()
         self.widgets_consulta()
-        self.filter_selected = "Nombre"
+
 
     def cambiar_tema(self, value):
         if value == "claro":
@@ -188,7 +250,6 @@ class MisPantallas(MDScreenManager):
             instance_text.error = False
     """
 
-
     # Metodos para screen consulta
     def widgets_consulta(self):
         self.data_tables = MDDataTable(
@@ -253,17 +314,30 @@ class MisPantallas(MDScreenManager):
             width_mult=dp(3),
         )
 
+        self.btn_graph = MDIconButton(
+            id="button_graph",
+            size_hint= (1, 1),
+            icon= "chart-pie",
+            font_size="48sp",
+            on_release=self.show_graph                    
+        )
+        self.btn_table = MDIconButton(
+            id="button_table",
+            size_hint= (1, 1),
+            icon= "table-eye",
+            font_size="48sp",
+            on_release=self.show_table                    
+        )
+
         # Evento para detectar texto en MDTextField
         self.bar_search.bind(text=self.on_text_changed)
         self.bar_search.bind(focus=self.on_focus)
         # Agrego widgets a layout
         self.obj_consultar.ids.table.add_widget(self.data_tables)
-        
         self.obj_consultar.ids.field_search.add_widget(self.titulo)
-        
+        self.obj_consultar.ids.button_data.add_widget(self.btn_graph)
 
         self.obj_c.mostrar_cat(self)
-
 
     def select_filter(self, instance):
         self.filter_menu.open()
@@ -305,7 +379,21 @@ class MisPantallas(MDScreenManager):
         if msj:
             self.data_tables.row_data=[] # Borro filas
 
-    def delete(self, ):
+    def show_graph(self, instance):
+        self.obj_consultar.ids.button_data.clear_widgets()
+        self.obj_consultar.ids.table.clear_widgets()
+
+        self.obj_consultar.ids.button_data.add_widget(self.btn_table)
+        self.obj_consultar.ids.table.add_widget(self.grafica)
+
+    def show_table(self, instance):
+        self.obj_consultar.ids.button_data.clear_widgets()
+        self.obj_consultar.ids.table.clear_widgets()
+
+        self.obj_consultar.ids.button_data.add_widget(self.btn_graph)
+        self.obj_consultar.ids.table.add_widget(self.data_tables)
+
+    def delete(self):
         self.data_tables.row_data=[] # Borro filas
 
     # Accedo a base de datos -> lectura en modelo.py-> carga en vista.py

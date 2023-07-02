@@ -18,8 +18,8 @@
         MDIconButton:
             id:full_cat
             size_hint: .5, 1
-            icon: "tray-full"
-            #icon: "refresh"
+            #icon: "tray-full"
+            icon: "refresh"
             on_release:app.root.full_cat()
         MDIconButton:
             id: buscar
@@ -30,12 +30,9 @@
         MDBoxLayout:
             id: field_search
             size_hint: 8, 1
-        MDIconButton:
-            id:buttongraph
-            size_hint: 1, 1
-            icon: "chart-pie"
-            font_size:"48sp"
-            #on_release:app.root.current="Home"        
+        MDBoxLayout:
+            id: button_data
+            size_hint: 1, 1        
         MDIconButton:
             id:buttonhome
             size_hint: 1, 1

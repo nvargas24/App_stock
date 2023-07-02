@@ -418,4 +418,6 @@ class Crud(BaseDatos):
             x_nom.append(row.nombre)
             y_cant.append(row.cantidad)
 
+        window_consulta.grafica.upgrade_graph(x_nom, y_cant)
+
         return x_nom, y_cant
