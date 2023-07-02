@@ -21,6 +21,8 @@ from kivymd.uix.button import MDFlatButton
 from kivymd.uix.datatables import MDDataTable
 from kivymd.uix.label import MDLabel
 from kivymd.uix.textfield import MDTextField
+from kivymd.uix.button import MDIconButton
+from kivymd.uix.selectioncontrol import MDCheckbox
 
 
 class Home(MDBoxLayout):
@@ -64,6 +66,7 @@ class MisPantallas(MDScreenManager):
         self.obj_c = Crud()
         self.crear_menu()
         self.widgets_consulta()
+        self.filter_selected = "Nombre"
 
     def cambiar_tema(self, value):
         if value == "claro":
@@ -202,34 +205,73 @@ class MisPantallas(MDScreenManager):
         )
         self.bar_search = MDTextField(
             id="bar_search",
-            size_hint_x=1,
-            size_hint_y=1,
+            size_hint= (2, 1),
             # pos_hint = {"center_x": .5, "center_y": .5},
             hint_text="Buscar",
             mode="fill",
             max_text_length=20,
-            # icon_left= "magnify",
             font_size="18sp",
         )
-
+        self.filter = MDIconButton(
+            id="filter",
+            size_hint= (1, 1),
+            icon= "filter-variant",
+            font_size="48sp",
+            on_release= self.select_filter
+        )
         self.titulo = MDLabel(
             id="titulo",
-            size_hint_x=1,
-            size_hint_y=1,
+            size_hint= (1, 1),
             halign="center",
             font_style="H5",
             theme_text_color="Custom",
             text="Catalogo",
         )  # Si asigno 'id' con .kv no lo reconoce dentro del layout, usando children
 
+        self.filter_items = [
+            {
+                "text": "Nombre",
+                "theme_text_color": "Custom",
+                "text_color": self.obj_app.theme_cls.opposite_bg_darkest,
+                "viewclass": "OneLineListItem",
+                "left_widget": MDCheckbox(),
+                "on_release": lambda x="Nombre": self.filter_item_selected(x)
+            },
+            {
+                "text": "Descripcion",
+                "theme_text_color": "Custom",
+                "text_color": self.obj_app.theme_cls.opposite_bg_darkest,
+                "viewclass": "OneLineListItem",
+                "left_widget": MDCheckbox(),
+                "on_release": lambda x="Descripcion": self.filter_item_selected(x)
+            },
+        ]
+        self.filter_menu = MDDropdownMenu(
+            caller=self.filter,
+            items=self.filter_items,
+            max_height=dp(100),
+            width_mult=dp(3),
+        )
+
         # Evento para detectar texto en MDTextField
         self.bar_search.bind(text=self.on_text_changed)
         self.bar_search.bind(focus=self.on_focus)
         # Agrego widgets a layout
         self.obj_consultar.ids.table.add_widget(self.data_tables)
+        
         self.obj_consultar.ids.field_search.add_widget(self.titulo)
+        
 
         self.obj_c.mostrar_cat(self)
+
+
+    def select_filter(self, instance):
+        self.filter_menu.open()
+
+    def filter_item_selected(self, filter_selected):
+        self.filter_menu.dismiss()
+        print(f"Elemento seleccionado: {filter_selected}")
+        self.filter_selected = filter_selected
 
     def on_focus(self, instance, value):
         #print("valor:  ", value)
@@ -241,18 +283,28 @@ class MisPantallas(MDScreenManager):
 
     def show_buscar(self):
         # Toggle widget en layout
-        # print(self.obj_consultar.ids.field_search.children)
-        if self.obj_consultar.ids.field_search.children[0].id == "titulo":
+        id_widget = self.obj_consultar.ids.field_search.children[0].id
+
+        print(self.obj_consultar.ids.field_search.children)
+        if id_widget == "titulo" :
             self.obj_consultar.ids.field_search.clear_widgets()
             self.obj_consultar.ids.field_search.add_widget(self.bar_search)
-        elif self.obj_consultar.ids.field_search.children[0].id == "bar_search":
+            self.obj_consultar.ids.field_search.add_widget(self.filter)
+        elif id_widget == "bar_search" or id_widget == "filter":
             self.obj_consultar.ids.field_search.clear_widgets()
             self.obj_consultar.ids.field_search.add_widget(self.titulo)
 
-    def on_text_changed(self, instance, value):
-        print("Texto cambiado:", value)
-        self.obj_c.consulta(value, value, self)
-    
+    def on_text_changed(self, instance, item_search):
+        print("Texto cambiado:", item_search)
+        if self.filter_selected == "Nombre":
+            msj = self.obj_c.consulta(item_search,"", self)
+        elif self.filter_selected == "Descripcion":
+            msj = self.obj_c.consulta("", item_search, self)
+
+        print(msj)
+        if msj:
+            self.data_tables.row_data=[] # Borro filas
+
     def delete(self, ):
         self.data_tables.row_data=[] # Borro filas
 
