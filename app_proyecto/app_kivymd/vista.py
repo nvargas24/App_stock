@@ -27,48 +27,56 @@ from kivy.garden.matplotlib.backend_kivyagg import FigureCanvasKivyAgg as Figure
 import matplotlib.pyplot as plt
 import random
 
+# Flag utilizado para indicar si el widget actual
+# en la pantalla de Consulta es la tabla (1) o el gráfico (0).
+flag_tabla = 1
 
+
+# Clase destinada a cargar el contenido del archivo "home.kv"
 class Home(MDBoxLayout):
     Builder.load_file("home.kv")
 
+
+# Clase destinada a cargar el contenido del archivo "agregar.kv"
 class Agregar(MDBoxLayout):
     Builder.load_file("agregar.kv")
 
+
+# Clase destinada a cargar el contenido del archivo "eliminar.kv"
 class Eliminar(MDBoxLayout):
     Builder.load_file("eliminar.kv")
 
+
+# Clase destinada a cargar el contenido del archivo "modificar.kv"
 class Modificar(MDBoxLayout):
     Builder.load_file("modificar.kv")
 
+
+# Clase destinada a cargar el contenido del archivo "consultar.kv"
 class Consultar(MDBoxLayout):
     Builder.load_file("consultar.kv")
 
+
+# Clase personalizada utilizada para añadir íconos en el menú desplegable
+# encargado de cambiar el tema de la App.
 class IconListItem(OneLineIconListItem):
     icon = StringProperty()
 
-class Canvas_grafica(FigureCanvas):
-    """
-    Clase que contiene métodos para actualizar y dar estilo al gráfico de torta.
-    """
 
-    def __init__(self):
-        """
-        Constructor que hereda el correspondiente a la clase ``FigureCanvas()``,
-        y que además crea un gráfico matplotlib en blanco.
-        """
+# Clase que contiene métodos para actualizar y dar estilo al gráfico de torta.
+class Canvas_grafica(FigureCanvas):
+    # Constructor que hereda el correspondiente a la clase FigureCanvas(),
+    # y que además crea un gráfico matplotlib en blanco.
+    def __init__(self, app):
         # Asigno un espacio para ubicar el gráfico de matplotlib usando Canvas.
         self.fig, self.ax = plt.subplots(
             1, dpi=100, figsize=(50, 50), sharey=True, facecolor="none"
         )
         super().__init__(self.fig)
+        self.obj_app = app  # Objeto asociado a la App.
 
+    # Método para actualizar nombres y cantidades en gráfico de torta.
     def upgrade_graph(self, nombre, cantidad):
-        """
-        Método para actualizar nombres y cantidades en gráfico de torta.
-
-        :param nombre: Nombre del componente.
-        :param cantidad: Cantidad del componente.
-        """
         # Borro gráfico antiguo.
         self.ax.clear()
 
@@ -90,6 +98,14 @@ class Canvas_grafica(FigureCanvas):
         valor_real = lambda pct: "{:.0f}".format(
             (pct * sum(list(map(int, self.tamanio)))) / 100
         )
+
+        # Chequeo el tema actual definido en la App para, en función de ello,
+        # cambiar el color de la fuente del gráfico.
+        if self.obj_app.theme_cls.theme_style == "Dark":
+            text_color = {"fontsize": 18, "color": "white"}
+        else:
+            text_color = {"fontsize": 18, "color": "black"}
+
         # Asigno nuevos parámetros a gráfico.
         self.ax.pie(
             self.tamanio,
@@ -102,33 +118,44 @@ class Canvas_grafica(FigureCanvas):
             startangle=90,
             radius=0.7,
             labeldistance=1.1,
-            textprops={"fontsize": 18, "color": "grey"},
+            textprops=text_color,
         )
-        self.draw()
+        self.draw()  # Dibujo el gráfico.
 
+
+# Clase asociada a la ventana de la App y que permite el acceso a las otras pantallas(MDScreen) de la misma.
 class MisPantallas(MDScreenManager):
-
     def __init__(self, app, **kwargs):
         super(MisPantallas, self).__init__(**kwargs)
-        self.obj_app = app
+        self.obj_app = app  # Objeto asociado a la App.
+        # Objeto asociado a la clase Home (root) del archivo "home.kv".
         self.obj_home = Home()
+        # Objeto asociado a la clase Agregar (root) del archivo "agregar.kv".
         self.obj_agregar = Agregar()
+        # Objeto asociado a la clase Eliminar (root) del archivo "eliminar.kv".
         self.obj_eliminar = Eliminar()
+        # Objeto asociado a la clase Modificar (root) del archivo "modificar.kv".
         self.obj_modificar = Modificar()
+        # Objeto asociado a la clase Consultar (root) del archivo "consultar.kv".
         self.obj_consultar = Consultar()
+
+        # Agrego el contenido del archivo "home.kv" al MDScreen cuyo id es "home".
         self.ids.home.add_widget(self.obj_home)
+        # Agrego el contenido del archivo "agregar.kv" al MDScreen cuyo id es "add".
         self.ids.add.add_widget(self.obj_agregar)
+        # Agrego el contenido del archivo "eliminar.kv" al MDScreen cuyo id es "elim".
         self.ids.elim.add_widget(self.obj_eliminar)
+        # Agrego el contenido del archivo "modificar.kv" al MDScreen cuyo id es "mod".
         self.ids.mod.add_widget(self.obj_modificar)
+        # Agrego el contenido del archivo "consultar.kv" al MDScreen cuyo id es "consulta".
         self.ids.consulta.add_widget(self.obj_consultar)
 
         self.filter_selected = "Nombre"
-        self.grafica = Canvas_grafica()
+        self.grafica = Canvas_grafica(self.obj_app)
 
         self.obj_c = Crud()
         self.crear_menu()
         self.widgets_consulta()
-
 
     def cambiar_tema(self, value):
         if value == "claro":
@@ -140,6 +167,13 @@ class MisPantallas(MDScreenManager):
             self.obj_home.ids.buttonedit.md_bg_color = "#C7C7C7"
             self.obj_home.ids.buttonsearch.md_bg_color = "#C7C7C7"
             self.crear_menu()
+            self.crear_menu_filtro()
+            self.crear_tabla()
+            if flag_tabla:
+                self.show_table(self)
+            else:
+                self.show_graph(self)
+            self.obj_c.mostrar_cat(self)
         else:
             self.menu.dismiss()
             self.obj_app.theme_cls.primary_palette = "Orange"
@@ -149,6 +183,13 @@ class MisPantallas(MDScreenManager):
             self.obj_home.ids.buttonedit.md_bg_color = "#404040"
             self.obj_home.ids.buttonsearch.md_bg_color = "#404040"
             self.crear_menu()
+            self.crear_menu_filtro()
+            self.crear_tabla()
+            if flag_tabla:
+                self.show_table(self)
+            else:
+                self.show_graph(self)
+            self.obj_c.mostrar_cat(self)
 
     def crear_menu(self):
         self.menu_items = [
@@ -252,6 +293,8 @@ class MisPantallas(MDScreenManager):
 
     # Metodos para screen consulta
     def widgets_consulta(self):
+        self.crear_tabla()
+        """
         self.data_tables = MDDataTable(
             rows_num=10000,
             size_hint=(1, 1),
@@ -263,38 +306,44 @@ class MisPantallas(MDScreenManager):
                 ("[size=18][color=#CC742C]Descripcion[/color][/size]", dp(50)),
             ],
         )
+        """
         self.bar_search = MDTextField(
             id="bar_search",
-            size_hint= (2, 1),
+            size_hint=(2, 1),
             hint_text="Buscar por nombre",
-            #mode="fill",
+            # mode="fill",
             max_text_length=20,
             font_size="18sp",
-            #text_color_normal=(0, 0, 0, 1),
-            text_color_focus=(1, 1, 1, 1),
-            line_color_focus=(0.8, 0.8, 0.8, 1),
-            #fill_color_normal=(0.9, 0.9, 0.9, 1),
-            #fill_color_focus=(1, 1, 1, 1),
+            hint_text_color_normal=(0, 0, 0, 1),
+            hint_text_color_focus=(0, 0, 0, 1),
+            text_color_normal=(0, 0, 0, 1),
+            text_color_focus=(0, 0, 0, 1),
+            line_color_normal=(0, 0, 0, 1),
+            line_color_focus=(0, 0, 0, 1),
+            max_length_text_color=(0, 0, 0, 1),
         )
         self.filter = MDIconButton(
             id="filter",
-            size_hint= (1, 1),
-            #pos_hint= {"center_y": .5},
-            #pos= (self.bar_search.width - self.width + dp(8), 0),
-            theme_text_color= "Primary",
-            icon= "filter-variant",
+            size_hint=(1, 1),
+            # pos_hint= {"center_y": .5},
+            # pos= (self.bar_search.width - self.width + dp(8), 0),
+            # theme_text_color="Primary",
+            icon="filter-variant",
             font_size="48sp",
-            on_release= self.select_filter
+            on_release=self.select_filter,
         )
         self.titulo = MDLabel(
             id="titulo",
-            size_hint= (1, 1),
+            size_hint=(1, 1),
             halign="center",
             font_style="H5",
             theme_text_color="Custom",
-            text="Catalogo",
+            text_color=(0, 0, 0, 1),
+            text="Catálogo",
         )  # Si asigno 'id' con .kv no lo reconoce dentro del layout, usando children
 
+        self.crear_menu_filtro()
+        """
         self.filter_menu = MDDropdownMenu(
             caller=self.filter,
             items=[
@@ -318,20 +367,21 @@ class MisPantallas(MDScreenManager):
             max_height=dp(100),
             width_mult=dp(3),
         )
+        """
 
         self.btn_graph = MDIconButton(
             id="button_graph",
-            size_hint= (1, 1),
-            icon= "chart-pie",
+            size_hint=(1, 1),
+            icon="chart-pie",
             font_size="48sp",
-            on_release=self.show_graph                    
+            on_release=self.show_graph,
         )
         self.btn_table = MDIconButton(
             id="button_table",
-            size_hint= (1, 1),
-            icon= "table-eye",
+            size_hint=(1, 1),
+            icon="table-eye",
             font_size="48sp",
-            on_release=self.show_table                    
+            on_release=self.show_table,
         )
 
         # Evento para detectar texto en MDTextField
@@ -344,6 +394,57 @@ class MisPantallas(MDScreenManager):
 
         self.obj_c.mostrar_cat(self)
 
+    def crear_tabla(self):
+        if self.obj_app.theme_cls.primary_palette == "Orange":
+            self.data_tables = MDDataTable(
+                rows_num=10000,
+                size_hint=(1, 1),
+                column_data=[
+                    ("[size=18][color=#CC742C]ID[/color][/size]", dp(10)),
+                    ("[size=18][color=#CC742C]Producto[/color][/size]", dp(30)),
+                    ("[size=18][color=#CC742C]Cantidad[/color][/size]", dp(20)),
+                    ("[size=18][color=#CC742C]Precio[/color][/size]", dp(30)),
+                    ("[size=18][color=#CC742C]Descripcion[/color][/size]", dp(50)),
+                ],
+            )
+        else:
+            self.data_tables = MDDataTable(
+                rows_num=10000,
+                size_hint=(1, 1),
+                column_data=[
+                    ("[size=18][color=#03A9F4]ID[/color][/size]", dp(10)),
+                    ("[size=18][color=#03A9F4]Producto[/color][/size]", dp(30)),
+                    ("[size=18][color=#03A9F4]Cantidad[/color][/size]", dp(20)),
+                    ("[size=18][color=#03A9F4]Precio[/color][/size]", dp(30)),
+                    ("[size=18][color=#03A9F4]Descripcion[/color][/size]", dp(50)),
+                ],
+            )
+
+    def crear_menu_filtro(self):
+        self.filter_menu = MDDropdownMenu(
+            caller=self.filter,
+            items=[
+                {
+                    "text": "Nombre",
+                    "theme_text_color": "Custom",
+                    "text_color": self.obj_app.theme_cls.opposite_bg_darkest,
+                    "viewclass": "OneLineListItem",
+                    "left_widget": MDCheckbox(),
+                    "on_release": lambda x="Nombre": self.filter_item_selected(x),
+                },
+                {
+                    "text": "Descripcion",
+                    "theme_text_color": "Custom",
+                    "text_color": self.obj_app.theme_cls.opposite_bg_darkest,
+                    "viewclass": "OneLineListItem",
+                    "left_widget": MDCheckbox(),
+                    "on_release": lambda x="Descripcion": self.filter_item_selected(x),
+                },
+            ],
+            max_height=dp(100),
+            width_mult=dp(3),
+        )
+
     def select_filter(self, instance):
         self.filter_menu.open()
 
@@ -351,7 +452,7 @@ class MisPantallas(MDScreenManager):
         self.filter_menu.dismiss()
         print(f"Elemento seleccionado: {filter_selected}")
         self.filter_selected = filter_selected
-        
+
         if self.filter_selected == "Nombre":
             self.bar_search.hint_text = "Buscar por nombre"
         elif self.filter_selected == "Descripcion":
@@ -362,7 +463,7 @@ class MisPantallas(MDScreenManager):
         id_widget = self.obj_consultar.ids.field_search.children[0].id
 
         print(self.obj_consultar.ids.field_search.children)
-        if id_widget == "titulo" :
+        if id_widget == "titulo":
             self.obj_consultar.ids.field_search.clear_widgets()
             self.obj_consultar.ids.field_search.add_widget(self.bar_search)
             self.obj_consultar.ids.field_search.add_widget(self.filter)
@@ -373,22 +474,31 @@ class MisPantallas(MDScreenManager):
     def on_text_changed(self, instance, item_search):
         print("Texto cambiado:", item_search)
         if self.filter_selected == "Nombre":
-            msj = self.obj_c.consulta(item_search,"", self)
+            msj = self.obj_c.consulta(item_search, "", self)
         elif self.filter_selected == "Descripcion":
             msj = self.obj_c.consulta("", item_search, self)
 
         print(msj)
         if msj:
-            self.data_tables.row_data=[] # Borro filas
+            self.data_tables.row_data = []  # Borro filas
 
     def show_graph(self, instance):
+        global flag_tabla
+
+        flag_tabla = 0
         self.obj_consultar.ids.button_data.clear_widgets()
         self.obj_consultar.ids.table.clear_widgets()
 
         self.obj_consultar.ids.button_data.add_widget(self.btn_table)
         self.obj_consultar.ids.table.add_widget(self.grafica)
 
+        self.obj_consultar.ids.field_search.clear_widgets()
+        self.obj_consultar.ids.field_search.add_widget(self.titulo)
+
     def show_table(self, instance):
+        global flag_tabla
+
+        flag_tabla = 1
         self.obj_consultar.ids.button_data.clear_widgets()
         self.obj_consultar.ids.table.clear_widgets()
 
@@ -396,12 +506,17 @@ class MisPantallas(MDScreenManager):
         self.obj_consultar.ids.table.add_widget(self.data_tables)
 
     def delete(self):
-        self.data_tables.row_data=[] # Borro filas
+        self.data_tables.row_data = []  # Borro filas
 
     # Accedo a base de datos -> lectura en modelo.py-> carga en vista.py
-    def full_cat(self, ):
+    def full_cat(
+        self,
+    ):
         self.delete()
-        self.obj_c.mostrar_cat(self) # para que desde modelo.py pueda acceder a add_frame
-    # Agrega frame a tabla 
+        self.obj_c.mostrar_cat(
+            self
+        )  # para que desde modelo.py pueda acceder a add_frame
+
+    # Agrega frame a tabla
     def add_frame(self, *args):
         self.data_tables.add_row((args[0], args[1], args[2], args[3], args[4]))
