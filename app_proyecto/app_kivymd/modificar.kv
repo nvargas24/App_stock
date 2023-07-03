@@ -36,6 +36,7 @@
         MDIconButton:
             id:button
             icon: "dots-vertical"
+            # Abro el menú de opciones para cambiar de tema.
             on_release:app.root.menu.open()
         MDLabel:
             id: toplabel
@@ -48,6 +49,7 @@
             id:buttonhome
             icon: "home"
             font_size:"48sp"
+            # Cambio a pantalla "Home" y limpio los campos de entrada del formulario.
             on_release:
                 app.root.limpiar_campos([root.ids.input_nombre_mod,root.ids.input_cantidad_mod,root.ids.input_precio_mod,root.ids.input_descrip_mod])
                 app.root.current="Home"
@@ -75,6 +77,7 @@
             helper_text_mode: "on_error"
             helper_text: "*Campo obligatorio"
             required: False
+            # Habilito la propiedad "required" al hacer foco en el TextField.
             on_focus: self.required=True
 
         MDModLabel:
@@ -114,10 +117,12 @@
             text: "Guardar cambios"
             icon: "pencil-circle"
             pos_hint:{"center_x":0.4,"center_y":0.5}
+             # Envío los valores cargados al método "call_modif()".
             on_release:app.root.call_modif()
         
         MDRoundFlatIconButton:
             text: "Cancelar"
             icon: "close-circle"
             pos_hint:{"center_x":0.6,"center_y":0.5}
+            # Limpio los campos de entrada del formulario.
             on_release:app.root.limpiar_campos([root.ids.input_nombre_mod,root.ids.input_cantidad_mod,root.ids.input_precio_mod,root.ids.input_descrip_mod])

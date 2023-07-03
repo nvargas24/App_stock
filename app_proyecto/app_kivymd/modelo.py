@@ -30,48 +30,30 @@ except:
     print("No se pudo crear la base de datos")
 
 
+# Clase que establece a que base de datos me conecto y su tipo.
 class BaseModel(Model):
-    """
-    Clase que establece a que base de datos me conecto y su tipo.
-    """
-
     class Meta:
         database = db  # Indico a que base me conecto y su tipo.
 
 
+# Clase asociada a la tabla de la base de datos, y donde defino sus atributos (campos).
 class Componentes(BaseModel):
-    """
-    Clase asociada a la tabla de la base de datos, y donde defino sus atributos (campos).
-    """
-
     nombre = CharField()
     cantidad = CharField()
     precio = CharField()
     descripcion = CharField()
 
 
+# Clase que contiene métodos para conectarme a la base de datos, y para manejar los registros de la misma.
 class BaseDatos:
-    """
-    Clase que contiene métodos para conectarme a la base de datos, y para manejar los registros de la misma.
-    """
-
+    # Constructor para crear, conectarme, y agregar una tabla a la base de datos.
     def __init__(self):
-        """
-        Constructor para crear, conectarme, y agregar una tabla a la base de datos.
-        """
         self.con = db
         self.con.connect()  # Me conecto a la bd.
         self.con.create_tables([Componentes])  # Creo la tabla Componentes.
 
+    # Método para agregar una fila de datos (registro) a la tabla.
     def agregar_db(self, nombre, cantidad, precio, descripcion):
-        """
-        Método para agregar una fila de datos (registro) a la tabla.
-
-        :param nombre: Nombre del componente.
-        :param cantidad: Cantidad del componente.
-        :param precio: Precio del componente.
-        :param descripcion: Descripción del componente.
-        """
         comp = Componentes()  # Creo un objeto (registro) de la clase Componentes.
 
         # Le asigno los valores ingresados a cada atributo(campo) del objeto.
@@ -85,13 +67,9 @@ class BaseDatos:
         except:
             print("No se pudo guardar el registro")
 
+    # Método para eliminar una fila de datos (registro) de la tabla
+    # usando como referencia el campo "Nombre".
     def eliminar_db(self, nombre):
-        """
-        Método para eliminar una fila de datos (registro) de la tabla
-        usando como referencia el campo **Nombre**.
-
-        :param nombre: Nombre del componente.
-        """
         reg_borrar = Componentes.get(Componentes.nombre == nombre)
 
         try:
@@ -99,17 +77,9 @@ class BaseDatos:
         except:
             print("No se pudo eliminar el registro")
 
+    # Método para seleccionar una o varias filas de la tabla usando como referencia
+    # el campo "Nombre" y/o el campo "Descripción".
     def leer_db(self, nombre=None, descrip=None):
-        """
-        Método para seleccionar una o varias filas de la tabla usando como referencia
-        el campo **Nombre** y/o el campo **Descripción**.
-
-        :param nombre: Nombre del componente.
-        :param descrip: Descripcion del componente.
-
-        :returns: Fila/s encontrada/s de acuerdo a la referencia.
-        """
-
         if nombre == None and descrip == None:
             rows = Componentes.select()
         elif nombre != None and descrip == None:
@@ -121,18 +91,10 @@ class BaseDatos:
                 (Componentes.nombre == nombre) & (Componentes.descripcion == descrip)
             )
 
-        return rows
+        return rows  # Retorno fila/s encontrada/s de acuerdo a la referencia.
 
+    # Método para actualizar uno o varios campos de una fila de la tabla.
     def actualizar_db(self, nombre, cant, prec, descrip):
-        """
-        Método para actualizar uno o varios campos de una fila de la tabla.
-
-        :param nombre: Nombre del componente.
-        :param cant: Nuevo valor del campo cantidad (si existe un dato válido).
-        :param prec: Nuevo valor del campo precio (si existe un dato válido).
-        :param descrip: Nuevo valor del campo descripción (si existe un dato válido).
-        """
-
         if flag_c == 1:  # Si existe un dato cantidad válido.
             reg_actualizar = Componentes.update(cantidad=cant).where(
                 Componentes.nombre == nombre
@@ -162,42 +124,26 @@ class BaseDatos:
 
 
 # ---------------------Clase que contienen métodos para manejo de datos ingresados--------------------------------
-class Crud(BaseDatos):
-    """
-    Clase que contiene métodos para el manejo de los datos ingresados.
-    """
 
+
+# Clase que contiene métodos para el manejo de los datos ingresados.
+class Crud(BaseDatos):
+    # Constructor que hereda el correspondiente a la clase "BaseDatos()"",
+    # y que además crea un objeto "Validacion()" para comprobar los campos de entrada.
+    # También hereda de la clase "Sujeto()"" para el manejo de observadores.
     def __init__(self):
-        """
-        Constructor que hereda el correspondiente a la clase ``BaseDatos()``,
-        y que además crea un objeto ``Validacion()`` para comprobar los campos de entrada.
-        También hereda de la clase ``Sujeto()`` para el manejo de observadores.
-        """
         super().__init__()
         self.obj_val = Validacion()
 
+    # Método para agregar un nuevo componente.
     def agreg(self, nombre, cantidad, precio, descripcion):
-        """
-        Método para agregar un nuevo componente.
-
-        :param nombre: Nombre del componente.
-        :param cantidad: Cantidad del componente.
-        :param precio: Precio del componente.
-        :param descripcion: Descripción del componente.
-
-        :returns: ``"Campos vacios"`` si no se completaron todos los campos.
-        :returns: ``"Ya existe el articulo"`` si el componente que se quiere ingresar ya se encontraba cargado.
-        :returns: ``"Nuevo articulo cargado"`` si el componente fue ingresado exitosamente.
-
-        Si en algunos de los campos se ingresó un dato inválido (no cumple regex)
-        se generará una excepción.
-        """
         nom = nombre.text
         cant = cantidad.text
         prec = precio.text
         descrip = descripcion.text
 
         # Chequeo que el campo nombre, cantidad, precio y descripción no se encuentren vacíos.
+        # Retorna una lista informando en caso de error.
         if not (
             self.obj_val.empty_entry(nom, "nom")
             and self.obj_val.empty_entry(cant, "cant")
@@ -215,23 +161,16 @@ class Crud(BaseDatos):
         ):
             raise ValueError("Campos incorrectos")
 
-        # Cargo en la base de datos y notifico al observador
+        # Cargo el artículo en la base de datos.
+        # Retorna una lista informando el resultado de la operación ya sea si fue exitosa o no.
         if not self.leer_db(nom):
             self.agregar_db(nom, cant, prec, descrip)
             return ["Operación exitosa", "Artículo cargado correctamente"]
 
         return ["Error en la operación", "Artículo ya existente"]
 
+    # Método para eliminar un componente ingresado (lo busco por el nombre).
     def elim(self, nombre):
-        """
-        Método para eliminar un componente ingresado (lo busco por el nombre).
-
-        :param nombre: Nombre del componente.
-
-        :returns: ``"Campo vacio"`` si no se ingresó ningún nombre.
-        :returns: ``"Articulo no encontrado"`` si el componente a eliminar no se encuentra ingresado.
-        :returns: ``"Articulo eliminado"`` si el componente fue eliminado exitosamente.
-        """
         nom = nombre.text
 
         # Chequeo que el campo nombre no esté vacío.
@@ -242,27 +181,12 @@ class Crud(BaseDatos):
         if not self.leer_db(nom):
             return ["Error en la operación", "Artículo no encontrado"]
 
-        # Elimino de la base de datos y notifico al observador.
+        # Elimino el artículo de la base de datos.
         self.eliminar_db(nom)
         return ["Operación exitosa", "Artículo eliminado correctamente"]
 
+    # Método para modificar un componente ingresado (lo busco por el nombre).
     def modif(self, nombre, cantidad, precio, descripcion):
-        """
-        Método para modificar un componente ingresado (lo busco por el nombre).
-
-        :param nombre: Nombre del componente.
-        :param cantidad: Cantidad del componente.
-        :param precio: Precio del componente.
-        :param descripcion: Descripción del componente.
-
-        :returns: ``"Campo vacio"`` si no se ingresó ningún nombre.
-        :returns: ``"Articulo no existe"`` si el componente a modificar no se encuentra ingresado.
-        :returns: ``"Articulo sin modificar"`` si no se ingresó ningún parámetro a modificar del componente.
-        :returns: ``"Articulo modificado"`` si el componente fue modificado exitosamente.
-
-        Si en algunos de los campos se ingresó un dato inválido (no cumple regex)
-        se generará una excepción.
-        """
         global flag_e
         global flag_c
         global flag_p
@@ -312,7 +236,7 @@ class Crud(BaseDatos):
             if not (flag_c or flag_p or flag_d):
                 return ["Error en la operación", "No se ha modificado el artículo"]
 
-            # Si se ingresó un dato modifico el componente y notifico al observador.
+            # Si se ingresó un dato modifico el componente.
             self.actualizar_db(nom, cant, prec, descrip)
 
             flag_c = 0
@@ -329,19 +253,8 @@ class Crud(BaseDatos):
             "Campos incorrectos"
         )  # Si se ingresó un dato inválido genero una excepción.
 
+    # Método para consultar los datos de un componente en particular (lo busco por el nombre y/o descripción).
     def consulta(self, nombre, descrip, window_consulta):
-        """
-        Método para consultar los datos de un componente en particular (lo busco por el nombre y/o descripción).
-
-        :param nombre: Nombre del componente.
-        :param descrip: Descripción del componente.
-        :param window_consulta: Objeto de clase ``WindowConsulta()``.
-
-        :returns: ``"Campo vacios"`` si no se ingresó ningún nombre y/o descripción.
-        :returns: ``"Articulo no encontrado por nombre"`` si el componente consultado por nombre no se encuentra ingresado.
-        :returns: ``"Articulo no encontrado por descripcion"`` si el componente consultado por descripción no se encuentra ingresado.
-        :returns: ``"Articulo no encontrado"`` si el componente consultado por nombre y descripción no se encuentra ingresado.
-        """
         nom = nombre
         descrip = descrip
 
@@ -388,24 +301,14 @@ class Crud(BaseDatos):
                 row.descripcion,
             )
 
-    # NO ES NECESARIO PASAR EL PARAMETRO SDE WINDOWS_MAIN AL DECORADOR
-    # YA QUE SE MUESTRA EN LA VENTANA DE CATALOGO
+    # Método que muestra el catálogo completo de componentes cargados hasta el momento.
     def mostrar_cat(self, window_consulta):
-        """
-        Método que muestra el catálogo completo de componentes cargados hasta el momento.
-
-        :param window_consulta: Objeto de clase ``WindowConsulta()``.
-
-        :returns: **x_nom**, lista que almacena los nombres de cada componente registrado.
-        :returns: **y_cant**, lista que almacena las cantidades de cada componente registrado.
-        """
-
         x_nom = []  # Lista que almacena los nombres de cada componente cargado.
         y_cant = []  # Lista que almacena las cantidades de cada componente cargado.
 
         data_from_db = self.leer_db()
 
-        # Cargo la tabla de la ventana Consulta con todos los registros almacenados en la bd.
+        # Cargo la tabla de la ventana "Consulta" con todos los registros almacenados en la bd.
         for row in data_from_db:
             window_consulta.add_frame(
                 str(row.id),

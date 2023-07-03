@@ -32,7 +32,8 @@
             icon: "dots-vertical"
             theme_text_color:"Custom"
             text_color: 0,0,0,1
-            on_release:app.root.menu.open()
+            # Abro el menú de opciones para cambiar de tema.
+            on_release:app.root.menu.open() 
         MDLabel:
             id: toplabel
             text: "Electrónica del Oeste"
@@ -60,6 +61,7 @@
         spacing:dp(25)            
         ButtonCard:
             id: buttonadd
+            # Cambio a pantalla "Agregar".
             on_release:app.root.current="Agregar"
             MDBoxLayout:
                 orientation:"vertical"
@@ -71,6 +73,7 @@
                     
         ButtonCard:
             id: buttondel
+            # Cambio a pantalla "Eliminar".
             on_release:app.root.current="Eliminar"
             MDBoxLayout:
                 orientation:"vertical"
@@ -82,6 +85,7 @@
                          
         ButtonCard:
             id: buttonedit
+            # Cambio a pantalla "Modificar".
             on_release:app.root.current="Modificar"
             MDBoxLayout:
                 orientation:"vertical"
@@ -93,6 +97,7 @@
                     
         ButtonCard:
             id: buttonsearch
+            # Cambio a pantalla "Consultar".
             on_release:app.root.current="Consultar"
             MDBoxLayout:
                 orientation:"vertical"

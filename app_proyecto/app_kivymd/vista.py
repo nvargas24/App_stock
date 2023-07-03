@@ -57,7 +57,7 @@ class Consultar(MDBoxLayout):
     Builder.load_file("consultar.kv")
 
 
-# Clase personalizada utilizada para añadir íconos en el menú desplegable
+# Clase personalizada utilizada para añadir íconos junto a las opciones del menú desplegable
 # encargado de cambiar el tema de la App.
 class IconListItem(OneLineIconListItem):
     icon = StringProperty()
@@ -125,6 +125,7 @@ class Canvas_grafica(FigureCanvas):
 
 # Clase asociada a la ventana de la App y que permite el acceso a las otras pantallas(MDScreen) de la misma.
 class MisPantallas(MDScreenManager):
+    # Constructor que configura la ventana de la App y los widgets que contiene.
     def __init__(self, app, **kwargs):
         super(MisPantallas, self).__init__(**kwargs)
         self.obj_app = app  # Objeto asociado a la App.
@@ -153,26 +154,46 @@ class MisPantallas(MDScreenManager):
         self.filter_selected = "Nombre"
         self.grafica = Canvas_grafica(self.obj_app)
 
-        self.obj_c = Crud()
-        self.crear_menu()
+        self.obj_c = Crud()  # Creo un objeto de clase Crud.
+        self.crear_menu_tema()  # Creo el menu que permite cambiar el tema de la App.
         self.widgets_consulta()
 
+    # Método que cambia el tema y la paleta de colores primaria de la App
+    # en función de la opción seleccionada en el menu asociado.
     def cambiar_tema(self, value):
         if value == "claro":
-            self.menu.dismiss()
+            self.menu.dismiss()  # Cierro el menu tras seleccionar una opción.
+
             self.obj_app.theme_cls.primary_palette = "LightBlue"
             self.obj_app.theme_cls.theme_style = "Light"
+
+            # Cambio el color de fondo de los botones de la pantalla "Home"
             self.obj_home.ids.buttonadd.md_bg_color = "#C7C7C7"
             self.obj_home.ids.buttondel.md_bg_color = "#C7C7C7"
             self.obj_home.ids.buttonedit.md_bg_color = "#C7C7C7"
             self.obj_home.ids.buttonsearch.md_bg_color = "#C7C7C7"
-            self.crear_menu()
+
+            # Vuelvo a crear el menu de cambio de tema para actualizar
+            # el color de las opciones al nuevo tema seleccionado.
+            self.crear_menu_tema()
+
+            # Vuelvo a crear el menu de filtro de búsqueda para actualizar
+            # el color de las opciones al nuevo tema seleccionado.
             self.crear_menu_filtro()
+
+            # Vuelvo a crear la tabla de artículos cargados para actualizar
+            # el color de la misma al nuevo tema seleccionado.
             self.crear_tabla()
             if flag_tabla:
+                # Si el widget actual en la pantalla "Consulta" es la tabla,
+                # muestro la misma actualizada al color del tema seleccionado.
                 self.show_table(self)
             else:
+                # Si el widget actual en la pantalla "Consulta" es el gráfico,
+                # muestro el mismo con su color de fuente actualizado al tema seleccionado.
                 self.show_graph(self)
+
+            # Actualizo el contenido de la tabla y el gráfico.
             self.obj_c.mostrar_cat(self)
         else:
             self.menu.dismiss()
@@ -182,7 +203,7 @@ class MisPantallas(MDScreenManager):
             self.obj_home.ids.buttondel.md_bg_color = "#404040"
             self.obj_home.ids.buttonedit.md_bg_color = "#404040"
             self.obj_home.ids.buttonsearch.md_bg_color = "#404040"
-            self.crear_menu()
+            self.crear_menu_tema()
             self.crear_menu_filtro()
             self.crear_tabla()
             if flag_tabla:
@@ -191,7 +212,8 @@ class MisPantallas(MDScreenManager):
                 self.show_graph(self)
             self.obj_c.mostrar_cat(self)
 
-    def crear_menu(self):
+    # Método que crea el menú de opciones para cambiar el tema de la App.
+    def crear_menu_tema(self):
         self.menu_items = [
             {
                 "icon": "weather-sunny",
@@ -217,6 +239,9 @@ class MisPantallas(MDScreenManager):
             width_mult=dp(3),
         )
 
+    # Método que recibe la lista que retorna la función de agregar un artículo "agreg()",
+    # que forma parte de "modelo.py".
+    # Si se generó una excepción mostrará el mensaje de error correspondiente.
     def call_agreg(self):
         nombre = self.obj_agregar.ids.input_nombre_add
         cantidad = self.obj_agregar.ids.input_cantidad_add
@@ -226,18 +251,25 @@ class MisPantallas(MDScreenManager):
             mje = self.obj_c.agreg(nombre, cantidad, precio, descripcion)
         except ValueError as mje:
             print(mje)
+            # En caso de excepción también envío una lista al método que genera los mensajes emergentes de información.
             self.show_msg_popup(
                 ["Error en la operación", "Campos cargados incorrectamente"]
             )
         else:
+            # Envío la lista recibida al método que genera los mensajes emergentes de información.
             self.show_msg_popup(mje)
 
+    # Método que recibe la lista que retorna la función de eliminar un artículo "elim()",
+    # que forma parte de "modelo.py".
     def call_elim(self):
         nombre = self.obj_eliminar.ids.input_nombre_elim
 
         mje = self.obj_c.elim(nombre)
         self.show_msg_popup(mje)
 
+    # Método que recibe la lista que retorna la función de modificar un artículo "modif()",
+    # que forma parte de "modelo.py".
+    # Si se generó una excepción mostrará el mensaje de error correspondiente.
     def call_modif(self):
         nombre = self.obj_modificar.ids.input_nombre_mod
         cantidad = self.obj_modificar.ids.input_cantidad_mod
@@ -253,7 +285,10 @@ class MisPantallas(MDScreenManager):
         else:
             self.show_msg_popup(mje)
 
+    # Método que crea y muestra un mensaje emergente de información en función de la lista recibida.
     def show_msg_popup(self, mje):
+        # El primer string de la lista constituye el título del mensaje.
+        # El segundo string de la lista constituye el contenido del mensaje.
         self.dialog = MDDialog(
             title=mje[0],
             type="custom",
@@ -274,39 +309,22 @@ class MisPantallas(MDScreenManager):
 
         self.dialog.open()
 
+    # Método que cierra el mensaje emergente al presionar el botón "Aceptar" del mismo.
     def close_msg_popup(self, obj):
         self.dialog.dismiss()
 
+    # Método que limpia el contenido de los campos de entrada de los formularios,
+    # y tambíen desactiva su propiedad "error" para que no quede activo el mensaje de ayuda "*Campo obligatorio".
     def limpiar_campos(self, lista_campos):
         for campo in lista_campos:
             campo.text = ""
             campo.error = False
 
-    """
-    def set_error_message(self, instance_text):
-        if instance_text.focus == False:
-            instance_text.required = True
-        else:
-            instance_text.required = True
-            instance_text.error = False
-    """
-
     # Metodos para screen consulta
     def widgets_consulta(self):
+        # Creo tabla de artículos cargados.
         self.crear_tabla()
-        """
-        self.data_tables = MDDataTable(
-            rows_num=10000,
-            size_hint=(1, 1),
-            column_data=[
-                ("[size=18][color=#CC742C]ID[/color][/size]", dp(10)),
-                ("[size=18][color=#CC742C]Producto[/color][/size]", dp(30)),
-                ("[size=18][color=#CC742C]Cantidad[/color][/size]", dp(20)),
-                ("[size=18][color=#CC742C]Precio[/color][/size]", dp(30)),
-                ("[size=18][color=#CC742C]Descripcion[/color][/size]", dp(50)),
-            ],
-        )
-        """
+
         self.bar_search = MDTextField(
             id="bar_search",
             size_hint=(2, 1),
@@ -342,32 +360,8 @@ class MisPantallas(MDScreenManager):
             text="Catálogo",
         )  # Si asigno 'id' con .kv no lo reconoce dentro del layout, usando children
 
+        # Creo menú de filtro de búsqueda
         self.crear_menu_filtro()
-        """
-        self.filter_menu = MDDropdownMenu(
-            caller=self.filter,
-            items=[
-                {
-                    "text": "Nombre",
-                    "theme_text_color": "Custom",
-                    "text_color": self.obj_app.theme_cls.opposite_bg_darkest,
-                    "viewclass": "OneLineListItem",
-                    "left_widget": MDCheckbox(),
-                    "on_release": lambda x="Nombre": self.filter_item_selected(x)
-                },
-                {
-                    "text": "Descripcion",
-                    "theme_text_color": "Custom",
-                    "text_color": self.obj_app.theme_cls.opposite_bg_darkest,
-                    "viewclass": "OneLineListItem",
-                    "left_widget": MDCheckbox(),
-                    "on_release": lambda x="Descripcion": self.filter_item_selected(x)
-                },
-            ],
-            max_height=dp(100),
-            width_mult=dp(3),
-        )
-        """
 
         self.btn_graph = MDIconButton(
             id="button_graph",
@@ -394,7 +388,10 @@ class MisPantallas(MDScreenManager):
 
         self.obj_c.mostrar_cat(self)
 
+    # Método que crea la tabla de artículos cargados.
     def crear_tabla(self):
+        # Al crear la tabla tiene en cuenta la paleta de colores primaria de la App,
+        # para establecer el color del texto de los encabezados de las columnas.
         if self.obj_app.theme_cls.primary_palette == "Orange":
             self.data_tables = MDDataTable(
                 rows_num=10000,
@@ -420,6 +417,7 @@ class MisPantallas(MDScreenManager):
                 ],
             )
 
+    # Método que crea el menú de filtro de búsqueda en la tabla.
     def crear_menu_filtro(self):
         self.filter_menu = MDDropdownMenu(
             caller=self.filter,

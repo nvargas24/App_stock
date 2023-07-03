@@ -21,6 +21,7 @@
         MDIconButton:
             id:button
             icon: "dots-vertical"
+            # Abro el menú de opciones para cambiar de tema.
             on_release:app.root.menu.open()
         MDLabel:
             id: toplabel
@@ -33,6 +34,7 @@
             id:buttonhome
             icon: "home"
             font_size:"48sp"
+            # Cambio a pantalla "Home" y limpio el campo de entrada del formulario.
             on_release:
                 app.root.limpiar_campos([root.ids.input_nombre_elim])
                 app.root.current="Home"
@@ -72,6 +74,7 @@
             helper_text: "*Campo obligatorio"
             helper_text_mode: "on_error"
             required: False
+            # Habilito la propiedad "required" al hacer foco en el TextField.
             on_focus: self.required=True
             size_hint_y:.1
 
@@ -85,10 +88,12 @@
             text: "Eliminar"
             icon: "delete-circle"
             pos_hint:{"center_x":0.4,"center_y":0.5}
+            # Envío el valor cargado al método "call_elim()".
             on_release:app.root.call_elim()
 
         MDRoundFlatIconButton:
             text: "Cancelar"
             icon: "close-circle"
             pos_hint:{"center_x":0.6,"center_y":0.5}
+            # Limpio el campo de entrada del formulario.
             on_release:app.root.limpiar_campos([root.ids.input_nombre_elim])

@@ -11,25 +11,17 @@ __version__ = "0.0.1"
 import re
 
 
+# Clase que contiene los métodos asociados para la comprobación de los campos de entrada.
 class Validacion:
-    """
-    Clase que contiene los métodos asociados para la comprobación de los campos de entrada.
-    """
-
+    # Método para validar los datos con regex.
     def val_entry(self, data_entry, name_entry):
-        """
-        Método para validar los datos con regex.
-
-        :param data_entry: Dato a validar.
-        :param name_entry: Tipo de campo de entrada a validar.
-
-        :returns: Resultado de la validación.
-        """
-        # Patrones para validar los campos por regex.
+        # Patrones para validar los campos por regex
+        # según el tipo de campo de entrada (name_entry) a validar.
         patron1 = "^[a-zA-Z0-9\./ ]+$"
         patron2 = "^[0-9]+$"
         patron3 = "^[0-9\.]+$"
 
+        # Retorno resultado de la validación.
         if name_entry == "nom":
             return re.match(patron1, data_entry)
         elif name_entry == "cant":
@@ -39,16 +31,11 @@ class Validacion:
         elif name_entry == "descrip":
             return re.match(patron1, data_entry)
 
+    # Método para chequear si el campo de entrada se encuentra vacío.
     def empty_entry(self, data_entry, name_entry):
-        """
-        Método para chequear si el campo de entrada se encuentra vacío.
+        # Retorna '0' si el campo está vacío.
+        # Retorna '1' si en el campo se ingresó un dato.
 
-        :param data_entry: Contenido del campo de entrada.
-        :param name_entry: Tipo de campo de entrada a revisar.
-
-        :returns: ``0`` Si el campo está vacío.
-        :returns: ``1`` Si en el campo se ingresó un dato.
-        """
         if (
             name_entry == "nom"
             and data_entry
