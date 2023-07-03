@@ -58,7 +58,7 @@ class Canvas_grafica(FigureCanvas):
         """
         # Asigno un espacio para ubicar el gráfico de matplotlib usando Canvas.
         self.fig, self.ax = plt.subplots(
-            1, dpi=80, figsize=(12, 12), sharey=True, facecolor="none"
+            1, dpi=100, figsize=(50, 50), sharey=True, facecolor="none"
         )
         super().__init__(self.fig)
 
@@ -102,7 +102,7 @@ class Canvas_grafica(FigureCanvas):
             startangle=90,
             radius=0.7,
             labeldistance=1.1,
-            textprops={"fontsize": 12},
+            textprops={"fontsize": 18, "color": "grey"},
         )
         self.draw()
 
@@ -254,7 +254,6 @@ class MisPantallas(MDScreenManager):
     def widgets_consulta(self):
         self.data_tables = MDDataTable(
             rows_num=10000,
-            # use_pagination=True,
             size_hint=(1, 1),
             column_data=[
                 ("[size=18][color=#CC742C]ID[/color][/size]", dp(10)),
@@ -267,15 +266,22 @@ class MisPantallas(MDScreenManager):
         self.bar_search = MDTextField(
             id="bar_search",
             size_hint= (2, 1),
-            # pos_hint = {"center_x": .5, "center_y": .5},
-            hint_text="Buscar",
-            mode="fill",
+            hint_text="Buscar por nombre",
+            #mode="fill",
             max_text_length=20,
             font_size="18sp",
+            #text_color_normal=(0, 0, 0, 1),
+            text_color_focus=(1, 1, 1, 1),
+            line_color_focus=(0.8, 0.8, 0.8, 1),
+            #fill_color_normal=(0.9, 0.9, 0.9, 1),
+            #fill_color_focus=(1, 1, 1, 1),
         )
         self.filter = MDIconButton(
             id="filter",
             size_hint= (1, 1),
+            #pos_hint= {"center_y": .5},
+            #pos= (self.bar_search.width - self.width + dp(8), 0),
+            theme_text_color= "Primary",
             icon= "filter-variant",
             font_size="48sp",
             on_release= self.select_filter
@@ -289,27 +295,26 @@ class MisPantallas(MDScreenManager):
             text="Catalogo",
         )  # Si asigno 'id' con .kv no lo reconoce dentro del layout, usando children
 
-        self.filter_items = [
-            {
-                "text": "Nombre",
-                "theme_text_color": "Custom",
-                "text_color": self.obj_app.theme_cls.opposite_bg_darkest,
-                "viewclass": "OneLineListItem",
-                "left_widget": MDCheckbox(),
-                "on_release": lambda x="Nombre": self.filter_item_selected(x)
-            },
-            {
-                "text": "Descripcion",
-                "theme_text_color": "Custom",
-                "text_color": self.obj_app.theme_cls.opposite_bg_darkest,
-                "viewclass": "OneLineListItem",
-                "left_widget": MDCheckbox(),
-                "on_release": lambda x="Descripcion": self.filter_item_selected(x)
-            },
-        ]
         self.filter_menu = MDDropdownMenu(
             caller=self.filter,
-            items=self.filter_items,
+            items=[
+                {
+                    "text": "Nombre",
+                    "theme_text_color": "Custom",
+                    "text_color": self.obj_app.theme_cls.opposite_bg_darkest,
+                    "viewclass": "OneLineListItem",
+                    "left_widget": MDCheckbox(),
+                    "on_release": lambda x="Nombre": self.filter_item_selected(x)
+                },
+                {
+                    "text": "Descripcion",
+                    "theme_text_color": "Custom",
+                    "text_color": self.obj_app.theme_cls.opposite_bg_darkest,
+                    "viewclass": "OneLineListItem",
+                    "left_widget": MDCheckbox(),
+                    "on_release": lambda x="Descripcion": self.filter_item_selected(x)
+                },
+            ],
             max_height=dp(100),
             width_mult=dp(3),
         )
@@ -331,7 +336,7 @@ class MisPantallas(MDScreenManager):
 
         # Evento para detectar texto en MDTextField
         self.bar_search.bind(text=self.on_text_changed)
-        self.bar_search.bind(focus=self.on_focus)
+
         # Agrego widgets a layout
         self.obj_consultar.ids.table.add_widget(self.data_tables)
         self.obj_consultar.ids.field_search.add_widget(self.titulo)
@@ -346,14 +351,11 @@ class MisPantallas(MDScreenManager):
         self.filter_menu.dismiss()
         print(f"Elemento seleccionado: {filter_selected}")
         self.filter_selected = filter_selected
-
-    def on_focus(self, instance, value):
-        #print("valor:  ", value)
-        #print(self.bar_search.hint_text)
-        if value:
-            self.bar_search.hint_text = ""
-        else:
-            self.bar_search.hint_text = "Buscar"
+        
+        if self.filter_selected == "Nombre":
+            self.bar_search.hint_text = "Buscar por nombre"
+        elif self.filter_selected == "Descripcion":
+            self.bar_search.hint_text = "Buscar por descripcion"
 
     def show_buscar(self):
         # Toggle widget en layout
