@@ -8,14 +8,16 @@ __email__ = "diegoacalderon994@gmail.com, nahuvargas24@gmail.com"
 __copyright__ = "Copyright 2023"
 __version__ = "0.0.1"
 
+import random
 from modelo import Crud
 from kivy.metrics import dp
 from kivy.lang import Builder
+from kivy.properties import StringProperty
+
 from kivymd.uix.screenmanager import MDScreenManager
 from kivymd.uix.menu import MDDropdownMenu
 from kivymd.uix.list import OneLineIconListItem
 from kivymd.uix.boxlayout import MDBoxLayout
-from kivy.properties import StringProperty
 from kivymd.uix.dialog import MDDialog
 from kivymd.uix.button import MDFlatButton
 from kivymd.uix.datatables import MDDataTable
@@ -23,9 +25,10 @@ from kivymd.uix.label import MDLabel
 from kivymd.uix.textfield import MDTextField
 from kivymd.uix.button import MDIconButton
 from kivymd.uix.selectioncontrol import MDCheckbox
+
 from kivy.garden.matplotlib.backend_kivyagg import FigureCanvasKivyAgg as FigureCanvas
 import matplotlib.pyplot as plt
-import random
+
 
 # Flag utilizado para indicar si el widget actual
 # en la pantalla de Consulta es la tabla (1) o el gráfico (0).
@@ -68,16 +71,15 @@ class Canvas_grafica(FigureCanvas):
     # Constructor que hereda el correspondiente a la clase FigureCanvas(),
     # y que además crea un gráfico matplotlib en blanco.
     def __init__(self, app):
-        # Asigno un espacio para ubicar el gráfico de matplotlib usando Canvas.
+        # Creo grafico de torta
         self.fig, self.ax = plt.subplots(
             1, dpi=100, figsize=(50, 50), sharey=True, facecolor="none"
         )
         super().__init__(self.fig)
         self.obj_app = app  # Objeto asociado a la App.
 
-    # Método para actualizar nombres y cantidades en gráfico de torta.
+    # Método para actualizar datos de grafico
     def upgrade_graph(self, nombre, cantidad):
-        # Borro gráfico antiguo.
         self.ax.clear()
 
         # Parámetros para nuevo gráfico.
@@ -94,7 +96,7 @@ class Canvas_grafica(FigureCanvas):
             self.colores.append("#%02x%02x%02x" % (r, g, b))
             self.explotar.append(0.05)
 
-        # Pasaje de porcentaje a valor real en bd.
+        # Pasaje de porcentaje a valor real
         valor_real = lambda pct: "{:.0f}".format(
             (pct * sum(list(map(int, self.tamanio)))) / 100
         )
@@ -106,7 +108,7 @@ class Canvas_grafica(FigureCanvas):
         else:
             text_color = {"fontsize": 18, "color": "black"}
 
-        # Asigno nuevos parámetros a gráfico.
+        # Asigno parámetros a gráfico.
         self.ax.pie(
             self.tamanio,
             explode=self.explotar,
@@ -120,7 +122,7 @@ class Canvas_grafica(FigureCanvas):
             labeldistance=1.1,
             textprops=text_color,
         )
-        self.draw()  # Dibujo el gráfico.
+        self.draw()
 
 
 # Clase asociada a la ventana de la App y que permite el acceso a las otras pantallas(MDScreen) de la misma.
@@ -151,11 +153,14 @@ class MisPantallas(MDScreenManager):
         # Agrego el contenido del archivo "consultar.kv" al MDScreen cuyo id es "consulta".
         self.ids.consulta.add_widget(self.obj_consultar)
 
+        # Asigno tipo de busqueda por defecto
         self.filter_selected = "Nombre"
+        # Creo grafico al abrir la app
         self.grafica = Canvas_grafica(self.obj_app)
-
-        self.obj_c = Crud()  # Creo un objeto de clase Crud.
-        self.crear_menu_tema()  # Creo el menu que permite cambiar el tema de la App.
+        self.obj_c = Crud()
+        # Creo el menu que permite cambiar el tema de la App.
+        self.crear_menu_tema()
+        # Creo widgets dinamicos  
         self.widgets_consulta()
 
     # Método que cambia el tema y la paleta de colores primaria de la App
@@ -203,6 +208,8 @@ class MisPantallas(MDScreenManager):
             self.obj_home.ids.buttondel.md_bg_color = "#404040"
             self.obj_home.ids.buttonedit.md_bg_color = "#404040"
             self.obj_home.ids.buttonsearch.md_bg_color = "#404040"
+            
+            # Idem anterior para otro tema
             self.crear_menu_tema()
             self.crear_menu_filtro()
             self.crear_tabla()
@@ -321,6 +328,7 @@ class MisPantallas(MDScreenManager):
             campo.error = False
 
     # Metodos para screen consulta
+    # Creo widgets
     def widgets_consulta(self):
         # Creo tabla de artículos cargados.
         self.crear_tabla()
@@ -343,9 +351,6 @@ class MisPantallas(MDScreenManager):
         self.filter = MDIconButton(
             id="filter",
             size_hint=(1, 1),
-            # pos_hint= {"center_y": .5},
-            # pos= (self.bar_search.width - self.width + dp(8), 0),
-            # theme_text_color="Primary",
             icon="filter-variant",
             font_size="48sp",
             on_release=self.select_filter,
@@ -358,7 +363,7 @@ class MisPantallas(MDScreenManager):
             theme_text_color="Custom",
             text_color=(0, 0, 0, 1),
             text="Catálogo",
-        )  # Si asigno 'id' con .kv no lo reconoce dentro del layout, usando children
+        )
 
         # Creo menú de filtro de búsqueda
         self.crear_menu_filtro()
@@ -442,7 +447,7 @@ class MisPantallas(MDScreenManager):
             max_height=dp(100),
             width_mult=dp(3),
         )
-
+    
     def select_filter(self, instance):
         self.filter_menu.open()
 
