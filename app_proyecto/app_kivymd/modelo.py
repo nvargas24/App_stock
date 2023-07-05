@@ -10,6 +10,7 @@ __version__ = "0.0.1"
 
 from peewee import *
 from validar import Validacion
+import os
 
 # --------------------Variables---------------------------------
 # Flag utilizado para informar si hubo un error en la validación de los datos de un campo a actualizar.
@@ -21,10 +22,12 @@ flag_p = 0
 # Flag utilizado para informar que existe un dato válido para actualizar en el campo descripción.
 flag_d = 0
 
+PATH_DB = os.path.join(os.path.dirname(__file__), "base_stock.db")
+
 # ---------------------Clases que contienen métodos para base de datos--------------------------------
 try:
     db = SqliteDatabase(
-        "base_stock.db"
+        PATH_DB
     )  # Creo el objeto que indica el tipo y nombre de bd a la cual me voy a conectar (si no existe la crea).
 except:
     print("No se pudo crear la base de datos")
