@@ -387,7 +387,7 @@ class MisPantallas(MDScreenManager):
         self.bar_search.bind(text=self.on_text_changed)
 
         # Agrego widgets a layout
-        self.obj_consultar.ids.table.add_widget(self.data_tables)
+        self.obj_consultar.ids.field_visual_data.add_widget(self.data_tables)
         self.obj_consultar.ids.field_search.add_widget(self.titulo)
         self.obj_consultar.ids.button_data.add_widget(self.btn_graph)
 
@@ -482,7 +482,6 @@ class MisPantallas(MDScreenManager):
             msj = self.obj_c.consulta("", item_search, self)
 
         #print(msj)
-        # Al recibir en msj de no encotrado o campos vacio, se muestra la tabla
         if msj=="Campos vacíos":
             self.delete()
             self.obj_c.mostrar_cat(self)
@@ -495,10 +494,10 @@ class MisPantallas(MDScreenManager):
 
         flag_tabla = 0
         self.obj_consultar.ids.button_data.clear_widgets()
-        self.obj_consultar.ids.table.clear_widgets()
+        self.obj_consultar.ids.field_visual_data.clear_widgets()
 
         self.obj_consultar.ids.button_data.add_widget(self.btn_table)
-        self.obj_consultar.ids.table.add_widget(self.grafica)
+        self.obj_consultar.ids.field_visual_data.add_widget(self.grafica)
 
         self.obj_consultar.ids.field_search.clear_widgets()
         self.obj_consultar.ids.field_search.add_widget(self.titulo)
@@ -508,10 +507,10 @@ class MisPantallas(MDScreenManager):
 
         flag_tabla = 1
         self.obj_consultar.ids.button_data.clear_widgets()
-        self.obj_consultar.ids.table.clear_widgets()
+        self.obj_consultar.ids.field_visual_data.clear_widgets()
 
         self.obj_consultar.ids.button_data.add_widget(self.btn_graph)
-        self.obj_consultar.ids.table.add_widget(self.data_tables)
+        self.obj_consultar.ids.field_visual_data.add_widget(self.data_tables)
 
     def delete(self):
         self.data_tables.row_data = []  # Borro filas
