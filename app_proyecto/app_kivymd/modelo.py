@@ -275,16 +275,6 @@ class Crud(BaseDatos):
             data_from_db = self.leer_db(None, descrip)
             if not data_from_db:
                 return "Artículo no encontrado por descripción"
-
-        # Búsqueda por nombre y descripción.
-        elif self.obj_val.empty_entry(nom, "nom") and self.obj_val.empty_entry(
-            descrip, "descrip"
-        ):
-            print("busqueda por nombre y descripcion")
-            data_from_db = self.leer_db(nom, descrip)
-            if not data_from_db:
-                return "Artículo no encontrado"
-
         else:
             return "Campos vacíos"
 
@@ -300,6 +290,7 @@ class Crud(BaseDatos):
                 row.precio,
                 row.descripcion,
             )
+        return "Encontrado"
 
     # Método que muestra el catálogo completo de componentes cargados hasta el momento.
     def mostrar_cat(self, window_consulta):

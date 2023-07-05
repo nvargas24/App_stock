@@ -481,9 +481,14 @@ class MisPantallas(MDScreenManager):
         elif self.filter_selected == "Descripcion":
             msj = self.obj_c.consulta("", item_search, self)
 
-        print(msj)
-        if msj:
-            self.data_tables.row_data = []  # Borro filas
+        #print(msj)
+        # Al recibir en msj de no encotrado o campos vacio, se muestra la tabla
+        if msj=="Campos vacíos":
+            self.delete()
+            self.obj_c.mostrar_cat(self)
+        elif not msj=="Encontrado":
+            self.delete()
+
 
     def show_graph(self, instance):
         global flag_tabla
