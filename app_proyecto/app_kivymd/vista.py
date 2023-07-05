@@ -90,9 +90,9 @@ class Canvas_grafica(FigureCanvas):
 
         # Asigno color aleatorio claros segun la cantidad de artículos disponibles.
         for i in range(len(self.nombres)):
-            r = random.randint(150, 255)
-            g = random.randint(150, 255)
-            b = random.randint(150, 255)
+            r = random.randint(120, 220)
+            g = random.randint(120, 220)
+            b = random.randint(120, 220)
             self.colores.append("#%02x%02x%02x" % (r, g, b))
             self.explotar.append(0.05)
 
@@ -447,13 +447,15 @@ class MisPantallas(MDScreenManager):
             max_height=dp(100),
             width_mult=dp(3),
         )
-    
+
+    # Metodo para mostrar tipos de filtros en barra de busqueda
     def select_filter(self, instance):
         self.filter_menu.open()
 
+    # Metodo para determinar tipo de busqueda y mostrar lo selecciona en barra de busqueda
     def filter_item_selected(self, filter_selected):
         self.filter_menu.dismiss()
-        print(f"Elemento seleccionado: {filter_selected}")
+        #print(f"Elemento seleccionado: {filter_selected}")
         self.filter_selected = filter_selected
 
         if self.filter_selected == "Nombre":
@@ -461,11 +463,10 @@ class MisPantallas(MDScreenManager):
         elif self.filter_selected == "Descripcion":
             self.bar_search.hint_text = "Buscar por descripcion"
 
+    # Metodo para motrar o no la barra de busqueda
     def show_buscar(self):
-        # Toggle widget en layout
         id_widget = self.obj_consultar.ids.field_search.children[0].id
-
-        print(self.obj_consultar.ids.field_search.children)
+        #print(self.obj_consultar.ids.field_search.children)
         if id_widget == "titulo":
             self.obj_consultar.ids.field_search.clear_widgets()
             self.obj_consultar.ids.field_search.add_widget(self.bar_search)
@@ -474,8 +475,12 @@ class MisPantallas(MDScreenManager):
             self.obj_consultar.ids.field_search.clear_widgets()
             self.obj_consultar.ids.field_search.add_widget(self.titulo)
 
+    # Evento para determinar palabra a buscar
+    # Si no se encuentra se vacia frames de tabla,
+    # Si no se ingresa nada se muestra tabla actualizada de base de datos,
+    # Si se encuentra solo se muestra el/los articulos
     def on_text_changed(self, instance, item_search):
-        print("Texto cambiado:", item_search)
+        #print("Texto cambiado:", item_search)
         if self.filter_selected == "Nombre":
             msj = self.obj_c.consulta(item_search, "", self)
         elif self.filter_selected == "Descripcion":
@@ -488,7 +493,7 @@ class MisPantallas(MDScreenManager):
         elif not msj=="Encontrado":
             self.delete()
 
-
+    # Muestro grafico y borro tabla en screen Consulta
     def show_graph(self, instance):
         global flag_tabla
 
@@ -502,6 +507,7 @@ class MisPantallas(MDScreenManager):
         self.obj_consultar.ids.field_search.clear_widgets()
         self.obj_consultar.ids.field_search.add_widget(self.titulo)
 
+    # Muestro tabla y borro grafico en screen Cosulta
     def show_table(self, instance):
         global flag_tabla
 
@@ -512,17 +518,16 @@ class MisPantallas(MDScreenManager):
         self.obj_consultar.ids.button_data.add_widget(self.btn_graph)
         self.obj_consultar.ids.field_visual_data.add_widget(self.data_tables)
 
+    # Borra frame de tabla
     def delete(self):
         self.data_tables.row_data = []  # Borro filas
 
-    # Accedo a base de datos -> lectura en modelo.py-> carga en vista.py
-    def full_cat(
-        self,
-    ):
+    # Actualizo tabla con base de datos
+    def full_cat(self):
         self.delete()
-        self.obj_c.mostrar_cat(
-            self
-        )  # para que desde modelo.py pueda acceder a add_frame
+        self.obj_c.mostrar_cat(self)
+        self.obj_consultar.ids.field_search.clear_widgets()
+        self.obj_consultar.ids.field_search.add_widget(self.titulo)
 
     # Agrega frame a tabla
     def add_frame(self, *args):
