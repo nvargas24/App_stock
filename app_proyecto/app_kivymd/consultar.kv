@@ -19,14 +19,15 @@
         MDIconButton:
             id:full_cat
             size_hint: .5, 1
-            #icon: "tray-full"
             icon: "refresh"
+            # Refresco el contenido de la tabla.
             on_release:app.root.full_cat()
         MDIconButton:
             id: buscar
             size_hint: .5, 1
             icon: "magnify"
             md_bg_color: app.theme_cls.primary_color
+            # Abro MDTextField de búsqueda.
             on_release: app.root.show_buscar()        
         MDBoxLayout:
             id: field_search

@@ -160,7 +160,7 @@ class MisPantallas(MDScreenManager):
         self.obj_c = Crud()
         # Creo el menu que permite cambiar el tema de la App.
         self.crear_menu_tema()
-        # Creo widgets dinamicos  
+        # Creo widgets dinamicos
         self.widgets_consulta()
 
     # Método que cambia el tema y la paleta de colores primaria de la App
@@ -208,7 +208,7 @@ class MisPantallas(MDScreenManager):
             self.obj_home.ids.buttondel.md_bg_color = "#404040"
             self.obj_home.ids.buttonedit.md_bg_color = "#404040"
             self.obj_home.ids.buttonsearch.md_bg_color = "#404040"
-            
+
             # Idem anterior para otro tema
             self.crear_menu_tema()
             self.crear_menu_filtro()
@@ -327,8 +327,8 @@ class MisPantallas(MDScreenManager):
             campo.text = ""
             campo.error = False
 
-    # Metodos para screen consulta
-    # Creo widgets
+    # Métodos para screen consulta.
+    # Creo widgets.
     def widgets_consulta(self):
         # Creo tabla de artículos cargados.
         self.crear_tabla()
@@ -337,7 +337,6 @@ class MisPantallas(MDScreenManager):
             id="bar_search",
             size_hint=(2, 1),
             hint_text="Buscar por nombre",
-            # mode="fill",
             max_text_length=20,
             font_size="18sp",
             hint_text_color_normal=(0, 0, 0, 1),
@@ -365,7 +364,7 @@ class MisPantallas(MDScreenManager):
             text="Catálogo",
         )
 
-        # Creo menú de filtro de búsqueda
+        # Creo menú de filtro de búsqueda.
         self.crear_menu_filtro()
 
         self.btn_graph = MDIconButton(
@@ -383,10 +382,10 @@ class MisPantallas(MDScreenManager):
             on_release=self.show_table,
         )
 
-        # Evento para detectar texto en MDTextField
+        # Evento para detectar texto en MDTextField.
         self.bar_search.bind(text=self.on_text_changed)
 
-        # Agrego widgets a layout
+        # Agrego widgets a layout.
         self.obj_consultar.ids.field_visual_data.add_widget(self.data_tables)
         self.obj_consultar.ids.field_search.add_widget(self.titulo)
         self.obj_consultar.ids.button_data.add_widget(self.btn_graph)
@@ -448,14 +447,13 @@ class MisPantallas(MDScreenManager):
             width_mult=dp(3),
         )
 
-    # Metodo para mostrar tipos de filtros en barra de busqueda
+    # Método para mostrar tipos de filtros en barra de búsqueda.
     def select_filter(self, instance):
         self.filter_menu.open()
 
-    # Metodo para determinar tipo de busqueda y mostrar lo selecciona en barra de busqueda
+    # Método para determinar tipo de búsqueda y mostrar lo seleccionado en dicha barra.
     def filter_item_selected(self, filter_selected):
         self.filter_menu.dismiss()
-        #print(f"Elemento seleccionado: {filter_selected}")
         self.filter_selected = filter_selected
 
         if self.filter_selected == "Nombre":
@@ -463,10 +461,9 @@ class MisPantallas(MDScreenManager):
         elif self.filter_selected == "Descripcion":
             self.bar_search.hint_text = "Buscar por descripcion"
 
-    # Metodo para motrar o no la barra de busqueda
+    # Método para mostrar o no la barra de búsqueda.
     def show_buscar(self):
         id_widget = self.obj_consultar.ids.field_search.children[0].id
-        #print(self.obj_consultar.ids.field_search.children)
         if id_widget == "titulo":
             self.obj_consultar.ids.field_search.clear_widgets()
             self.obj_consultar.ids.field_search.add_widget(self.bar_search)
@@ -476,24 +473,22 @@ class MisPantallas(MDScreenManager):
             self.obj_consultar.ids.field_search.add_widget(self.titulo)
 
     # Evento para determinar palabra a buscar
-    # Si no se encuentra se vacia frames de tabla,
+    # Si no se encuentra se vacía frames de tabla,
     # Si no se ingresa nada se muestra tabla actualizada de base de datos,
-    # Si se encuentra solo se muestra el/los articulos
+    # Si se encuentra solo se muestra el/los articulos.
     def on_text_changed(self, instance, item_search):
-        #print("Texto cambiado:", item_search)
         if self.filter_selected == "Nombre":
             msj = self.obj_c.consulta(item_search, "", self)
         elif self.filter_selected == "Descripcion":
             msj = self.obj_c.consulta("", item_search, self)
 
-        #print(msj)
-        if msj=="Campos vacíos":
+        if msj == "Campos vacíos":
             self.delete()
             self.obj_c.mostrar_cat(self)
-        elif not msj=="Encontrado":
+        elif not msj == "Encontrado":
             self.delete()
 
-    # Muestro grafico y borro tabla en screen Consulta
+    # Método que muestra gráfico y borra tabla en screen "Consulta".
     def show_graph(self, instance):
         global flag_tabla
 
@@ -507,7 +502,7 @@ class MisPantallas(MDScreenManager):
         self.obj_consultar.ids.field_search.clear_widgets()
         self.obj_consultar.ids.field_search.add_widget(self.titulo)
 
-    # Muestro tabla y borro grafico en screen Cosulta
+    # Método que muestra tabla y borra gráfico en screen "Consulta".
     def show_table(self, instance):
         global flag_tabla
 
@@ -518,17 +513,17 @@ class MisPantallas(MDScreenManager):
         self.obj_consultar.ids.button_data.add_widget(self.btn_graph)
         self.obj_consultar.ids.field_visual_data.add_widget(self.data_tables)
 
-    # Borra frame de tabla
+    # Método que borra frame de tabla.
     def delete(self):
-        self.data_tables.row_data = []  # Borro filas
+        self.data_tables.row_data = []  # Borro filas.
 
-    # Actualizo tabla con base de datos
+    # Método que actualiza tabla con base de datos.
     def full_cat(self):
         self.delete()
         self.obj_c.mostrar_cat(self)
         self.obj_consultar.ids.field_search.clear_widgets()
         self.obj_consultar.ids.field_search.add_widget(self.titulo)
 
-    # Agrega frame a tabla
+    # Método que agrega frame a tabla.
     def add_frame(self, *args):
         self.data_tables.add_row((args[0], args[1], args[2], args[3], args[4]))
