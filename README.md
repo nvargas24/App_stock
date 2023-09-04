@@ -25,6 +25,12 @@ Las 3 versiones fueron realizadas en un principio en gitlab, en un único proyec
 sólo quedaron resgitrados los commits en la version en Tkinter.
 
 ## Versión_Tkinter
+La app al ejecutarse se tendrá disponible esta única ventana.
+![](Imagenes/tkinter1.jpg)
++ **Formulario**: Sección que permite al usuario cargos los datos para realizar alguna de las opciones disponibles para interacturactuar con la base de datos (CRUD).,
++ **CRUD**: Acciones a realizar con los datos cargados en formularios, dependiendo cual sea la acción a realizar, se lleva a cabo una verificación de los campos del formualrio
++ 
+
 
 ## Versión_QTDesigner
 
