@@ -41,7 +41,27 @@ La app al ejecutarse se tendrá disponible esta única ventana.
 + **Recarga de base datos**: Consulta __todos__ los datos en la base datos y carga en la tabla.
 + **Tabla de base de datos**: Se cargan todos o algún datos consultado a la base de datos.
 ### Uso
+Al ejecutar la app, el usuario puede ingresar los siguientes parametros:  
++ *Nombre*
++ *Cantidad*
++ *Precio*
++ *Descripción*  
 
+En la sección CRUD, puede interactuar con la base de datos:  
++ ***Agregar artículo***: se tomarán todos los campos se sección **Formulario**. Estos serán cargados en la base de datos.  
++ ***Eliminar artículo***: se toma sólo el campo **Nombre** y se buscará en la base datos, si existe se elimina de la base
+de datos, si no existe no se realiza nada.  
++ ***Modificar artículo***: se toman todos los campos, verificando primero por **Nombre** si existe el artículo. Si existe
+se procede a modificar los demas parametros cargados en el fomulario para dicho artículo.  
++ ***Consultar stock***: se toma solo el campo **Nombre**, y se busca en la base de datos. Si existe se muestra en la tabla
+con todos sus parametros actuales.
+
+*Dependiendo de la acción a realizar se verifica que los campos involucrados no esten vacios y cumpla el regex (sólo numero/letras)*
+
+Aparte de las acciones disponibles en la sección CRUD, se cuenta con la opción ***Ver Catálogo completo***. El cual lee y 
+muestra todos los datos disponibles en la base de datos en la tabla y en un gráfico de tortas, realizado con Matplotlib.
+
+***Toda acción realizada será notificada por medio de popup y por terminal implementando decoradores***
 
 ## Versión_QTDesigner
 
