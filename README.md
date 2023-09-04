@@ -5,7 +5,6 @@ Ing. Calderón, Diego
 Sr. Vargas, Nahuel
 
 ## Tabla de Contenidos
-
 - [Introducción](#introducción)
 - [Aclaraciones](#aclaraciones)
 - [Versión Tkinter](#versión_tkinter)
@@ -27,10 +26,10 @@ sólo quedaron resgitrados los commits en la version en Tkinter.
 ## Versión_Tkinter
 La app al ejecutarse se tendrá disponible esta única ventana.
 ![](Imagenes/tkinter1.jpg)
-+ **Formulario**: Sección que permite al usuario cargos los datos para realizar alguna de las opciones disponibles para interacturactuar con la base de datos (CRUD).,
-+ **CRUD**: Acciones a realizar con los datos cargados en formularios, dependiendo cual sea la acción a realizar, se lleva a cabo una verificación de los campos del formualrio
-+ 
-
++ **Formulario**: Sección que permite al usuario cargar los datos, estos cuenta con verificación de campos según la accion a realizar.
++ **CRUD**: Acciones a realizar con los datos cargados en formularios.
++ **Recarga de base datos**: Consulta __todos__ los datos en la base datos y carga en la tabla.
++ **Tabla de base de datos**: Se cargan todos o algún datos consultado a la base de datos.
 
 ## Versión_QTDesigner
 
