@@ -1,0 +1,131 @@
+<MDIconButton>:
+    pos_hint:{"center_y":0.5}
+    size_hint_x:0.1
+    theme_text_color:"Custom"
+    text_color: 0,0,0,1
+
+<MDAddTextField@MDTextField>:
+    hint_text_color_normal: app.theme_cls.primary_color
+    hint_text_color_focus: app.theme_cls.primary_color
+    text_color_normal: app.theme_cls.opposite_bg_darkest
+    text_color_focus: app.theme_cls.opposite_bg_darkest
+    line_color_normal: app.theme_cls.primary_color
+    line_color_focus: app.theme_cls.primary_color
+    error_color:app.theme_cls.primary_color
+    mode: "rectangle"
+    helper_text: "*Campo obligatorio"
+    helper_text_mode: "on_error"
+    required: False
+    # Habilito la propiedad "required" al hacer foco en el TextField.
+    on_focus: self.required=True
+
+<MDAddLabel@MDLabel>:
+    halign:"center"
+    theme_text_color:"Custom"
+    text_color: 0,0,0,1
+    size_hint_y:.1
+    md_bg_color: app.theme_cls.primary_color
+
+<MDRoundFlatIconButton>:
+    md_bg_color: app.theme_cls.primary_color
+    text_color: 0,0,0,1
+    theme_icon_color: "Custom"
+    icon_color: 0,0,0,1
+    line_width:dp(1.5)
+    size_hint:0.1,0.5
+
+<Agregar@MDBoxLayout>:
+    orientation:"vertical"
+    
+    MDBoxLayout:
+        md_bg_color: app.theme_cls.primary_color
+        size_hint_y:0.1
+        MDIconButton:
+            id:button
+            icon: "dots-vertical"
+            # Abro el menú de opciones para cambiar de tema.
+            on_release:app.root.menu.open()
+        MDLabel:
+            id: toplabel
+            text: "Nuevo artículo"
+            font_style:"H5"
+            halign:"center"
+            theme_text_color:"Custom"
+            text_color: 0,0,0,1
+        MDIconButton:
+            id:buttonhome
+            icon: "home"
+            font_size:"48sp"
+            # Cambio a pantalla "Home" y limpio los campos de entrada del formulario.
+            on_release:
+                app.root.limpiar_campos([root.ids.input_nombre_add,root.ids.input_cantidad_add,root.ids.input_precio_add,root.ids.input_descrip_add])
+                app.root.current="Home"
+                        
+    MDWidget:
+        size_hint_y:0.1
+        md_bg_color: app.theme_cls.bg_darkest
+    
+    MDGridLayout:
+        cols: 2
+        rows: 4 
+        size_hint_y:0.6
+        spacing:dp(20)
+        padding:dp(20)
+
+        MDAddLabel:
+            id: label_nombre_add
+            text: 'Producto'
+        
+        MDAddTextField:
+            id: input_nombre_add
+            hint_text: "Ingrese el nombre del producto"
+            size_hint_y:0.1
+        
+        MDAddLabel:
+            id: label_cantidad_add
+            text: 'Cantidad'
+ 
+        MDAddTextField:
+            id: input_cantidad_add
+            hint_text: "Ingrese un valor numérico"
+            size_hint_y:0.1
+           
+        MDAddLabel:
+            id: label_precio_add
+            text: 'Precio'
+
+        MDAddTextField:
+            id: input_precio_add
+            hint_text: "Ingrese un valor numérico"
+            size_hint_y:0.1
+            
+        MDAddLabel:
+            id: label_descrip_add
+            text: 'Descripción'
+
+        MDAddTextField:
+            id: input_descrip_add
+            hint_text: "Ingrese una breve descripción"
+            size_hint_y:0.1
+            
+    MDWidget:
+        size_hint_y:0.1
+        md_bg_color: app.theme_cls.bg_darkest
+    
+    MDFloatLayout:
+        size_hint_y:0.1
+        MDRoundFlatIconButton:
+            text: "Guardar artículo"
+            icon: "content-save"
+            pos_hint:{"center_x":0.4,"center_y":0.5}
+            # Envío los valores cargados al método "call_agreg()".
+            on_release:app.root.call_agreg()
+        
+        MDRoundFlatIconButton:
+            text: "Cancelar"
+            icon: "close-circle"
+            pos_hint:{"center_x":0.6,"center_y":0.5}
+            # Limpio los campos de entrada del formulario.
+            on_release:app.root.limpiar_campos([root.ids.input_nombre_add,root.ids.input_cantidad_add,root.ids.input_precio_add,root.ids.input_descrip_add])
+                
+               

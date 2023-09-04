@@ -1,0 +1,108 @@
+<ButtonCard@MDCard>
+    padding: dp(4)
+    size_hint: 0.1,0.1
+    pos_hint: {"center_x": .5, "center_y": .5}
+    md_bg_color: C("#404040")
+    line_color:app.theme_cls.primary_color
+    ripple_behavior: True
+
+<MDButtonCardLabel@MDLabel>:
+    halign:"center"
+    font_style:"H6"
+    theme_text_color:"Custom"
+    text_color: app.theme_cls.opposite_bg_darkest
+    bold:True
+    size_hint_y:0.3
+
+<MDButtonCardIcon@MDIcon>:
+    theme_text_color:"Custom"
+    text_color: app.theme_cls.opposite_bg_darkest
+    pos_hint:{"center_x":0.5,"center_y":0.5}
+    font_size: "48sp"
+
+<Home@MDBoxLayout>:
+    orientation:"vertical"
+    MDBoxLayout:
+        md_bg_color: app.theme_cls.primary_color
+        size_hint_y:0.1
+        MDIconButton:
+            id:button
+            pos_hint:{"center_y":0.5}
+            size_hint_x:0.1
+            icon: "dots-vertical"
+            theme_text_color:"Custom"
+            text_color: 0,0,0,1
+            # Abro el menú de opciones para cambiar de tema.
+            on_release:app.root.menu.open() 
+        MDLabel:
+            id: toplabel
+            text: "Electrónica del Oeste"
+            font_style:"H5"
+            halign:"center"
+            theme_text_color:"Custom"
+            text_color: 0,0,0,1
+        MDWidget:
+            size_hint_x:0.1
+
+    MDLabel:
+        id: sublabel
+        size_hint_y:0.1
+        text: "Bienvenido, seleccione la acción a realizar"
+        font_style:"H6"
+        halign:"center"
+        theme_text_color:"Custom"
+        text_color: app.theme_cls.opposite_bg_darkest
+    
+    GridLayout:
+        size_hint_y:0.8
+        rows:2
+        cols:2
+        padding:dp(25)
+        spacing:dp(25)            
+        ButtonCard:
+            id: buttonadd
+            # Cambio a pantalla "Agregar".
+            on_release:app.root.current="Agregar"
+            MDBoxLayout:
+                orientation:"vertical"
+                padding:0,0,0,15
+                MDButtonCardLabel:
+                    text:"Agregar un artículo"
+                MDButtonCardIcon:
+                    icon:"plus-circle"
+                    
+        ButtonCard:
+            id: buttondel
+            # Cambio a pantalla "Eliminar".
+            on_release:app.root.current="Eliminar"
+            MDBoxLayout:
+                orientation:"vertical"
+                padding:0,0,0,15
+                MDButtonCardLabel:
+                    text:"Eliminar un artículo"
+                MDButtonCardIcon:
+                    icon:"trash-can-outline"
+                         
+        ButtonCard:
+            id: buttonedit
+            # Cambio a pantalla "Modificar".
+            on_release:app.root.current="Modificar"
+            MDBoxLayout:
+                orientation:"vertical"
+                padding:0,0,0,15
+                MDButtonCardLabel:
+                    text:"Modificar un artículo"
+                MDButtonCardIcon:
+                    icon:"circle-edit-outline"
+                    
+        ButtonCard:
+            id: buttonsearch
+            # Cambio a pantalla "Consultar".
+            on_release:app.root.current="Consultar"
+            MDBoxLayout:
+                orientation:"vertical"
+                padding:0,0,0,15
+                MDButtonCardLabel:
+                    text:"Consultar stock"
+                MDButtonCardIcon:
+                    icon:"database-search-outline" 
