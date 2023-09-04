@@ -12,7 +12,13 @@ Sr. Vargas, Nahuel
     - [Entorno](#entorno)
     - [Uso](#uso)
 - [Versión QTDesigner](#versión_qtdesigner)
+    - [Ejecución](#ejecución)
+    - [Entorno](#entorno)
+    - [Uso](#uso)
 - [Versión KivyMD](#versión_kivymd)
+    - [Ejecución](#ejecución)
+    - [Entorno](#entorno)
+    - [Uso](#uso)
 - [Licencia](#licencia)
 
 ## Introducción
@@ -64,8 +70,32 @@ muestra todos los datos disponibles en la base de datos en la tabla y en un grá
 ***Toda acción realizada será notificada por medio de popup y por terminal implementando decoradores***
 
 ## Versión_QTDesigner
+### Ejecución
+```
+python qtdesigner/controlador.py
+```
+### Entorno
+La app al ejecutarse abrirá la ventana principal.    
+![](Imagenes/qt_main.jpg)
 
+Dependiendo de la opción seleccionada se abre una ventana distinta las cuales son:  
++ ***Agregar artículo***  
+    ![](Imagenes/qt_agregar.jpg)
++ ***Eliminar artículo***  
+    ![](Imagenes/qt_eliminar.jpg)
++ ***Modificar artículo***  
+    ![](Imagenes/qt_modificar.jpg)
++ ***Consultar stock***  
+    ![](Imagenes/qt_consulta.jpg)  
+### Uso
 ## Versión_KivyMD
+### Ejecución
+```
+python kivymd/controlador.py
+```
+### Entorno
+
+### Uso
 
 ## Licencia
 
