@@ -33,12 +33,13 @@ sólo quedaron resgitrados los commits en la version en Tkinter.
 
 ## Versión_Tkinter
 ### Ejecución
+Antes de ejecutar el programa debe segurarse de tener instalado las librerias de peewee, pandas y matplotlib.  
 ```
 pip install peewee
 pip install pandas
 pip install matplotlib
 ```
-
+Una vez corroborado que estan instaladas la librerias, ejecutar:  
 ```
 python tkinter/controlador.py
 ```
