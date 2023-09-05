@@ -1,4 +1,9 @@
 # app_stock
+En este repositorio se contará con la app de control de stock diseñada para el cierre de la diplomatura en Python, 
+llevado a cabo en la Universidad Tecnologica Nacional regional Buenos Aire E-Learning.
+
+Se implementa una interfaz de usuario, utilizando el patron MVC con una base de datos SQLite y un servidor-cliente. Se pone 
+en practica la escalabilidad de un proyecto utilizando disntintas herramientas para ui **#Tkinter** **#QtDesigner** **#KivyMD**.
 
 ## Autores
 Ing. Calderón, Diego  
@@ -18,16 +23,7 @@ Sr. Vargas, Nahuel
     - [Uso](#uso)
 - [Licencia](#licencia)
 
-## Introducción
-En este repositorio se contará con la app de control de stock diseñada para el cierre de la diplomatura en Python, 
-llevado a cabo en la Universidad Tecnologica Nacional regional Buenos Aire E-Learning.
-
-Se implementa una interfaz de usuario utilizando el patron MVC con una base de datos SQLite. 
-
 ## Aclaraciones
-En dicha diplomatura consto de realizar un app por etapas, es decir, poner en practica la escalabilidad de un proyecto.
-Por eso, se realizo la app con: #Tkinter #QtDesigner #KivyMD.
-
 Las 3 versiones fueron realizadas en un principio en gitlab, en un único proyecto con distintas ramas, al pasar a github (por falta de experiencia),
 sólo quedaron resgitrados los commits en la version en Tkinter.
 
