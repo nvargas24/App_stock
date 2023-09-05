@@ -34,15 +34,22 @@ sólo quedaron resgitrados los commits en la version en Tkinter.
 ## Versión_Tkinter
 ### Ejecución
 ```
+pip install peewee
+pip install pandas
+pip install matplotlib
+```
+
+```
 python tkinter/controlador.py
 ```
+### Uso
 La app al ejecutarse se tendrá disponible esta única ventana.    
 ![](Imagenes/tkinter1.jpg)
 + **Formulario**: Sección que permite al usuario cargar los datos, estos cuenta con verificación de campos según la accion a realizar.
 + **CRUD**: Acciones a realizar con los datos cargados en formularios.
 + **Recarga de base datos**: Consulta __todos__ los datos en la base datos y carga en la tabla.
 + **Tabla de base de datos**: Se cargan todos o algún datos consultado a la base de datos.
-### Uso
+
 Al ejecutar la app, el usuario puede ingresar los siguientes parametros:  
 + *Nombre*
 + *Cantidad*
@@ -73,6 +80,7 @@ python qtdesigner/controlador.py
 La app al ejecutarse abrirá la ventana principal.    
 ![](Imagenes/qt_main.jpg)
 
+### Uso
 Dependiendo de la opción seleccionada se abre una ventana distinta las cuales son:  
 + ***Agregar artículo***  
     ![](Imagenes/qt_agregar.jpg)
@@ -82,7 +90,7 @@ Dependiendo de la opción seleccionada se abre una ventana distinta las cuales s
     ![](Imagenes/qt_modificar.jpg)
 + ***Consultar stock***  
     ![](Imagenes/qt_consulta.jpg)  
-### Uso
+
 ## Versión_KivyMD
 ### Ejecución
 ```
