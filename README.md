@@ -88,7 +88,7 @@ python qtdesigner/controlador.py
 ```
 ### Uso
 La app al ejecutarse abrirá la ventana principal.    
-![](Imagenes/qt_main.jpg)
+![](Imagenes/qt_main.jpg)  
 Se cuenta con 2 secciones, una de opciones CRUD para interacturar con la base de datos y en la otra un gráfico de tortas
 el cual se actualiza al consultar todos los datos disponibles en la base de datos con **Catálogo completo** disponible en
 la ventana **Consulta stock**.
@@ -103,11 +103,13 @@ Dependiendo de la opción seleccionada se abre una ventana distinta las cuales s
     En el caso de no cumplir alguna, no se eliminara nada en la base de datos y se notificara en la parte inferior de la pantalla el error.  
 + ***Modificar artículo***  
     ![](Imagenes/qt_modificar.jpg)  
-    Se verifican si los campos no estan vacios y si cumplen el regex correspondiente para cada campo.  A su vez, se corrobora que exista el articulo.
+    Se verifican si los campos no estan vacios y si cumplen el regex correspondiente para cada campo. A su vez, se corrobora que exista el articulo.
     En el caso de no cumplir alguna no se modificara nada en la base de datos y se notificara en la parte inferior de la pantalla.  
 + ***Consultar stock***  
     ![](Imagenes/qt_consulta.jpg)  
-
+    El usuario puede consultar si existe tal articulo ya sea por nombre y/o descripción, si existe se muestra en la tabla aquellos que coincidan por nombre y/o descripcion. Si no existe tal articulo la tabla queda vacia. En el caso que ambos campos esten vacios al dar click en buscar se notifica como *campos vacios*.     
+  
+    Además se cuenta con la opción de consultar todos los datos disponibles en la base de datos, estos serán cargados en la tabla. Simultaneamente actualiza el gráfico disponible en la ventana principal.
 ## Versión_KivyMD
 ### Ejecución
 ```
