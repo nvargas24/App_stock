@@ -51,7 +51,7 @@ La app al ejecutarse se tendrá disponible esta única ventana.
 + **Recarga de base datos**: Consulta __todos__ los datos en la base datos y carga en la tabla.
 + **Tabla de base de datos**: Se cargan todos o algún datos consultado a la base de datos.
 
-Al ejecutar la app, el usuario puede ingresar los siguientes parametros:  
+En la sección de formulario, el usuario puede ingresar los siguientes parametros:  
 + *Nombre*
 + *Cantidad*
 + *Precio*
@@ -75,20 +75,36 @@ muestra todos los datos disponibles en la base de datos en la tabla y en un grá
 
 ## Versión_QTDesigner
 ### Ejecución
+Antes de ejecutar el programa debe segurarse de tener instalado las librerias de peewee, pandas y matplotlib.  
+```
+pip install peewee
+pip install pandas
+pip install matplotlib
+pip install PySide2
+```
+Una vez corroborado que estan instaladas la librerias, ejecutar:  
 ```
 python qtdesigner/controlador.py
 ```
+### Uso
 La app al ejecutarse abrirá la ventana principal.    
 ![](Imagenes/qt_main.jpg)
-
-### Uso
+Se cuenta con 2 secciones, una de opciones CRUD para interacturar con la base de datos y en la otra un gráfico de tortas
+el cual se actualiza al consultar todos los datos disponibles en la base de datos con **Catálogo completo** disponible en
+la ventana **Consulta stock**.
 Dependiendo de la opción seleccionada se abre una ventana distinta las cuales son:  
 + ***Agregar artículo***  
-    ![](Imagenes/qt_agregar.jpg)
+    ![](Imagenes/qt_agregar.jpg)  
+    Se verifican si los campos no estan vacios y si cumplen el regex correspondiente para cada campo.
+    En el caso de no cumplir alguna, no se cargara nada a la base de datos y se notificara en la parte inferior de la pantalla el error.  
 + ***Eliminar artículo***  
-    ![](Imagenes/qt_eliminar.jpg)
+    ![](Imagenes/qt_eliminar.jpg)  
+    Se verifica si el campo no estan vacio y si cumple el regex, en este caso de sólo letras. A su vez, se corrobora que exista el articulo.
+    En el caso de no cumplir alguna, no se eliminara nada en la base de datos y se notificara en la parte inferior de la pantalla el error.  
 + ***Modificar artículo***  
-    ![](Imagenes/qt_modificar.jpg)
+    ![](Imagenes/qt_modificar.jpg)  
+    Se verifican si los campos no estan vacios y si cumplen el regex correspondiente para cada campo.  A su vez, se corrobora que exista el articulo.
+    En el caso de no cumplir alguna no se modificara nada en la base de datos y se notificara en la parte inferior de la pantalla.  
 + ***Consultar stock***  
     ![](Imagenes/qt_consulta.jpg)  
 
