@@ -9,15 +9,12 @@ Sr. Vargas, Nahuel
 - [Aclaraciones](#aclaraciones)
 - [Versión Tkinter](#versión_tkinter)
     - [Ejecución](#ejecución)
-    - [Entorno](#entorno)
     - [Uso](#uso)
 - [Versión QTDesigner](#versión_qtdesigner)
     - [Ejecución](#ejecución)
-    - [Entorno](#entorno)
     - [Uso](#uso)
 - [Versión KivyMD](#versión_kivymd)
     - [Ejecución](#ejecución)
-    - [Entorno](#entorno)
     - [Uso](#uso)
 - [Licencia](#licencia)
 
@@ -39,7 +36,6 @@ sólo quedaron resgitrados los commits en la version en Tkinter.
 ```
 python tkinter/controlador.py
 ```
-### Entorno
 La app al ejecutarse se tendrá disponible esta única ventana.    
 ![](Imagenes/tkinter1.jpg)
 + **Formulario**: Sección que permite al usuario cargar los datos, estos cuenta con verificación de campos según la accion a realizar.
@@ -74,7 +70,6 @@ muestra todos los datos disponibles en la base de datos en la tabla y en un grá
 ```
 python qtdesigner/controlador.py
 ```
-### Entorno
 La app al ejecutarse abrirá la ventana principal.    
 ![](Imagenes/qt_main.jpg)
 
@@ -93,7 +88,6 @@ Dependiendo de la opción seleccionada se abre una ventana distinta las cuales s
 ```
 python kivymd/controlador.py
 ```
-### Entorno
 
 ### Uso
 
