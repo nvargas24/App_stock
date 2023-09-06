@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Índice &mdash; documentación de Control de stock - 0.0.1</title>
+  <title>Índice &mdash; documentación de Control de stock - 0.0.2</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -32,7 +32,7 @@
             Control de stock
           </a>
               <div class="version">
-                0.0.1
+                0.0.2
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -48,6 +48,9 @@
 <li class="toctree-l1"><a class="reference internal" href="modelo.html">Módulo Modelo</a></li>
 <li class="toctree-l1"><a class="reference internal" href="validar.html">Módulo Validar</a></li>
 <li class="toctree-l1"><a class="reference internal" href="vista.html">Módulo Vista</a></li>
+<li class="toctree-l1"><a class="reference internal" href="observador.html">Módulo Observador</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cliente.html">Módulo Cliente</a></li>
+<li class="toctree-l1"><a class="reference internal" href="servidor.html">Módulo Servidor</a></li>
 </ul>
 
         </div>
@@ -88,9 +91,13 @@
  | <a href="#L"><strong>L</strong></a>
  | <a href="#M"><strong>M</strong></a>
  | <a href="#N"><strong>N</strong></a>
+ | <a href="#O"><strong>O</strong></a>
  | <a href="#P"><strong>P</strong></a>
+ | <a href="#Q"><strong>Q</strong></a>
  | <a href="#S"><strong>S</strong></a>
+ | <a href="#U"><strong>U</strong></a>
  | <a href="#V"><strong>V</strong></a>
+ | <a href="#W"><strong>W</strong></a>
  
 </div>
 <h2 id="_">_</h2>
@@ -103,7 +110,21 @@
 </li>
         <li><a href="modelo.html#modelo.Crud.__init__">(método de modelo.Crud)</a>
 </li>
-        <li><a href="vista.html#vista.Menu.__init__">(método de vista.Menu)</a>
+        <li><a href="observador.html#observador.ObservadorConcreto.__init__">(método de observador.ObservadorConcreto)</a>
+</li>
+        <li><a href="servidor.html#servidor.Serv.__init__">(método de servidor.Serv)</a>
+</li>
+        <li><a href="vista.html#vista.Canvas_grafica.__init__">(método de vista.Canvas_grafica)</a>
+</li>
+        <li><a href="vista.html#vista.MainWindow.__init__">(método de vista.MainWindow)</a>
+</li>
+        <li><a href="vista.html#vista.WindowAgregar.__init__">(método de vista.WindowAgregar)</a>
+</li>
+        <li><a href="vista.html#vista.WindowConsulta.__init__">(método de vista.WindowConsulta)</a>
+</li>
+        <li><a href="vista.html#vista.WindowEliminar.__init__">(método de vista.WindowEliminar)</a>
+</li>
+        <li><a href="vista.html#vista.WindowModificar.__init__">(método de vista.WindowModificar)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -114,9 +135,11 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="modelo.html#modelo.BaseDatos.actualizar_db">actualizar_db() (método de modelo.BaseDatos)</a>
 </li>
+      <li><a href="modelo.html#modelo.Crud.agreg">agreg() (método de modelo.Crud)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="modelo.html#modelo.Crud.agreg">agreg() (método de modelo.Crud)</a>
+      <li><a href="observador.html#observador.Sujeto.agregar">agregar() (método de observador.Sujeto)</a>
 </li>
       <li><a href="modelo.html#modelo.BaseDatos.agregar_db">agregar_db() (método de modelo.BaseDatos)</a>
 </li>
@@ -138,17 +161,18 @@
 <h2 id="C">C</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="vista.html#vista.Menu.call_agreg">call_agreg() (método de vista.Menu)</a>
-</li>
-      <li><a href="vista.html#vista.Menu.call_consulta">call_consulta() (método de vista.Menu)</a>
-</li>
-      <li><a href="vista.html#vista.Menu.call_elim">call_elim() (método de vista.Menu)</a>
-</li>
-      <li><a href="vista.html#vista.Menu.call_modif">call_modif() (método de vista.Menu)</a>
-</li>
       <li><a href="modelo.html#modelo.Componentes.cantidad">cantidad (atributo de modelo.Componentes)</a>
 </li>
-      <li><a href="modelo.html#modelo.Evento.click">click() (método de modelo.Evento)</a>
+      <li><a href="vista.html#vista.Canvas_grafica">Canvas_grafica (clase en vista)</a>
+</li>
+      <li>
+    cliente
+
+      <ul>
+        <li><a href="cliente.html#module-cliente">módulo</a>
+</li>
+      </ul></li>
+      <li><a href="vista.html#vista.Opciones.close_all_window">close_all_window() (método de vista.Opciones)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -173,10 +197,24 @@
 <h2 id="D">D</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="modelo.html#modelo.Componentes.descripcion">descripcion (atributo de modelo.Componentes)</a>
+      <li><a href="modelo.html#modelo.decorador_add">decorador_add() (en el módulo modelo)</a>
+</li>
+      <li><a href="modelo.html#modelo.decorador_del">decorador_del() (en el módulo modelo)</a>
+</li>
+      <li><a href="modelo.html#modelo.decorador_mod">decorador_mod() (en el módulo modelo)</a>
+</li>
+      <li><a href="modelo.html#modelo.decorador_mostrar">decorador_mostrar() (en el módulo modelo)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="vista.html#vista.WindowConsulta.delete">delete() (método de vista.WindowConsulta)</a>
+
+      <ul>
+        <li><a href="vista.html#vista.WindowEliminar.delete">(método de vista.WindowEliminar)</a>
+</li>
+      </ul></li>
+      <li><a href="modelo.html#modelo.Componentes.descripcion">descripcion (atributo de modelo.Componentes)</a>
+</li>
       <li><a href="modelo.html#modelo.BaseModel.DoesNotExist">DoesNotExist (atributo de modelo.BaseModel)</a>
 
       <ul>
@@ -191,13 +229,11 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="modelo.html#modelo.Crud.elim">elim() (método de modelo.Crud)</a>
 </li>
-      <li><a href="modelo.html#modelo.BaseDatos.eliminar_db">eliminar_db() (método de modelo.BaseDatos)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="validar.html#validar.Validacion.empty_entry">empty_entry() (método de validar.Validacion)</a>
+      <li><a href="modelo.html#modelo.BaseDatos.eliminar_db">eliminar_db() (método de modelo.BaseDatos)</a>
 </li>
-      <li><a href="modelo.html#modelo.Evento">Evento (clase en modelo)</a>
+      <li><a href="validar.html#validar.Validacion.empty_entry">empty_entry() (método de validar.Validacion)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -205,7 +241,7 @@
 <h2 id="F">F</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="modelo.html#modelo.Evento.focus_out">focus_out() (método de modelo.Evento)</a>
+      <li><a href="vista.html#vista.WindowConsulta.full_cat">full_cat() (método de vista.WindowConsulta)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -221,13 +257,19 @@
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="vista.html#vista.SubWindow.ingreso_datos">ingreso_datos() (método de vista.SubWindow)</a>
+      <li><a href="controlador.html#controlador.Controlador.iniciar_servidor">iniciar_servidor() (método de controlador.Controlador)</a>
+</li>
+      <li><a href="vista.html#vista.WindowConsulta.insert">insert() (método de vista.WindowConsulta)</a>
 </li>
   </ul></td>
 </tr></table>
 
 <h2 id="L">L</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="servidor.html#servidor.Serv.lanza_servidor">lanza_servidor() (método de servidor.Serv)</a>
+</li>
+  </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="modelo.html#modelo.BaseDatos.leer_db">leer_db() (método de modelo.BaseDatos)</a>
 </li>
@@ -237,9 +279,7 @@
 <h2 id="M">M</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="vista.html#vista.Menu">Menu (clase en vista)</a>
-</li>
-      <li><a href="vista.html#vista.Menu.menu_opciones">menu_opciones() (método de vista.Menu)</a>
+      <li><a href="vista.html#vista.MainWindow">MainWindow (clase en vista)</a>
 </li>
       <li>
     modelo
@@ -250,17 +290,23 @@
       </ul></li>
       <li><a href="modelo.html#modelo.Crud.modif">modif() (método de modelo.Crud)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="vista.html#vista.WindowModificar.modificated">modificated() (método de vista.WindowModificar)</a>
+</li>
       <li><a href="modelo.html#modelo.Crud.mostrar_cat">mostrar_cat() (método de modelo.Crud)</a>
 </li>
       <li>
     módulo
 
       <ul>
+        <li><a href="cliente.html#module-cliente">cliente</a>
+</li>
         <li><a href="controlador.html#module-controlador">controlador</a>
 </li>
         <li><a href="modelo.html#module-modelo">modelo</a>
+</li>
+        <li><a href="observador.html#module-observador">observador</a>
+</li>
+        <li><a href="servidor.html#module-servidor">servidor</a>
 </li>
         <li><a href="validar.html#module-validar">validar</a>
 </li>
@@ -273,7 +319,36 @@
 <h2 id="N">N</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="vista.html#vista.WindowAgregar.new_load">new_load() (método de vista.WindowAgregar)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="modelo.html#modelo.Componentes.nombre">nombre (atributo de modelo.Componentes)</a>
+</li>
+      <li><a href="observador.html#observador.Sujeto.notificar">notificar() (método de observador.Sujeto)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="O">O</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li>
+    observador
+
+      <ul>
+        <li><a href="observador.html#module-observador">módulo</a>
+</li>
+      </ul></li>
+      <li><a href="observador.html#observador.Observador">Observador (clase en observador)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="observador.html#observador.ObservadorConcreto">ObservadorConcreto (clase en observador)</a>
+</li>
+      <li><a href="observador.html#observador.Sujeto.observadores">observadores (atributo de observador.Sujeto)</a>
+</li>
+      <li><a href="vista.html#vista.Opciones">Opciones (clase en vista)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -286,10 +361,69 @@
   </ul></td>
 </tr></table>
 
+<h2 id="Q">Q</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="observador.html#observador.Sujeto.quitar">quitar() (método de observador.Sujeto)</a>
+</li>
+  </ul></td>
+</tr></table>
+
 <h2 id="S">S</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="vista.html#vista.SubWindow">SubWindow (clase en vista)</a>
+      <li><a href="vista.html#vista.WindowConsulta.search">search() (método de vista.WindowConsulta)</a>
+</li>
+      <li><a href="servidor.html#servidor.Serv">Serv (clase en servidor)</a>
+</li>
+      <li>
+    servidor
+
+      <ul>
+        <li><a href="servidor.html#module-servidor">módulo</a>
+</li>
+      </ul></li>
+      <li><a href="vista.html#vista.Opciones.show_win_agregar">show_win_agregar() (método de vista.Opciones)</a>
+</li>
+      <li><a href="vista.html#vista.Opciones.show_win_consultar">show_win_consultar() (método de vista.Opciones)</a>
+</li>
+      <li><a href="vista.html#vista.Opciones.show_win_eliminar">show_win_eliminar() (método de vista.Opciones)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="vista.html#vista.Opciones.show_win_modificar">show_win_modificar() (método de vista.Opciones)</a>
+</li>
+      <li><a href="vista.html#vista.Canvas_grafica.staticMetaObject">staticMetaObject (atributo de vista.Canvas_grafica)</a>
+
+      <ul>
+        <li><a href="vista.html#vista.MainWindow.staticMetaObject">(atributo de vista.MainWindow)</a>
+</li>
+        <li><a href="vista.html#vista.WindowAgregar.staticMetaObject">(atributo de vista.WindowAgregar)</a>
+</li>
+        <li><a href="vista.html#vista.WindowConsulta.staticMetaObject">(atributo de vista.WindowConsulta)</a>
+</li>
+        <li><a href="vista.html#vista.WindowEliminar.staticMetaObject">(atributo de vista.WindowEliminar)</a>
+</li>
+        <li><a href="vista.html#vista.WindowModificar.staticMetaObject">(atributo de vista.WindowModificar)</a>
+</li>
+      </ul></li>
+      <li><a href="observador.html#observador.Sujeto">Sujeto (clase en observador)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="U">U</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="observador.html#observador.Observador.update">update() (método de observador.Observador)</a>
+
+      <ul>
+        <li><a href="observador.html#observador.ObservadorConcreto.update">(método de observador.ObservadorConcreto)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="vista.html#vista.Canvas_grafica.upgrade_graph">upgrade_graph() (método de vista.Canvas_grafica)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -317,6 +451,22 @@
         <li><a href="vista.html#module-vista">módulo</a>
 </li>
       </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="W">W</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="vista.html#vista.WindowAgregar">WindowAgregar (clase en vista)</a>
+</li>
+      <li><a href="vista.html#vista.WindowConsulta">WindowConsulta (clase en vista)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="vista.html#vista.WindowEliminar">WindowEliminar (clase en vista)</a>
+</li>
+      <li><a href="vista.html#vista.WindowModificar">WindowModificar (clase en vista)</a>
+</li>
   </ul></td>
 </tr></table>
 

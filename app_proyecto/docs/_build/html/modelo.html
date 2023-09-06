@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Módulo Modelo &mdash; documentación de Control de stock - 0.0.1</title>
+  <title>Módulo Modelo &mdash; documentación de Control de stock - 0.0.2</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -35,7 +35,7 @@
             Control de stock
           </a>
               <div class="version">
-                0.0.1
+                0.0.2
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -49,11 +49,10 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="controlador.html">Módulo Controlador</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Módulo Modelo</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#modelo.Evento"><code class="docutils literal notranslate"><span class="pre">Evento</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#modelo.Evento.click"><code class="docutils literal notranslate"><span class="pre">Evento.click()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#modelo.Evento.focus_out"><code class="docutils literal notranslate"><span class="pre">Evento.focus_out()</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="#modelo.decorador_add"><code class="docutils literal notranslate"><span class="pre">decorador_add()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#modelo.decorador_del"><code class="docutils literal notranslate"><span class="pre">decorador_del()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#modelo.decorador_mod"><code class="docutils literal notranslate"><span class="pre">decorador_mod()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#modelo.decorador_mostrar"><code class="docutils literal notranslate"><span class="pre">decorador_mostrar()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#modelo.BaseModel"><code class="docutils literal notranslate"><span class="pre">BaseModel</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#modelo.BaseModel.DoesNotExist"><code class="docutils literal notranslate"><span class="pre">BaseModel.DoesNotExist</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#modelo.BaseModel.id"><code class="docutils literal notranslate"><span class="pre">BaseModel.id</span></code></a></li>
@@ -89,6 +88,9 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="validar.html">Módulo Validar</a></li>
 <li class="toctree-l1"><a class="reference internal" href="vista.html">Módulo Vista</a></li>
+<li class="toctree-l1"><a class="reference internal" href="observador.html">Módulo Observador</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cliente.html">Módulo Cliente</a></li>
+<li class="toctree-l1"><a class="reference internal" href="servidor.html">Módulo Servidor</a></li>
 </ul>
 
         </div>
@@ -121,44 +123,60 @@
 <dt>modelo.py:</dt><dd><p>Módulo encargado de la lógica de la app, lo cual implica el manejo de base de datos, CRUD, y eventos.</p>
 </dd>
 </dl>
-<dl class="py class">
-<dt class="sig sig-object py" id="modelo.Evento">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">modelo.</span></span><span class="sig-name descname"><span class="pre">Evento</span></span><a class="reference internal" href="_modules/modelo.html#Evento"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#modelo.Evento" title="Enlazar permanentemente con esta definición"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Clase que integra los métodos asociados a los eventos de los campos de entrada.</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="modelo.Evento.click">
-<span class="sig-name descname"><span class="pre">click</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">campo</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">entry</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/modelo.html#Evento.click"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#modelo.Evento.click" title="Enlazar permanentemente con esta definición"></a></dt>
-<dd><p>Método que borra el texto escrito por defecto de acuerdo al campo donde se hizo click.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="modelo.decorador_add">
+<span class="sig-prename descclassname"><span class="pre">modelo.</span></span><span class="sig-name descname"><span class="pre">decorador_add</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">metodo</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/modelo.html#decorador_add"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#modelo.decorador_add" title="Enlazar permanentemente con esta definición"></a></dt>
+<dd><p>Función decoradora que captura el método <code class="docutils literal notranslate"><span class="pre">agregar_db()</span></code></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parámetros<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>event</strong> – Evento <code class="docutils literal notranslate"><span class="pre">&lt;&lt;Button-1&gt;&gt;</span></code> que recibe como argumento.</p></li>
-<li><p><strong>campo</strong> – Tipo de campo de entrada donde se realizó click.</p></li>
-<li><p><strong>var</strong> – Variable asociada al campo de entrada.</p></li>
-<li><p><strong>entry</strong> – Campo de entrada donde se realizó click.</p></li>
-</ul>
+<dd class="field-odd"><p><strong>metodo</strong> – Método <code class="docutils literal notranslate"><span class="pre">agregar_db()</span></code> que captura.</p>
+</dd>
+<dt class="field-even">Devuelve<span class="colon">:</span></dt>
+<dd class="field-even"><p>La función <code class="docutils literal notranslate"><span class="pre">envoltura()</span></code>.</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt class="sig sig-object py" id="modelo.Evento.focus_out">
-<span class="sig-name descname"><span class="pre">focus_out</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">campo</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">entry</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/modelo.html#Evento.focus_out"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#modelo.Evento.focus_out" title="Enlazar permanentemente con esta definición"></a></dt>
-<dd><p>Método que reescribe el texto por defecto de acuerdo al campo que se encuentre vacío
-y si no se está posicionado sobre el mismo.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="modelo.decorador_del">
+<span class="sig-prename descclassname"><span class="pre">modelo.</span></span><span class="sig-name descname"><span class="pre">decorador_del</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">metodo</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/modelo.html#decorador_del"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#modelo.decorador_del" title="Enlazar permanentemente con esta definición"></a></dt>
+<dd><p>Función decoradora que captura el método <code class="docutils literal notranslate"><span class="pre">eliminar_db()</span></code></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parámetros<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>event</strong> – Evento <code class="docutils literal notranslate"><span class="pre">&lt;&lt;FocusOut&gt;&gt;</span></code> que recibe como argumento.</p></li>
-<li><p><strong>campo</strong> – Tipo de campo de entrada donde ocurrió el evento.</p></li>
-<li><p><strong>var</strong> – Variable asociada al campo de entrada.</p></li>
-<li><p><strong>entry</strong> – Campo de entrada donde se produjo el evento.</p></li>
-</ul>
+<dd class="field-odd"><p><strong>metodo</strong> – Método <code class="docutils literal notranslate"><span class="pre">eliminar_db()</span></code> que captura.</p>
+</dd>
+<dt class="field-even">Devuelve<span class="colon">:</span></dt>
+<dd class="field-even"><p>La función <code class="docutils literal notranslate"><span class="pre">envoltura()</span></code>.</p>
 </dd>
 </dl>
 </dd></dl>
 
+<dl class="py function">
+<dt class="sig sig-object py" id="modelo.decorador_mod">
+<span class="sig-prename descclassname"><span class="pre">modelo.</span></span><span class="sig-name descname"><span class="pre">decorador_mod</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">metodo</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/modelo.html#decorador_mod"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#modelo.decorador_mod" title="Enlazar permanentemente con esta definición"></a></dt>
+<dd><p>Función decoradora que captura el método <code class="docutils literal notranslate"><span class="pre">actualizar_db()</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parámetros<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>metodo</strong> – Método <code class="docutils literal notranslate"><span class="pre">actualizar_db()</span></code> que captura.</p>
+</dd>
+<dt class="field-even">Devuelve<span class="colon">:</span></dt>
+<dd class="field-even"><p>La función <code class="docutils literal notranslate"><span class="pre">envoltura()</span></code>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="modelo.decorador_mostrar">
+<span class="sig-prename descclassname"><span class="pre">modelo.</span></span><span class="sig-name descname"><span class="pre">decorador_mostrar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">metodo</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/modelo.html#decorador_mostrar"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#modelo.decorador_mostrar" title="Enlazar permanentemente con esta definición"></a></dt>
+<dd><p>Función decoradora que captura el método <code class="docutils literal notranslate"><span class="pre">mostrar_cat()</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parámetros<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>metodo</strong> – Método <code class="docutils literal notranslate"><span class="pre">mostrar_cat()</span></code> que captura.</p>
+</dd>
+<dt class="field-even">Devuelve<span class="colon">:</span></dt>
+<dd class="field-even"><p>La función <code class="docutils literal notranslate"><span class="pre">envoltura()</span></code>.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py class">
@@ -230,39 +248,37 @@ y si no se está posicionado sobre el mismo.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="modelo.BaseDatos.agregar_db">
-<span class="sig-name descname"><span class="pre">agregar_db</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nombre</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cantidad</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">precio</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">descripcion</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/modelo.html#BaseDatos.agregar_db"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#modelo.BaseDatos.agregar_db" title="Enlazar permanentemente con esta definición"></a></dt>
-<dd><p>Método para agregar una fila de datos (registro) a la tabla.</p>
+<span class="sig-name descname"><span class="pre">agregar_db</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/modelo.html#BaseDatos.agregar_db"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#modelo.BaseDatos.agregar_db" title="Enlazar permanentemente con esta definición"></a></dt>
+<dd><p>Función que ejecuta el método capturado e informa en un archivo de log la acción realizada.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parámetros<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>nombre</strong> – Nombre del componente.</p></li>
-<li><p><strong>cantidad</strong> – Cantidad del componente.</p></li>
-<li><p><strong>precio</strong> – Precio del componente.</p></li>
-<li><p><strong>descripcion</strong> – Descripción del componente.</p></li>
-</ul>
+<dd class="field-odd"><p><strong>args</strong> – Párametros que fueron enviados previamente a la función capturada.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="modelo.BaseDatos.eliminar_db">
-<span class="sig-name descname"><span class="pre">eliminar_db</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nombre</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/modelo.html#BaseDatos.eliminar_db"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#modelo.BaseDatos.eliminar_db" title="Enlazar permanentemente con esta definición"></a></dt>
-<dd><p>Método para eliminar una fila de datos (registro) de la tabla
-usando como referencia el campo <strong>Nombre</strong>.</p>
+<span class="sig-name descname"><span class="pre">eliminar_db</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/modelo.html#BaseDatos.eliminar_db"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#modelo.BaseDatos.eliminar_db" title="Enlazar permanentemente con esta definición"></a></dt>
+<dd><p>Función que ejecuta el método capturado e informa en un archivo de log la acción realizada.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parámetros<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>nombre</strong> – Nombre del componente.</p>
+<dd class="field-odd"><p><strong>args</strong> – Párametros que fueron enviados previamente a la función capturada.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="modelo.BaseDatos.leer_db">
-<span class="sig-name descname"><span class="pre">leer_db</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nombre</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/modelo.html#BaseDatos.leer_db"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#modelo.BaseDatos.leer_db" title="Enlazar permanentemente con esta definición"></a></dt>
-<dd><p>Método para seleccionar una o varias filas de la tabla usando como referencia el campo <strong>Nombre</strong>.</p>
+<span class="sig-name descname"><span class="pre">leer_db</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nombre</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">descrip</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/modelo.html#BaseDatos.leer_db"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#modelo.BaseDatos.leer_db" title="Enlazar permanentemente con esta definición"></a></dt>
+<dd><p>Método para seleccionar una o varias filas de la tabla usando como referencia
+el campo <strong>Nombre</strong> y/o el campo <strong>Descripción</strong>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parámetros<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>nombre</strong> – Nombre del componente.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>nombre</strong> – Nombre del componente.</p></li>
+<li><p><strong>descrip</strong> – Descripcion del componente.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Devuelve<span class="colon">:</span></dt>
 <dd class="field-even"><p>Fila/s encontrada/s de acuerdo a la referencia.</p>
@@ -272,15 +288,11 @@ usando como referencia el campo <strong>Nombre</strong>.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="modelo.BaseDatos.actualizar_db">
-<span class="sig-name descname"><span class="pre">actualizar_db</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nombre</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data2mod</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/modelo.html#BaseDatos.actualizar_db"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#modelo.BaseDatos.actualizar_db" title="Enlazar permanentemente con esta definición"></a></dt>
-<dd><p>Método para actualizar uno o varios campos de una fila de la tabla.</p>
+<span class="sig-name descname"><span class="pre">actualizar_db</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/modelo.html#BaseDatos.actualizar_db"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#modelo.BaseDatos.actualizar_db" title="Enlazar permanentemente con esta definición"></a></dt>
+<dd><p>Función que ejecuta el método capturado e informa en un archivo de log la acción realizada.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parámetros<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>nombre</strong> – Nombre del componente.</p></li>
-<li><p><strong>param</strong> – Nuevo valor del campo.</p></li>
-<li><p><strong>data2mod</strong> – Campo a modificar.</p></li>
-</ul>
+<dd class="field-odd"><p><strong>args</strong> – Párametros que fueron enviados previamente a la función capturada.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -290,18 +302,19 @@ usando como referencia el campo <strong>Nombre</strong>.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="modelo.Crud">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">modelo.</span></span><span class="sig-name descname"><span class="pre">Crud</span></span><a class="reference internal" href="_modules/modelo.html#Crud"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#modelo.Crud" title="Enlazar permanentemente con esta definición"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#modelo.BaseDatos" title="modelo.BaseDatos"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseDatos</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#modelo.BaseDatos" title="modelo.BaseDatos"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseDatos</span></code></a>, <a class="reference internal" href="observador.html#observador.Sujeto" title="observador.Sujeto"><code class="xref py py-class docutils literal notranslate"><span class="pre">Sujeto</span></code></a></p>
 <p>Clase que contiene métodos para el manejo de los datos ingresados.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="modelo.Crud.__init__">
 <span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/modelo.html#Crud.__init__"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#modelo.Crud.__init__" title="Enlazar permanentemente con esta definición"></a></dt>
 <dd><p>Constructor que hereda el correspondiente a la clase <code class="docutils literal notranslate"><span class="pre">BaseDatos()</span></code>,
-y que además crea un objeto <code class="docutils literal notranslate"><span class="pre">Validacion()</span></code> para comprobar los campos de entrada.</p>
+y que además crea un objeto <code class="docutils literal notranslate"><span class="pre">Validacion()</span></code> para comprobar los campos de entrada.
+También hereda de la clase <code class="docutils literal notranslate"><span class="pre">Sujeto()</span></code> para el manejo de observadores.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="modelo.Crud.agreg">
-<span class="sig-name descname"><span class="pre">agreg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nombre</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cantidad</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">precio</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">descripcion</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tree</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/modelo.html#Crud.agreg"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#modelo.Crud.agreg" title="Enlazar permanentemente con esta definición"></a></dt>
+<span class="sig-name descname"><span class="pre">agreg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nombre</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cantidad</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">precio</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">descripcion</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/modelo.html#Crud.agreg"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#modelo.Crud.agreg" title="Enlazar permanentemente con esta definición"></a></dt>
 <dd><p>Método para agregar un nuevo componente.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parámetros<span class="colon">:</span></dt>
@@ -310,17 +323,16 @@ y que además crea un objeto <code class="docutils literal notranslate"><span cl
 <li><p><strong>cantidad</strong> – Cantidad del componente.</p></li>
 <li><p><strong>precio</strong> – Precio del componente.</p></li>
 <li><p><strong>descripcion</strong> – Descripción del componente.</p></li>
-<li><p><strong>tree</strong> – Treeview de la interfaz.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Devuelve<span class="colon">:</span></dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">&quot;campos</span> <span class="pre">vacíos&quot;</span></code> si no se completaron todos los campos.</p>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">&quot;Campos</span> <span class="pre">vacios&quot;</span></code> si no se completaron todos los campos.</p>
 </dd>
 <dt class="field-odd">Devuelve<span class="colon">:</span></dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">&quot;existe&quot;</span></code> si el componente que se quiere ingresar ya se encontraba cargado.</p>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">&quot;Ya</span> <span class="pre">existe</span> <span class="pre">el</span> <span class="pre">articulo&quot;</span></code> si el componente que se quiere ingresar ya se encontraba cargado.</p>
 </dd>
 <dt class="field-even">Devuelve<span class="colon">:</span></dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">&quot;cargado&quot;</span></code> si el componente fue ingresado exitosamente.</p>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">&quot;Nuevo</span> <span class="pre">articulo</span> <span class="pre">cargado&quot;</span></code> si el componente fue ingresado exitosamente.</p>
 </dd>
 </dl>
 <p>Si en algunos de los campos se ingresó un dato inválido (no cumple regex)
@@ -336,13 +348,13 @@ se generará una excepción.</p>
 <dd class="field-odd"><p><strong>nombre</strong> – Nombre del componente.</p>
 </dd>
 <dt class="field-even">Devuelve<span class="colon">:</span></dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">&quot;campo</span> <span class="pre">vacio&quot;</span></code> si no se ingresó ningún nombre.</p>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">&quot;Campo</span> <span class="pre">vacio&quot;</span></code> si no se ingresó ningún nombre.</p>
 </dd>
 <dt class="field-odd">Devuelve<span class="colon">:</span></dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">&quot;no</span> <span class="pre">encontrado&quot;</span></code> si el componente a eliminar no se encuentra ingresado.</p>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">&quot;Articulo</span> <span class="pre">no</span> <span class="pre">encontrado&quot;</span></code> si el componente a eliminar no se encuentra ingresado.</p>
 </dd>
 <dt class="field-even">Devuelve<span class="colon">:</span></dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">&quot;eliminado&quot;</span></code> si el componente fue eliminado exitosamente.</p>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">&quot;Articulo</span> <span class="pre">eliminado&quot;</span></code> si el componente fue eliminado exitosamente.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -353,16 +365,24 @@ se generará una excepción.</p>
 <dd><p>Método para modificar un componente ingresado (lo busco por el nombre).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parámetros<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>nombre</strong> – Nombre del componente.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>nombre</strong> – Nombre del componente.</p></li>
+<li><p><strong>cantidad</strong> – Cantidad del componente.</p></li>
+<li><p><strong>precio</strong> – Precio del componente.</p></li>
+<li><p><strong>descripcion</strong> – Descripción del componente.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Devuelve<span class="colon">:</span></dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">&quot;campo</span> <span class="pre">vacio&quot;</span></code> si no se ingresó ningún nombre.</p>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">&quot;Campo</span> <span class="pre">vacio&quot;</span></code> si no se ingresó ningún nombre.</p>
 </dd>
 <dt class="field-odd">Devuelve<span class="colon">:</span></dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">&quot;no</span> <span class="pre">existe&quot;</span></code> si el componente a modificar no se encuentra ingresado.</p>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">&quot;Articulo</span> <span class="pre">no</span> <span class="pre">existe&quot;</span></code> si el componente a modificar no se encuentra ingresado.</p>
 </dd>
 <dt class="field-even">Devuelve<span class="colon">:</span></dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">&quot;modificado&quot;</span></code> si el componente fue modificado exitosamente.</p>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">&quot;Articulo</span> <span class="pre">sin</span> <span class="pre">modificar&quot;</span></code> si no se ingresó ningún parámetro a modificar del componente.</p>
+</dd>
+<dt class="field-odd">Devuelve<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">&quot;Articulo</span> <span class="pre">modificado&quot;</span></code> si el componente fue modificado exitosamente.</p>
 </dd>
 </dl>
 <p>Si en algunos de los campos se ingresó un dato inválido (no cumple regex)
@@ -371,28 +391,41 @@ se generará una excepción.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="modelo.Crud.consulta">
-<span class="sig-name descname"><span class="pre">consulta</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nombre</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tree</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/modelo.html#Crud.consulta"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#modelo.Crud.consulta" title="Enlazar permanentemente con esta definición"></a></dt>
-<dd><p>Método para consultar los datos de un componente en particular (lo busco por el nombre).</p>
+<span class="sig-name descname"><span class="pre">consulta</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nombre</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">descrip</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window_consulta</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/modelo.html#Crud.consulta"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#modelo.Crud.consulta" title="Enlazar permanentemente con esta definición"></a></dt>
+<dd><p>Método para consultar los datos de un componente en particular (lo busco por el nombre y/o descripción).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parámetros<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>nombre</strong> – Nombre del componente.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>nombre</strong> – Nombre del componente.</p></li>
+<li><p><strong>descrip</strong> – Descripción del componente.</p></li>
+<li><p><strong>window_consulta</strong> – Objeto de clase <code class="docutils literal notranslate"><span class="pre">WindowConsulta()</span></code>.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Devuelve<span class="colon">:</span></dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">&quot;campo</span> <span class="pre">vacio&quot;</span></code> si no se ingresó ningún nombre.</p>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">&quot;Campo</span> <span class="pre">vacios&quot;</span></code> si no se ingresó ningún nombre y/o descripción.</p>
 </dd>
 <dt class="field-odd">Devuelve<span class="colon">:</span></dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">&quot;no</span> <span class="pre">encontrado&quot;</span></code> si el componente a consultar no se encuentra ingresado.</p>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">&quot;Articulo</span> <span class="pre">no</span> <span class="pre">encontrado</span> <span class="pre">por</span> <span class="pre">nombre&quot;</span></code> si el componente consultado por nombre no se encuentra ingresado.</p>
+</dd>
+<dt class="field-even">Devuelve<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">&quot;Articulo</span> <span class="pre">no</span> <span class="pre">encontrado</span> <span class="pre">por</span> <span class="pre">descripcion&quot;</span></code> si el componente consultado por descripción no se encuentra ingresado.</p>
+</dd>
+<dt class="field-odd">Devuelve<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">&quot;Articulo</span> <span class="pre">no</span> <span class="pre">encontrado&quot;</span></code> si el componente consultado por nombre y descripción no se encuentra ingresado.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="modelo.Crud.mostrar_cat">
-<span class="sig-name descname"><span class="pre">mostrar_cat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tree</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/modelo.html#Crud.mostrar_cat"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#modelo.Crud.mostrar_cat" title="Enlazar permanentemente con esta definición"></a></dt>
-<dd><p>Método que muestra el catálogo completo de componentes cargados hasta el momento.</p>
+<span class="sig-name descname"><span class="pre">mostrar_cat</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/modelo.html#Crud.mostrar_cat"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#modelo.Crud.mostrar_cat" title="Enlazar permanentemente con esta definición"></a></dt>
+<dd><p>Función que ejecuta el método capturado, e informa en consola mediante una
+tabla la lista de componentes ingresados.
+A partir de dicha información también realiza un gráfico de torta que se
+actualiza cada vez que se consulta el stock de componentes o al iniciar la app.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parámetros<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>tree</strong> – Treeview de la interfaz.</p>
+<dd class="field-odd"><p><strong>args</strong> – Párametros que fueron enviados previamente a la función capturada.</p>
 </dd>
 </dl>
 </dd></dl>

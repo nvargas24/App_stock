@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>vista &mdash; documentación de Control de stock - 0.0.1</title>
+  <title>vista &mdash; documentación de Control de stock - 0.0.2</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -32,7 +32,7 @@
             Control de stock
           </a>
               <div class="version">
-                0.0.1
+                0.0.2
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -48,6 +48,9 @@
 <li class="toctree-l1"><a class="reference internal" href="../modelo.html">Módulo Modelo</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../validar.html">Módulo Validar</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../vista.html">Módulo Vista</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../observador.html">Módulo Observador</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cliente.html">Módulo Cliente</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../servidor.html">Módulo Servidor</a></li>
 </ul>
 
         </div>
@@ -83,362 +86,396 @@
 <span class="n">__maintainer__</span> <span class="o">=</span> <span class="s2">&quot;Diego Calderón, Nahuel Vargas&quot;</span>
 <span class="n">__email__</span> <span class="o">=</span> <span class="s2">&quot;diegoacalderon994@gmail.com, nahuvargas24@gmail.com&quot;</span>
 <span class="n">__copyright__</span> <span class="o">=</span> <span class="s2">&quot;Copyright 2023&quot;</span>
-<span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;0.0.1&quot;</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;0.0.2&quot;</span>
 
-<span class="kn">from</span> <span class="nn">tkinter</span> <span class="kn">import</span> <span class="n">StringVar</span>
-<span class="kn">from</span> <span class="nn">tkinter</span> <span class="kn">import</span> <span class="n">Label</span>
-<span class="kn">from</span> <span class="nn">tkinter</span> <span class="kn">import</span> <span class="n">Entry</span>
-<span class="kn">from</span> <span class="nn">tkinter</span> <span class="kn">import</span> <span class="n">Button</span>
-<span class="kn">from</span> <span class="nn">tkinter</span> <span class="kn">import</span> <span class="n">ttk</span>
-<span class="kn">from</span> <span class="nn">tkinter.messagebox</span> <span class="kn">import</span> <span class="n">showerror</span>
-<span class="kn">from</span> <span class="nn">tkinter.messagebox</span> <span class="kn">import</span> <span class="n">showinfo</span>
-<span class="kn">from</span> <span class="nn">modelo</span> <span class="kn">import</span> <span class="n">Evento</span>
+<span class="kn">from</span> <span class="nn">PySide2.QtCore</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">PySide2.QtGui</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">PySide2.QtWidgets</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="kn">from</span> <span class="nn">matplotlib.backends.backend_qt5agg</span> <span class="kn">import</span> <span class="n">FigureCanvasQTAgg</span> <span class="k">as</span> <span class="n">FigureCanvas</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="kn">from</span> <span class="nn">Qt.window_main</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">Qt.window_agregar</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">Qt.window_eliminar</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">Qt.window_modificar</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">Qt.window_consulta</span> <span class="kn">import</span> <span class="o">*</span>
+
 <span class="kn">from</span> <span class="nn">modelo</span> <span class="kn">import</span> <span class="n">Crud</span>
+<span class="kn">import</span> <span class="nn">random</span>
 
 
-<div class="viewcode-block" id="Menu"><a class="viewcode-back" href="../vista.html#vista.Menu">[documentos]</a><span class="k">class</span> <span class="nc">Menu</span><span class="p">:</span>
+<span class="c1"># -------- Clases para widgets -------- #</span>
+<div class="viewcode-block" id="Opciones"><a class="viewcode-back" href="../vista.html#vista.Opciones">[documentos]</a><span class="k">class</span> <span class="nc">Opciones</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Clase que configura la ventana, treeview, botones y mensajes emergentes.</span>
-
-<span class="sd">    :param window: Objeto ventana que recibe como argumento de ``controlador.py``</span>
+<span class="sd">    Clase que establece qué ventanas mostrar</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="Menu.__init__"><a class="viewcode-back" href="../vista.html#vista.Menu.__init__">[documentos]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">window</span><span class="p">):</span>
+<div class="viewcode-block" id="Opciones.show_win_agregar"><a class="viewcode-back" href="../vista.html#vista.Opciones.show_win_agregar">[documentos]</a>    <span class="k">def</span> <span class="nf">show_win_agregar</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Constructor que configura la ventana y treeview.</span>
-
-<span class="sd">        :param window: Objeto ventana que recibe como argumento de ``controlador.py``</span>
+<span class="sd">        Método para setear y mostrar ventana de **Agregar Artículo**.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">window</span> <span class="o">=</span> <span class="n">window</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">obj_sub_m</span> <span class="o">=</span> <span class="n">SubWindow</span><span class="p">()</span>  <span class="c1"># Creo un objeto de clase Subwindow.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">close_all_window</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">window_agregar</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="s2">&quot;Agregar&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">window_agregar</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+        <span class="c1"># Muevo la ventana a la derecha de la ventana principal.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">window_agregar</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">geometry</span><span class="p">()</span><span class="o">.</span><span class="n">right</span><span class="p">()</span> <span class="o">+</span> <span class="mi">10</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">geometry</span><span class="p">()</span><span class="o">.</span><span class="n">top</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">opened_windows</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">window_agregar</span><span class="p">)</span>
 
-        <span class="c1"># --------------------Config de ventana-------------------------</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">window</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Control de stock - Electrónica del oeste&quot;</span><span class="p">)</span>
+        <span class="c1"># Limpio celdas.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">window_agregar</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">in_nombre</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">window_agregar</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">in_cant</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">window_agregar</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">in_precio</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">window_agregar</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">in_descrip</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">window_agregar</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">notificacion</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span></div>
 
-        <span class="c1"># --------------------Variables---------------------------------</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">var_nombre</span> <span class="o">=</span> <span class="n">StringVar</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">var_cantidad</span> <span class="o">=</span> <span class="n">StringVar</span><span class="p">()</span>  <span class="c1"># Luego lo convierto a int.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">var_precio</span> <span class="o">=</span> <span class="n">StringVar</span><span class="p">()</span>  <span class="c1"># Luego lo convierto a float.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">var_descrip</span> <span class="o">=</span> <span class="n">StringVar</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">obj_f</span> <span class="o">=</span> <span class="n">Crud</span><span class="p">()</span>  <span class="c1"># Creo un objeto de clase Crud.</span>
-
-        <span class="c1"># --------------------Etiquetas---------------------------------</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">titulo</span> <span class="o">=</span> <span class="n">Label</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">window</span><span class="p">,</span>
-            <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Electrónica del oeste&quot;</span><span class="p">,</span>
-            <span class="n">background</span><span class="o">=</span><span class="s2">&quot;#51CFF5&quot;</span><span class="p">,</span>
-            <span class="n">width</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
-            <span class="n">height</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
-            <span class="n">font</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;calibri&quot;</span><span class="p">,</span> <span class="mi">22</span><span class="p">,</span> <span class="s2">&quot;bold&quot;</span><span class="p">),</span>
-        <span class="p">)</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">subtitulo</span> <span class="o">=</span> <span class="n">Label</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">window</span><span class="p">,</span>
-            <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Bienvenido, seleccione la acción a realizar&quot;</span><span class="p">,</span>
-            <span class="n">font</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;calibri&quot;</span><span class="p">,</span> <span class="mi">12</span><span class="p">),</span>
-        <span class="p">)</span>
-
-        <span class="c1"># ---------------------Treeview-----------------------------------</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">tree</span> <span class="o">=</span> <span class="n">ttk</span><span class="o">.</span><span class="n">Treeview</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">window</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">tree</span><span class="p">[</span><span class="s2">&quot;columns&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;col1&quot;</span><span class="p">,</span> <span class="s2">&quot;col2&quot;</span><span class="p">,</span> <span class="s2">&quot;col3&quot;</span><span class="p">,</span> <span class="s2">&quot;col4&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">column</span><span class="p">(</span><span class="s2">&quot;#0&quot;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">minwidth</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">column</span><span class="p">(</span><span class="s2">&quot;col1&quot;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">144</span><span class="p">,</span> <span class="n">minwidth</span><span class="o">=</span><span class="mi">144</span><span class="p">,</span> <span class="n">anchor</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">column</span><span class="p">(</span><span class="s2">&quot;col2&quot;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span> <span class="n">minwidth</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span> <span class="n">anchor</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">column</span><span class="p">(</span><span class="s2">&quot;col3&quot;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span> <span class="n">minwidth</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span> <span class="n">anchor</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">column</span><span class="p">(</span><span class="s2">&quot;col4&quot;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">250</span><span class="p">,</span> <span class="n">minwidth</span><span class="o">=</span><span class="mi">250</span><span class="p">,</span> <span class="n">anchor</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">heading</span><span class="p">(</span><span class="s2">&quot;#0&quot;</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;ID&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">heading</span><span class="p">(</span><span class="s2">&quot;col1&quot;</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Producto&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">heading</span><span class="p">(</span><span class="s2">&quot;col2&quot;</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Cantidad&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">heading</span><span class="p">(</span><span class="s2">&quot;col3&quot;</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Precio&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">heading</span><span class="p">(</span><span class="s2">&quot;col4&quot;</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Descripción&quot;</span><span class="p">)</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">obj_f</span><span class="o">.</span><span class="n">mostrar_cat</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tree</span><span class="p">)</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">window</span><span class="o">.</span><span class="n">grid_rowconfigure</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="n">minsize</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">window</span><span class="o">.</span><span class="n">grid_rowconfigure</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="n">minsize</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">window</span><span class="o">.</span><span class="n">grid_rowconfigure</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="n">minsize</span><span class="o">=</span><span class="mi">22</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">window</span><span class="o">.</span><span class="n">grid_rowconfigure</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">minsize</span><span class="o">=</span><span class="mi">22</span><span class="p">)</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">titulo</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">columnspan</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">rowspan</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">subtitulo</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">columnspan</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">pady</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">column</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">11</span><span class="p">,</span> <span class="n">columnspan</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">padx</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">pady</span><span class="o">=</span><span class="mi">40</span><span class="p">)</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">obj_sub_m</span><span class="o">.</span><span class="n">ingreso_datos</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">window</span><span class="p">,</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">var_nombre</span><span class="p">,</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">var_cantidad</span><span class="p">,</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">var_precio</span><span class="p">,</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">var_descrip</span><span class="p">,</span>
-        <span class="p">)</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">menu_opciones</span><span class="p">()</span></div>
-
-<div class="viewcode-block" id="Menu.menu_opciones"><a class="viewcode-back" href="../vista.html#vista.Menu.menu_opciones">[documentos]</a>    <span class="k">def</span> <span class="nf">menu_opciones</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Opciones.show_win_eliminar"><a class="viewcode-back" href="../vista.html#vista.Opciones.show_win_eliminar">[documentos]</a>    <span class="k">def</span> <span class="nf">show_win_eliminar</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Método que configura los botones de opciones.</span>
-
+<span class="sd">        Método para setear y mostrar ventana de **Eliminar Artículo**.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">close_all_window</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">window_eliminar</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="s2">&quot;Eliminar&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">window_eliminar</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+        <span class="c1"># Muevo la ventana a la derecha de la ventana principal.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">window_eliminar</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">geometry</span><span class="p">()</span><span class="o">.</span><span class="n">right</span><span class="p">()</span> <span class="o">+</span> <span class="mi">10</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">geometry</span><span class="p">()</span><span class="o">.</span><span class="n">top</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">opened_windows</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">window_eliminar</span><span class="p">)</span>
 
-        <span class="c1"># ---------------------Botones--------------------------------------</span>
-        <span class="n">agregar</span> <span class="o">=</span> <span class="n">Button</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">window</span><span class="p">,</span>
-            <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Agregar artículo&quot;</span><span class="p">,</span>
-            <span class="n">background</span><span class="o">=</span><span class="s2">&quot;#51CFF5&quot;</span><span class="p">,</span>
-            <span class="n">activebackground</span><span class="o">=</span><span class="s2">&quot;#3FB9F5&quot;</span><span class="p">,</span>
-            <span class="n">width</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span>
-            <span class="n">height</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
-            <span class="n">command</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">call_agreg</span><span class="p">(),</span>
-        <span class="p">)</span>
+        <span class="c1"># Limpio celdas.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">window_eliminar</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">in_nombre</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">window_eliminar</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">notificacion</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span></div>
 
-        <span class="n">eliminar</span> <span class="o">=</span> <span class="n">Button</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">window</span><span class="p">,</span>
-            <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Eliminar artículo&quot;</span><span class="p">,</span>
-            <span class="n">background</span><span class="o">=</span><span class="s2">&quot;#51CFF5&quot;</span><span class="p">,</span>
-            <span class="n">activebackground</span><span class="o">=</span><span class="s2">&quot;#3FB9F5&quot;</span><span class="p">,</span>
-            <span class="n">width</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span>
-            <span class="n">height</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
-            <span class="n">command</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">call_elim</span><span class="p">(),</span>
-        <span class="p">)</span>
-
-        <span class="n">modificar</span> <span class="o">=</span> <span class="n">Button</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">window</span><span class="p">,</span>
-            <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Modificar artículo&quot;</span><span class="p">,</span>
-            <span class="n">background</span><span class="o">=</span><span class="s2">&quot;#51CFF5&quot;</span><span class="p">,</span>
-            <span class="n">activebackground</span><span class="o">=</span><span class="s2">&quot;#3FB9F5&quot;</span><span class="p">,</span>
-            <span class="n">width</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span>
-            <span class="n">height</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
-            <span class="n">command</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">call_modif</span><span class="p">(),</span>
-        <span class="p">)</span>
-
-        <span class="n">consultar</span> <span class="o">=</span> <span class="n">Button</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">window</span><span class="p">,</span>
-            <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Consultar stock&quot;</span><span class="p">,</span>
-            <span class="n">background</span><span class="o">=</span><span class="s2">&quot;#51CFF5&quot;</span><span class="p">,</span>
-            <span class="n">activebackground</span><span class="o">=</span><span class="s2">&quot;#3FB9F5&quot;</span><span class="p">,</span>
-            <span class="n">width</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span>
-            <span class="n">height</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
-            <span class="n">command</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">call_consulta</span><span class="p">(),</span>
-        <span class="p">)</span>
-
-        <span class="n">catalogo</span> <span class="o">=</span> <span class="n">Button</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">window</span><span class="p">,</span>
-            <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Ver Catálogo completo&quot;</span><span class="p">,</span>
-            <span class="n">background</span><span class="o">=</span><span class="s2">&quot;#51CFF5&quot;</span><span class="p">,</span>
-            <span class="n">activebackground</span><span class="o">=</span><span class="s2">&quot;#3FB9F5&quot;</span><span class="p">,</span>
-            <span class="n">width</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
-            <span class="n">height</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
-            <span class="n">command</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj_f</span><span class="o">.</span><span class="n">mostrar_cat</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tree</span><span class="p">),</span>
-        <span class="p">)</span>
-
-        <span class="c1"># -------------------Posiciono los controles ---------------------------</span>
-
-        <span class="n">agregar</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">pady</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">padx</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">sticky</span><span class="o">=</span><span class="s2">&quot;w&quot;</span><span class="p">)</span>
-        <span class="n">eliminar</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">pady</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">padx</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">sticky</span><span class="o">=</span><span class="s2">&quot;w&quot;</span><span class="p">)</span>
-        <span class="n">modificar</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">pady</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">padx</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">sticky</span><span class="o">=</span><span class="s2">&quot;w&quot;</span><span class="p">)</span>
-        <span class="n">consultar</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="mi">9</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">pady</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">padx</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">sticky</span><span class="o">=</span><span class="s2">&quot;w&quot;</span><span class="p">)</span>
-        <span class="n">catalogo</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">columnspan</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">pady</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">padx</span><span class="o">=</span><span class="mi">130</span><span class="p">,</span> <span class="n">sticky</span><span class="o">=</span><span class="s2">&quot;w&quot;</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="Menu.call_agreg"><a class="viewcode-back" href="../vista.html#vista.Menu.call_agreg">[documentos]</a>    <span class="k">def</span> <span class="nf">call_agreg</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Opciones.show_win_modificar"><a class="viewcode-back" href="../vista.html#vista.Opciones.show_win_modificar">[documentos]</a>    <span class="k">def</span> <span class="nf">show_win_modificar</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Método que imprime un mensaje emergente de acuerdo al string que retorna</span>
-<span class="sd">        la función de agregar un dato ``agreg()``, que forma parte de ``modelo.py``.</span>
+<span class="sd">        Método para setear y mostrar ventana de **Modificar Artículo**.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">close_all_window</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">window_modificar</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="s2">&quot;Modificar&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">window_modificar</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+        <span class="c1"># Muevo la ventana a la derecha de la ventana principal.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">window_modificar</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">geometry</span><span class="p">()</span><span class="o">.</span><span class="n">right</span><span class="p">()</span> <span class="o">+</span> <span class="mi">10</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">geometry</span><span class="p">()</span><span class="o">.</span><span class="n">top</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">opened_windows</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">window_modificar</span><span class="p">)</span>
 
-<span class="sd">        Si se generó una excepción mostrará el mensaje de error correspondiente.</span>
+        <span class="c1"># Limpio celdas.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">window_modificar</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">in_nombre</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">window_modificar</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">in_cant</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">window_modificar</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">in_precio</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">window_modificar</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">in_descrip</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">window_modificar</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">notificacion</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Opciones.show_win_consultar"><a class="viewcode-back" href="../vista.html#vista.Opciones.show_win_consultar">[documentos]</a>    <span class="k">def</span> <span class="nf">show_win_consultar</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Método para setear y mostrar ventana de **Consultar Artículo**.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">close_all_window</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">window_consulta</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="s2">&quot;Consulta&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">window_consulta</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+        <span class="c1"># Muevo la ventana a la derecha de la ventana principal.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">window_consulta</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">geometry</span><span class="p">()</span><span class="o">.</span><span class="n">right</span><span class="p">()</span> <span class="o">+</span> <span class="mi">10</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">geometry</span><span class="p">()</span><span class="o">.</span><span class="n">top</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">opened_windows</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">window_consulta</span><span class="p">)</span>
+
+        <span class="c1"># Limpio celdas.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">window_consulta</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">in_nombre</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">window_consulta</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">in_descrip</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">window_consulta</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">notificacion</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">window_consulta</span><span class="o">.</span><span class="n">full_cat</span><span class="p">()</span>  <span class="c1"># Obtengo catálogo completo de la bd y lo muestra al abrir la ventana.</span></div>
+
+<div class="viewcode-block" id="Opciones.close_all_window"><a class="viewcode-back" href="../vista.html#vista.Opciones.close_all_window">[documentos]</a>    <span class="k">def</span> <span class="nf">close_all_window</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Método para cerrar todas las ventanas secundarias abiertas.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">window</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">opened_windows</span><span class="p">:</span>
+            <span class="n">window</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">opened_windows</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># Vacio la lista de ventanas abiertas.</span></div></div>
+
+
+<span class="c1"># --- Clase para interactuar con gráfico de torta --- #</span>
+<div class="viewcode-block" id="Canvas_grafica"><a class="viewcode-back" href="../vista.html#vista.Canvas_grafica">[documentos]</a><span class="k">class</span> <span class="nc">Canvas_grafica</span><span class="p">(</span><span class="n">FigureCanvas</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Clase que contiene métodos para actualizar y dar estilo al gráfico de torta.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Canvas_grafica.__init__"><a class="viewcode-back" href="../vista.html#vista.Canvas_grafica.__init__">[documentos]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Constructor que hereda el correspondiente a la clase ``FigureCanvas()``,</span>
+<span class="sd">        y que además crea un gráfico matplotlib en blanco.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Asigno un espacio para ubicar el gráfico de matplotlib usando Canvas.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fig</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span>
+            <span class="mi">1</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">12</span><span class="p">),</span> <span class="n">sharey</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;none&quot;</span>
+        <span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fig</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Canvas_grafica.upgrade_graph"><a class="viewcode-back" href="../vista.html#vista.Canvas_grafica.upgrade_graph">[documentos]</a>    <span class="k">def</span> <span class="nf">upgrade_graph</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nombre</span><span class="p">,</span> <span class="n">cantidad</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Método para actualizar nombres y cantidades en gráfico de torta.</span>
+
+<span class="sd">        :param nombre: Nombre del componente.</span>
+<span class="sd">        :param cantidad: Cantidad del componente.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Borro gráfico antiguo.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+
+        <span class="c1"># Parámetros para nuevo gráfico.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nombres</span> <span class="o">=</span> <span class="n">nombre</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tamanio</span> <span class="o">=</span> <span class="n">cantidad</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">colores</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">explotar</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># Asigno color aleatorio claros segun la cantidad de artículos disponibles.</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nombres</span><span class="p">)):</span>
+            <span class="n">r</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">150</span><span class="p">,</span> <span class="mi">255</span><span class="p">)</span>
+            <span class="n">g</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">150</span><span class="p">,</span> <span class="mi">255</span><span class="p">)</span>
+            <span class="n">b</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">150</span><span class="p">,</span> <span class="mi">255</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">colores</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;#</span><span class="si">%02x%02x%02x</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">explotar</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mf">0.05</span><span class="p">)</span>
+
+        <span class="c1"># Pasaje de porcentaje a valor real en bd.</span>
+        <span class="n">valor_real</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">pct</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">{:.0f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="p">(</span><span class="n">pct</span> <span class="o">*</span> <span class="nb">sum</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tamanio</span><span class="p">))))</span> <span class="o">/</span> <span class="mi">100</span>
+        <span class="p">)</span>
+        <span class="c1"># Asigno nuevos parámetros a gráfico.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">pie</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tamanio</span><span class="p">,</span>
+            <span class="n">explode</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">explotar</span><span class="p">,</span>
+            <span class="n">labels</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">nombres</span><span class="p">,</span>
+            <span class="n">colors</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">colores</span><span class="p">,</span>
+            <span class="n">autopct</span><span class="o">=</span><span class="n">valor_real</span><span class="p">,</span>
+            <span class="n">pctdistance</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span>
+            <span class="n">shadow</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">startangle</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span>
+            <span class="n">radius</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span>
+            <span class="n">labeldistance</span><span class="o">=</span><span class="mf">1.1</span><span class="p">,</span>
+            <span class="n">textprops</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;fontsize&quot;</span><span class="p">:</span> <span class="mi">12</span><span class="p">},</span>
+        <span class="p">)</span>
+        <span class="c1">#self.ax.set_aspect(&#39;equal&#39;) </span>
+        <span class="c1"># Actualizo gráfico.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span></div></div>
+
+
+<span class="c1"># -------- Clases para ventanas -------#</span>
+<div class="viewcode-block" id="MainWindow"><a class="viewcode-back" href="../vista.html#vista.MainWindow">[documentos]</a><span class="k">class</span> <span class="nc">MainWindow</span><span class="p">(</span><span class="n">QMainWindow</span><span class="p">,</span> <span class="n">Opciones</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Clase que contiene métodos para la interacción en la ventana principal.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="MainWindow.__init__"><a class="viewcode-back" href="../vista.html#vista.MainWindow.__init__">[documentos]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Constructor que hereda el correspondiente a la clase ``QMainWindow()`` para acceder a widgets.</span>
+<span class="sd">        Tambíen hereda de la clase ``Opciones()`` para acceder a las ventanas secundarias.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="c1"># Creo objeto de la clase en QT para crear widgets.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ui</span> <span class="o">=</span> <span class="n">Ui_MainWindow</span><span class="p">()</span>
+        <span class="c1"># Se acccede al metodo setupUi que crea widgets.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">setupUi</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="c1"># Defino un objeto de clase Crud() para el manejo de datos.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">obj_f</span> <span class="o">=</span> <span class="n">Crud</span><span class="p">()</span>
+
+        <span class="c1"># Creo objetos window para acceder a las ventanas secundarias y estas a la principal.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">window_agregar</span> <span class="o">=</span> <span class="n">WindowAgregar</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">obj_f</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">window_eliminar</span> <span class="o">=</span> <span class="n">WindowEliminar</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">obj_f</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">window_modificar</span> <span class="o">=</span> <span class="n">WindowModificar</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">obj_f</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">window_consulta</span> <span class="o">=</span> <span class="n">WindowConsulta</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">obj_f</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+
+        <span class="c1"># Lista de ventanas abiertas.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">opened_windows</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># Creo objeto de clase Canvas_grafica() para crear y actualizar gráfico de matplotlib.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">grafica</span> <span class="o">=</span> <span class="n">Canvas_grafica</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">grafica_torta</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grafica</span><span class="p">)</span>
+
+        <span class="c1"># Obtengo y muestro catálogo completo en gráfico de torta al iniciar.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">window_consulta</span><span class="o">.</span><span class="n">full_cat</span><span class="p">()</span>
+
+        <span class="c1"># Callback de widgets Button para abrir ventanas secundarias.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">btn_agregar</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">show_win_agregar</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">btn_eliminar</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">show_win_eliminar</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">btn_modificar</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">show_win_modificar</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">btn_consultar</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">show_win_consultar</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="WindowAgregar"><a class="viewcode-back" href="../vista.html#vista.WindowAgregar">[documentos]</a><span class="k">class</span> <span class="nc">WindowAgregar</span><span class="p">(</span><span class="n">QDialog</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Clase que contiene métodos para la interacción en la ventana **Agregar Artículo**.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="WindowAgregar.__init__"><a class="viewcode-back" href="../vista.html#vista.WindowAgregar.__init__">[documentos]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj_f</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Constructor que hereda el correspondiente a la clase ``QDialog()`` para acceder a widgets.</span>
+
+<span class="sd">        :param obj_f: Objeto de clase ``Crud()``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="c1"># Creo objeto de la clase en QT para crear widgets.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ui</span> <span class="o">=</span> <span class="n">Ui_Agregar</span><span class="p">()</span>
+        <span class="c1"># Se acccede al método setupUi que crea widgets.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">setupUi</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="c1"># Cedo acceso a objeto Crud desde cualquier método de esta clase.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">obj_f</span> <span class="o">=</span> <span class="n">obj_f</span>
+
+        <span class="c1"># Callback de widgets Button</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">btn_aceptar</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">new_load</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">btn_cancelar</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">close</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="WindowAgregar.new_load"><a class="viewcode-back" href="../vista.html#vista.WindowAgregar.new_load">[documentos]</a>    <span class="k">def</span> <span class="nf">new_load</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Método para agregar un nuevo artículo.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">mje</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj_f</span><span class="o">.</span><span class="n">agreg</span><span class="p">(</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">var_nombre</span><span class="p">,</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">var_cantidad</span><span class="p">,</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">var_precio</span><span class="p">,</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">var_descrip</span><span class="p">,</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">tree</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">in_nombre</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">in_cant</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">in_precio</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">in_descrip</span><span class="p">,</span>
             <span class="p">)</span>
+            <span class="c1"># Informo en la ventana el resultado de la operacíon realizada.</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">notificacion</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="n">mje</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">mje</span><span class="p">:</span>
+            <span class="c1"># Informo en la ventana la excepción.</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">notificacion</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">mje</span><span class="p">))</span></div></div>
 
-        <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">mje</span><span class="p">:</span>  <span class="c1"># Si se genera una excepción, la capturo y muestro mje de error.</span>
-            <span class="nb">print</span><span class="p">(</span><span class="n">mje</span><span class="p">)</span>
-            <span class="n">showerror</span><span class="p">(</span><span class="s2">&quot;Error en la operación&quot;</span><span class="p">,</span> <span class="s2">&quot;Campos cargados incorrectamente&quot;</span><span class="p">)</span>
 
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">mje</span> <span class="o">==</span> <span class="s2">&quot;existe&quot;</span><span class="p">:</span>
-                <span class="n">showerror</span><span class="p">(</span><span class="s2">&quot;Error en la carga de datos&quot;</span><span class="p">,</span> <span class="s2">&quot;Artículo ya existente&quot;</span><span class="p">)</span>
-            <span class="k">elif</span> <span class="n">mje</span> <span class="o">==</span> <span class="s2">&quot;cargado&quot;</span><span class="p">:</span>
-                <span class="n">showinfo</span><span class="p">(</span><span class="s2">&quot;Operación exitosa&quot;</span><span class="p">,</span> <span class="s2">&quot;Artículo cargado correctamente&quot;</span><span class="p">)</span>
-            <span class="k">elif</span> <span class="n">mje</span> <span class="o">==</span> <span class="s2">&quot;campos vacios&quot;</span><span class="p">:</span>
-                <span class="n">showerror</span><span class="p">(</span>
-                    <span class="s2">&quot;Error en la operacíon&quot;</span><span class="p">,</span> <span class="s2">&quot;No se han completado todos los campos&quot;</span>
-                <span class="p">)</span>
+<div class="viewcode-block" id="WindowEliminar"><a class="viewcode-back" href="../vista.html#vista.WindowEliminar">[documentos]</a><span class="k">class</span> <span class="nc">WindowEliminar</span><span class="p">(</span><span class="n">QDialog</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Clase que contiene métodos para la interacción en la ventana **Eliminar Artículo**.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">obj_f</span><span class="o">.</span><span class="n">mostrar_cat</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tree</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="Menu.call_elim"><a class="viewcode-back" href="../vista.html#vista.Menu.call_elim">[documentos]</a>    <span class="k">def</span> <span class="nf">call_elim</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="WindowEliminar.__init__"><a class="viewcode-back" href="../vista.html#vista.WindowEliminar.__init__">[documentos]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj_f</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Método que imprime un mensaje emergente de acuerdo al string que retorna</span>
-<span class="sd">        la función de eliminar un dato ``elim()``, que forma parte de ``modelo.py``.</span>
+<span class="sd">        Constructor que hereda el correspondiente a la clase ``QDialog()`` para acceder a widgets.</span>
 
+<span class="sd">        :param obj_f: Objeto de clase ``Crud()``.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">mje</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj_f</span><span class="o">.</span><span class="n">elim</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">var_nombre</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">mje</span> <span class="o">==</span> <span class="s2">&quot;eliminado&quot;</span><span class="p">:</span>
-            <span class="n">showinfo</span><span class="p">(</span><span class="s2">&quot;Operación exitosa&quot;</span><span class="p">,</span> <span class="s2">&quot;Artículo eliminado correctamente&quot;</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">mje</span> <span class="o">==</span> <span class="s2">&quot;no encontrado&quot;</span><span class="p">:</span>
-            <span class="n">showerror</span><span class="p">(</span><span class="s2">&quot;Error en la operación&quot;</span><span class="p">,</span> <span class="s2">&quot;Artículo no encontrado&quot;</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">mje</span> <span class="o">==</span> <span class="s2">&quot;campo vacio&quot;</span><span class="p">:</span>
-            <span class="n">showerror</span><span class="p">(</span><span class="s2">&quot;Error en la operación&quot;</span><span class="p">,</span> <span class="s2">&quot;No se ha ingresado ningun nombre&quot;</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="c1"># Creo objeto de la clase en QT para crear widgets.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ui</span> <span class="o">=</span> <span class="n">Ui_Eliminar</span><span class="p">()</span>
+        <span class="c1"># Se acccede al método setupUi que crea widgets.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">setupUi</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="c1"># Cedo acceso a objeto Crud desde cualquier método de esta clase.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">obj_f</span> <span class="o">=</span> <span class="n">obj_f</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">obj_f</span><span class="o">.</span><span class="n">mostrar_cat</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tree</span><span class="p">)</span></div>
+        <span class="c1"># Callback de widgets Button.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">btn_aceptar</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">delete</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">btn_cancelar</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">close</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Menu.call_modif"><a class="viewcode-back" href="../vista.html#vista.Menu.call_modif">[documentos]</a>    <span class="k">def</span> <span class="nf">call_modif</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="WindowEliminar.delete"><a class="viewcode-back" href="../vista.html#vista.WindowEliminar.delete">[documentos]</a>    <span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Método que imprime un mensaje emergente de acuerdo al string que retorna</span>
-<span class="sd">        la función de modificar un dato ``modif()``, que forma parte de ``modelo.py``.</span>
+<span class="sd">        Método para eliminar un artículo existente.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">mje</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj_f</span><span class="o">.</span><span class="n">elim</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">in_nombre</span><span class="p">)</span>
 
-<span class="sd">        Si se generó una excepción mostrará el mensaje de error correspondiente.</span>
+        <span class="c1"># Informo en la ventana el resultado de la operacíon realizada.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">notificacion</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="n">mje</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="WindowModificar"><a class="viewcode-back" href="../vista.html#vista.WindowModificar">[documentos]</a><span class="k">class</span> <span class="nc">WindowModificar</span><span class="p">(</span><span class="n">QDialog</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Clase que contiene métodos para la interacción en la ventana **Modificar Artículo**.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="WindowModificar.__init__"><a class="viewcode-back" href="../vista.html#vista.WindowModificar.__init__">[documentos]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj_f</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Constructor que hereda el correspondiente a la clase ``QDialog()`` para acceder a widgets.</span>
+
+<span class="sd">        :param obj_f: Objeto de clase ``Crud()``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="c1"># Creo objeto de la clase en QT para crear widgets.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ui</span> <span class="o">=</span> <span class="n">Ui_Modificar</span><span class="p">()</span>
+        <span class="c1"># Se acccede al método setupUi que crea widgets.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">setupUi</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="c1"># Cedo acceso a objeto Crud desde cualquier método de esta clase.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">obj_f</span> <span class="o">=</span> <span class="n">obj_f</span>
+
+        <span class="c1"># Callback de widgets Button.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">btn_aceptar</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">modificated</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">btn_cancelar</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">close</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="WindowModificar.modificated"><a class="viewcode-back" href="../vista.html#vista.WindowModificar.modificated">[documentos]</a>    <span class="k">def</span> <span class="nf">modificated</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Método para modificar un artículo existente.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">mje</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj_f</span><span class="o">.</span><span class="n">modif</span><span class="p">(</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">var_nombre</span><span class="p">,</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">var_cantidad</span><span class="p">,</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">var_precio</span><span class="p">,</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">var_descrip</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">in_nombre</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">in_cant</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">in_precio</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">in_descrip</span><span class="p">,</span>
             <span class="p">)</span>
-
-        <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">mje</span><span class="p">:</span>  <span class="c1"># Si se genera una excepción, la capturo y muestro mje de error.</span>
-            <span class="nb">print</span><span class="p">(</span><span class="n">mje</span><span class="p">)</span>
-            <span class="n">showerror</span><span class="p">(</span><span class="s2">&quot;Error en la operación&quot;</span><span class="p">,</span> <span class="s2">&quot;Campos cargados incorrectamente&quot;</span><span class="p">)</span>
-
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">mje</span> <span class="o">==</span> <span class="s2">&quot;campo vacio&quot;</span><span class="p">:</span>
-                <span class="n">showerror</span><span class="p">(</span><span class="s2">&quot;Error en la operación&quot;</span><span class="p">,</span> <span class="s2">&quot;No se ha ingresado ningun nombre&quot;</span><span class="p">)</span>
-            <span class="k">elif</span> <span class="n">mje</span> <span class="o">==</span> <span class="s2">&quot;no existe&quot;</span><span class="p">:</span>
-                <span class="n">showerror</span><span class="p">(</span><span class="s2">&quot;Error en la operación&quot;</span><span class="p">,</span> <span class="s2">&quot;Artículo no encontrado&quot;</span><span class="p">)</span>
-            <span class="k">elif</span> <span class="n">mje</span> <span class="o">==</span> <span class="s2">&quot;modificado&quot;</span><span class="p">:</span>
-                <span class="n">showinfo</span><span class="p">(</span><span class="s2">&quot;Operación exitosa&quot;</span><span class="p">,</span> <span class="s2">&quot;Artículo modificado correctamente&quot;</span><span class="p">)</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">obj_f</span><span class="o">.</span><span class="n">mostrar_cat</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tree</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="Menu.call_consulta"><a class="viewcode-back" href="../vista.html#vista.Menu.call_consulta">[documentos]</a>    <span class="k">def</span> <span class="nf">call_consulta</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Método que imprime un mensaje emergente de acuerdo al string que retorna</span>
-<span class="sd">        la función de consultar stock ``consulta()``, que forma parte de ``modelo.py``.</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">mje</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj_f</span><span class="o">.</span><span class="n">consulta</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">var_nombre</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tree</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">mje</span> <span class="o">==</span> <span class="s2">&quot;campo vacio&quot;</span><span class="p">:</span>
-            <span class="n">showerror</span><span class="p">(</span><span class="s2">&quot;Error en la operación&quot;</span><span class="p">,</span> <span class="s2">&quot;No se ha ingresado ningun nombre&quot;</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">mje</span> <span class="o">==</span> <span class="s2">&quot;no encontrado&quot;</span><span class="p">:</span>
-            <span class="n">showerror</span><span class="p">(</span><span class="s2">&quot;Error en la operación&quot;</span><span class="p">,</span> <span class="s2">&quot;Artículo no encontrado&quot;</span><span class="p">)</span></div></div>
+            <span class="c1"># Informo en la ventana el resultado de la operacíon realizada.</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">notificacion</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="n">mje</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">mje</span><span class="p">:</span>
+            <span class="c1"># Informo en la ventana la excepción.</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">notificacion</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">mje</span><span class="p">))</span></div></div>
 
 
-<div class="viewcode-block" id="SubWindow"><a class="viewcode-back" href="../vista.html#vista.SubWindow">[documentos]</a><span class="k">class</span> <span class="nc">SubWindow</span><span class="p">:</span>
+<div class="viewcode-block" id="WindowConsulta"><a class="viewcode-back" href="../vista.html#vista.WindowConsulta">[documentos]</a><span class="k">class</span> <span class="nc">WindowConsulta</span><span class="p">(</span><span class="n">QWidget</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Clase que configura las etiquetas y los campos de entrada.</span>
+<span class="sd">    Clase que contiene métodos para la interacción en la ventana **Consultar Artículo**.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="SubWindow.ingreso_datos"><a class="viewcode-back" href="../vista.html#vista.SubWindow.ingreso_datos">[documentos]</a>    <span class="k">def</span> <span class="nf">ingreso_datos</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">window</span><span class="p">,</span> <span class="n">var_nombre</span><span class="p">,</span> <span class="n">var_cantidad</span><span class="p">,</span> <span class="n">var_precio</span><span class="p">,</span> <span class="n">var_descrip</span><span class="p">):</span>
+<div class="viewcode-block" id="WindowConsulta.__init__"><a class="viewcode-back" href="../vista.html#vista.WindowConsulta.__init__">[documentos]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj_f</span><span class="p">,</span> <span class="n">obj_win_main</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Método que define las etiquetas, los campos de entrada y eventos asociados a los mismos.</span>
+<span class="sd">        Constructor que hereda el correspondiente a la clase ``QWidget()`` para acceder a widgets.</span>
 
-<span class="sd">        :param window: Objeto ventana que recibe como argumento de la clase ``Menu()``.</span>
-<span class="sd">        :param var_nombre: Variable que será asociada al campo de entrada **Nombre**.</span>
-<span class="sd">        :param var_cantidad: Variable que será asociada al campo de entrada **Cantidad**.</span>
-<span class="sd">        :param var_precio: Variable que será asociada al campo de entrada **Precio**.</span>
-<span class="sd">        :param var_descrip: Variable que será asociada al campo de entrada **Descripción**.</span>
+<span class="sd">        :param obj_f: Objeto de clase ``Crud()``.</span>
+<span class="sd">        :param obj_win_main: Objeto de clase ``MainWindow()`` para acceder a atributos/métodos de ventana principal.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">obj_e</span> <span class="o">=</span> <span class="n">Evento</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="c1"># Creo objeto de la clase en QT para crear widgets.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ui</span> <span class="o">=</span> <span class="n">Ui_Consulta</span><span class="p">()</span>
+        <span class="c1"># Se acccede al método setupUi que crea widgets.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">setupUi</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="c1"># Cedo acceso a objeto Crud desde cualquier método de esta clase.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">obj_f</span> <span class="o">=</span> <span class="n">obj_f</span>
+        <span class="c1"># Cedo acceso a objeto MainWindow desde cualquier método de esta clase.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">obj_win_main</span> <span class="o">=</span> <span class="n">obj_win_main</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">nombre</span> <span class="o">=</span> <span class="n">Label</span><span class="p">(</span><span class="n">window</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">Nombre:&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">cantidad</span> <span class="o">=</span> <span class="n">Label</span><span class="p">(</span><span class="n">window</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">Cantidad:&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">precio</span> <span class="o">=</span> <span class="n">Label</span><span class="p">(</span><span class="n">window</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">Precio:&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">descripcion</span> <span class="o">=</span> <span class="n">Label</span><span class="p">(</span><span class="n">window</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">Descripción:&quot;</span><span class="p">)</span>
+        <span class="c1"># Callback de widgets Button.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">btn_buscar</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">search</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">btn_cat_full</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">full_cat</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">btn_volver</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">close</span><span class="p">)</span></div>
 
-        <span class="c1"># --------------------------Campos de entrada------------------------------------</span>
-        <span class="c1"># En lambda, a la función que llama le paso como parámetro</span>
-        <span class="c1"># &quot;nom&quot;/&quot;cant&quot;/&quot;precio&quot;/&quot;descrip&quot; para hacer referencia</span>
-        <span class="c1"># al campo &quot;Nombre&quot;/&quot;Cantidad&quot;/&quot;Precio&quot;/&quot;Descripción&quot;.</span>
+<div class="viewcode-block" id="WindowConsulta.insert"><a class="viewcode-back" href="../vista.html#vista.WindowConsulta.insert">[documentos]</a>    <span class="k">def</span> <span class="nf">insert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="n">nom</span><span class="p">,</span> <span class="n">cant</span><span class="p">,</span> <span class="n">prec</span><span class="p">,</span> <span class="n">descrip</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Método para agregar un artículo nuevo en la tabla.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">frame</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">frame</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="nb">id</span><span class="p">,</span> <span class="n">nom</span><span class="p">,</span> <span class="n">cant</span><span class="p">,</span> <span class="n">prec</span><span class="p">,</span> <span class="n">descrip</span><span class="p">))</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">nombre_entry</span> <span class="o">=</span> <span class="n">Entry</span><span class="p">(</span><span class="n">window</span><span class="p">,</span> <span class="n">textvariable</span><span class="o">=</span><span class="n">var_nombre</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">nombre_entry</span><span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="n">foreground</span><span class="o">=</span><span class="s2">&quot;grey&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">nombre_entry</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Escriba el nombre del artículo&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">nombre_entry</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span>
-            <span class="s2">&quot;&lt;Button-1&gt;&quot;</span><span class="p">,</span>
-            <span class="k">lambda</span> <span class="n">event</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj_e</span><span class="o">.</span><span class="n">click</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="s2">&quot;nom&quot;</span><span class="p">,</span> <span class="n">var_nombre</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nombre_entry</span><span class="p">),</span>
-        <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">nombre_entry</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span>
-            <span class="s2">&quot;&lt;FocusOut&gt;&quot;</span><span class="p">,</span>
-            <span class="k">lambda</span> <span class="n">event</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj_e</span><span class="o">.</span><span class="n">focus_out</span><span class="p">(</span>
-                <span class="n">event</span><span class="p">,</span>
-                <span class="s2">&quot;nom&quot;</span><span class="p">,</span>
-                <span class="n">var_nombre</span><span class="p">,</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">nombre_entry</span><span class="p">,</span>
-            <span class="p">),</span>
-        <span class="p">)</span>
+        <span class="n">fila</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">registro</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">frame</span><span class="p">:</span>
+            <span class="n">columna</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="c1"># Creo fila nueva cada vez que se lee un nuevo frame (todos los parámetros de un artículo).</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">catalogo_list</span><span class="o">.</span><span class="n">insertRow</span><span class="p">(</span><span class="n">fila</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">elemento</span> <span class="ow">in</span> <span class="n">registro</span><span class="p">:</span>
+                <span class="c1"># Cargo cada parámetro en la columna correspondiente, por orden.</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">catalogo_list</span><span class="o">.</span><span class="n">setItem</span><span class="p">(</span><span class="n">fila</span><span class="p">,</span> <span class="n">columna</span><span class="p">,</span> <span class="n">QTableWidgetItem</span><span class="p">(</span><span class="n">elemento</span><span class="p">))</span>
+                <span class="n">columna</span> <span class="o">+=</span> <span class="mi">1</span></div>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">cantidad_entry</span> <span class="o">=</span> <span class="n">Entry</span><span class="p">(</span><span class="n">window</span><span class="p">,</span> <span class="n">textvariable</span><span class="o">=</span><span class="n">var_cantidad</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">cantidad_entry</span><span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="n">foreground</span><span class="o">=</span><span class="s2">&quot;grey&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">cantidad_entry</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Escriba un valor numérico&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">cantidad_entry</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span>
-            <span class="s2">&quot;&lt;Button-1&gt;&quot;</span><span class="p">,</span>
-            <span class="k">lambda</span> <span class="n">event</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj_e</span><span class="o">.</span><span class="n">click</span><span class="p">(</span>
-                <span class="n">event</span><span class="p">,</span> <span class="s2">&quot;cant&quot;</span><span class="p">,</span> <span class="n">var_cantidad</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cantidad_entry</span>
-            <span class="p">),</span>
-        <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">cantidad_entry</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span>
-            <span class="s2">&quot;&lt;FocusOut&gt;&quot;</span><span class="p">,</span>
-            <span class="k">lambda</span> <span class="n">event</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj_e</span><span class="o">.</span><span class="n">focus_out</span><span class="p">(</span>
-                <span class="n">event</span><span class="p">,</span>
-                <span class="s2">&quot;cant&quot;</span><span class="p">,</span>
-                <span class="n">var_cantidad</span><span class="p">,</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">cantidad_entry</span><span class="p">,</span>
-            <span class="p">),</span>
-        <span class="p">)</span>
+<div class="viewcode-block" id="WindowConsulta.delete"><a class="viewcode-back" href="../vista.html#vista.WindowConsulta.delete">[documentos]</a>    <span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Método para limpiar celdas de la tabla.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">catalogo_list</span><span class="o">.</span><span class="n">clearContents</span><span class="p">()</span></div>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">precio_entry</span> <span class="o">=</span> <span class="n">Entry</span><span class="p">(</span><span class="n">window</span><span class="p">,</span> <span class="n">textvariable</span><span class="o">=</span><span class="n">var_precio</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">precio_entry</span><span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="n">foreground</span><span class="o">=</span><span class="s2">&quot;grey&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">precio_entry</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Escriba un valor numérico&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">precio_entry</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span>
-            <span class="s2">&quot;&lt;Button-1&gt;&quot;</span><span class="p">,</span>
-            <span class="k">lambda</span> <span class="n">event</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj_e</span><span class="o">.</span><span class="n">click</span><span class="p">(</span>
-                <span class="n">event</span><span class="p">,</span> <span class="s2">&quot;precio&quot;</span><span class="p">,</span> <span class="n">var_precio</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">precio_entry</span>
-            <span class="p">),</span>
-        <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">precio_entry</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span>
-            <span class="s2">&quot;&lt;FocusOut&gt;&quot;</span><span class="p">,</span>
-            <span class="k">lambda</span> <span class="n">event</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj_e</span><span class="o">.</span><span class="n">focus_out</span><span class="p">(</span>
-                <span class="n">event</span><span class="p">,</span>
-                <span class="s2">&quot;precio&quot;</span><span class="p">,</span>
-                <span class="n">var_precio</span><span class="p">,</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">precio_entry</span><span class="p">,</span>
-            <span class="p">),</span>
-        <span class="p">)</span>
+<div class="viewcode-block" id="WindowConsulta.search"><a class="viewcode-back" href="../vista.html#vista.WindowConsulta.search">[documentos]</a>    <span class="k">def</span> <span class="nf">search</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Método para buscar y mostrar artículo/s en la tabla.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">mje</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj_f</span><span class="o">.</span><span class="n">consulta</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">in_nombre</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">in_descrip</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">descripcion_entry</span> <span class="o">=</span> <span class="n">Entry</span><span class="p">(</span><span class="n">window</span><span class="p">,</span> <span class="n">textvariable</span><span class="o">=</span><span class="n">var_descrip</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">descripcion_entry</span><span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="n">foreground</span><span class="o">=</span><span class="s2">&quot;grey&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">descripcion_entry</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Agregue una breve descrip. del art.&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">descripcion_entry</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span>
-            <span class="s2">&quot;&lt;Button-1&gt;&quot;</span><span class="p">,</span>
-            <span class="k">lambda</span> <span class="n">event</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj_e</span><span class="o">.</span><span class="n">click</span><span class="p">(</span>
-                <span class="n">event</span><span class="p">,</span> <span class="s2">&quot;descrip&quot;</span><span class="p">,</span> <span class="n">var_descrip</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">descripcion_entry</span>
-            <span class="p">),</span>
-        <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">descripcion_entry</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span>
-            <span class="s2">&quot;&lt;FocusOut&gt;&quot;</span><span class="p">,</span>
-            <span class="k">lambda</span> <span class="n">event</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj_e</span><span class="o">.</span><span class="n">focus_out</span><span class="p">(</span>
-                <span class="n">event</span><span class="p">,</span>
-                <span class="s2">&quot;descrip&quot;</span><span class="p">,</span>
-                <span class="n">var_descrip</span><span class="p">,</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">descripcion_entry</span><span class="p">,</span>
-            <span class="p">),</span>
-        <span class="p">)</span>
+        <span class="c1"># Informo en la ventana el resultado de la operacíon realizada.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">notificacion</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="n">mje</span><span class="p">)</span></div>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">nombre</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">sticky</span><span class="o">=</span><span class="s2">&quot;w&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">cantidad</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">sticky</span><span class="o">=</span><span class="s2">&quot;w&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">precio</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">sticky</span><span class="o">=</span><span class="s2">&quot;w&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">descripcion</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">sticky</span><span class="o">=</span><span class="s2">&quot;w&quot;</span><span class="p">)</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">nombre_entry</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">padx</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">sticky</span><span class="o">=</span><span class="s2">&quot;w&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">cantidad_entry</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">padx</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">sticky</span><span class="o">=</span><span class="s2">&quot;w&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">precio_entry</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">padx</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">sticky</span><span class="o">=</span><span class="s2">&quot;w&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">descripcion_entry</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">padx</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">sticky</span><span class="o">=</span><span class="s2">&quot;w&quot;</span><span class="p">)</span></div></div>
+<div class="viewcode-block" id="WindowConsulta.full_cat"><a class="viewcode-back" href="../vista.html#vista.WindowConsulta.full_cat">[documentos]</a>    <span class="k">def</span> <span class="nf">full_cat</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Método para mostrar todos los artículos en la tabla.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">catalogo_list</span><span class="o">.</span><span class="n">clearContents</span><span class="p">()</span>
+        <span class="c1"># Actualizo tabla y gráfico de torta.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">obj_f</span><span class="o">.</span><span class="n">mostrar_cat</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj_win_main</span><span class="p">)</span></div></div>
 </pre></div>
 
            </div>

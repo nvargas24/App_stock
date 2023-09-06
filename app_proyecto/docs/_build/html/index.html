@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Bienvenidos a la documentación de Control de Stock &mdash; documentación de Control de stock - 0.0.1</title>
+  <title>Bienvenidos a la documentación de Control de Stock &mdash; documentación de Control de stock - 0.0.2</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -34,7 +34,7 @@
             Control de stock
           </a>
               <div class="version">
-                0.0.1
+                0.0.2
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -50,6 +50,9 @@
 <li class="toctree-l1"><a class="reference internal" href="modelo.html">Módulo Modelo</a></li>
 <li class="toctree-l1"><a class="reference internal" href="validar.html">Módulo Validar</a></li>
 <li class="toctree-l1"><a class="reference internal" href="vista.html">Módulo Vista</a></li>
+<li class="toctree-l1"><a class="reference internal" href="observador.html">Módulo Observador</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cliente.html">Módulo Cliente</a></li>
+<li class="toctree-l1"><a class="reference internal" href="servidor.html">Módulo Servidor</a></li>
 </ul>
 
         </div>
@@ -80,10 +83,12 @@
 <h1>Bienvenidos a la documentación de Control de Stock<a class="headerlink" href="#bienvenidos-a-la-documentacion-de-control-de-stock" title="Enlace permanente a este encabezado"></a></h1>
 <p><strong>Control de Stock</strong> es una app que permite al usuario realizar la inspección del stock de una tienda de
 electrónica, donde, mediante los distintos botones, podrá ingresar un nuevo componente, eliminarlo,
-modificarlo, o verificar la disponibilidad del mismo. Se mostrará un mensaje emergente de manera de avisar si la
-acción fue realiza exitosamente o cuál fue el error.</p>
-<p>El usuario siempre podrá visualizar el catálogo completo de artículos cargados hasta el momento, incluso tras cerrar y volver
-a abrir la app.</p>
+modificarlo, o verificar la disponibilidad del mismo (consultando ya sea por nombre y/o descripción).
+Según sea la ventana en la que se encuentre, se mostrará un mensaje de manera de avisar si la acción fue realizada exitosamente o cuál fue el error.</p>
+<p>El usuario también podrá visualizar, en la ventana principal, un gráfico de torta con los componentes ingresados hasta el momento, el cual se actualizará
+tras presionar el botón de «Consultar Stock».</p>
+<p>La app además ejecuta un servidor al que cualquier cliente podrá conectarse, y consultar el stock total de artículos disponibles,
+el de un componente en particular o cerrar la conexión cuando lo desee.</p>
 <div class="admonition note">
 <p class="admonition-title">Nota</p>
 <p>Esta aplicación se encuentra aún en desarrollo.</p>
@@ -94,16 +99,16 @@ a abrir la app.</p>
 <li class="toctree-l1"><a class="reference internal" href="controlador.html">Módulo Controlador</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="controlador.html#controlador.Controlador"><code class="docutils literal notranslate"><span class="pre">Controlador</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="controlador.html#controlador.Controlador.__init__"><code class="docutils literal notranslate"><span class="pre">Controlador.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="controlador.html#controlador.Controlador.iniciar_servidor"><code class="docutils literal notranslate"><span class="pre">Controlador.iniciar_servidor()</span></code></a></li>
 </ul>
 </li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="modelo.html">Módulo Modelo</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="modelo.html#modelo.Evento"><code class="docutils literal notranslate"><span class="pre">Evento</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="modelo.html#modelo.Evento.click"><code class="docutils literal notranslate"><span class="pre">Evento.click()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="modelo.html#modelo.Evento.focus_out"><code class="docutils literal notranslate"><span class="pre">Evento.focus_out()</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="modelo.html#modelo.decorador_add"><code class="docutils literal notranslate"><span class="pre">decorador_add()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="modelo.html#modelo.decorador_del"><code class="docutils literal notranslate"><span class="pre">decorador_del()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="modelo.html#modelo.decorador_mod"><code class="docutils literal notranslate"><span class="pre">decorador_mod()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="modelo.html#modelo.decorador_mostrar"><code class="docutils literal notranslate"><span class="pre">decorador_mostrar()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="modelo.html#modelo.BaseModel"><code class="docutils literal notranslate"><span class="pre">BaseModel</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="modelo.html#modelo.BaseModel.DoesNotExist"><code class="docutils literal notranslate"><span class="pre">BaseModel.DoesNotExist</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="modelo.html#modelo.BaseModel.id"><code class="docutils literal notranslate"><span class="pre">BaseModel.id</span></code></a></li>
@@ -146,17 +151,78 @@ a abrir la app.</p>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="vista.html">Módulo Vista</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="vista.html#vista.Menu"><code class="docutils literal notranslate"><span class="pre">Menu</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="vista.html#vista.Menu.__init__"><code class="docutils literal notranslate"><span class="pre">Menu.__init__()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="vista.html#vista.Menu.menu_opciones"><code class="docutils literal notranslate"><span class="pre">Menu.menu_opciones()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="vista.html#vista.Menu.call_agreg"><code class="docutils literal notranslate"><span class="pre">Menu.call_agreg()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="vista.html#vista.Menu.call_elim"><code class="docutils literal notranslate"><span class="pre">Menu.call_elim()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="vista.html#vista.Menu.call_modif"><code class="docutils literal notranslate"><span class="pre">Menu.call_modif()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="vista.html#vista.Menu.call_consulta"><code class="docutils literal notranslate"><span class="pre">Menu.call_consulta()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="vista.html#vista.Opciones"><code class="docutils literal notranslate"><span class="pre">Opciones</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="vista.html#vista.Opciones.show_win_agregar"><code class="docutils literal notranslate"><span class="pre">Opciones.show_win_agregar()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vista.html#vista.Opciones.show_win_eliminar"><code class="docutils literal notranslate"><span class="pre">Opciones.show_win_eliminar()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vista.html#vista.Opciones.show_win_modificar"><code class="docutils literal notranslate"><span class="pre">Opciones.show_win_modificar()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vista.html#vista.Opciones.show_win_consultar"><code class="docutils literal notranslate"><span class="pre">Opciones.show_win_consultar()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vista.html#vista.Opciones.close_all_window"><code class="docutils literal notranslate"><span class="pre">Opciones.close_all_window()</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="vista.html#vista.SubWindow"><code class="docutils literal notranslate"><span class="pre">SubWindow</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="vista.html#vista.SubWindow.ingreso_datos"><code class="docutils literal notranslate"><span class="pre">SubWindow.ingreso_datos()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="vista.html#vista.Canvas_grafica"><code class="docutils literal notranslate"><span class="pre">Canvas_grafica</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="vista.html#vista.Canvas_grafica.__init__"><code class="docutils literal notranslate"><span class="pre">Canvas_grafica.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vista.html#vista.Canvas_grafica.upgrade_graph"><code class="docutils literal notranslate"><span class="pre">Canvas_grafica.upgrade_graph()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vista.html#vista.Canvas_grafica.staticMetaObject"><code class="docutils literal notranslate"><span class="pre">Canvas_grafica.staticMetaObject</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="vista.html#vista.MainWindow"><code class="docutils literal notranslate"><span class="pre">MainWindow</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="vista.html#vista.MainWindow.__init__"><code class="docutils literal notranslate"><span class="pre">MainWindow.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vista.html#vista.MainWindow.staticMetaObject"><code class="docutils literal notranslate"><span class="pre">MainWindow.staticMetaObject</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="vista.html#vista.WindowAgregar"><code class="docutils literal notranslate"><span class="pre">WindowAgregar</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="vista.html#vista.WindowAgregar.__init__"><code class="docutils literal notranslate"><span class="pre">WindowAgregar.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vista.html#vista.WindowAgregar.new_load"><code class="docutils literal notranslate"><span class="pre">WindowAgregar.new_load()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vista.html#vista.WindowAgregar.staticMetaObject"><code class="docutils literal notranslate"><span class="pre">WindowAgregar.staticMetaObject</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="vista.html#vista.WindowEliminar"><code class="docutils literal notranslate"><span class="pre">WindowEliminar</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="vista.html#vista.WindowEliminar.__init__"><code class="docutils literal notranslate"><span class="pre">WindowEliminar.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vista.html#vista.WindowEliminar.delete"><code class="docutils literal notranslate"><span class="pre">WindowEliminar.delete()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vista.html#vista.WindowEliminar.staticMetaObject"><code class="docutils literal notranslate"><span class="pre">WindowEliminar.staticMetaObject</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="vista.html#vista.WindowModificar"><code class="docutils literal notranslate"><span class="pre">WindowModificar</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="vista.html#vista.WindowModificar.__init__"><code class="docutils literal notranslate"><span class="pre">WindowModificar.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vista.html#vista.WindowModificar.modificated"><code class="docutils literal notranslate"><span class="pre">WindowModificar.modificated()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vista.html#vista.WindowModificar.staticMetaObject"><code class="docutils literal notranslate"><span class="pre">WindowModificar.staticMetaObject</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="vista.html#vista.WindowConsulta"><code class="docutils literal notranslate"><span class="pre">WindowConsulta</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="vista.html#vista.WindowConsulta.__init__"><code class="docutils literal notranslate"><span class="pre">WindowConsulta.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vista.html#vista.WindowConsulta.staticMetaObject"><code class="docutils literal notranslate"><span class="pre">WindowConsulta.staticMetaObject</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vista.html#vista.WindowConsulta.insert"><code class="docutils literal notranslate"><span class="pre">WindowConsulta.insert()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vista.html#vista.WindowConsulta.delete"><code class="docutils literal notranslate"><span class="pre">WindowConsulta.delete()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vista.html#vista.WindowConsulta.search"><code class="docutils literal notranslate"><span class="pre">WindowConsulta.search()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vista.html#vista.WindowConsulta.full_cat"><code class="docutils literal notranslate"><span class="pre">WindowConsulta.full_cat()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="observador.html">Módulo Observador</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="observador.html#observador.Sujeto"><code class="docutils literal notranslate"><span class="pre">Sujeto</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="observador.html#observador.Sujeto.observadores"><code class="docutils literal notranslate"><span class="pre">Sujeto.observadores</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="observador.html#observador.Sujeto.agregar"><code class="docutils literal notranslate"><span class="pre">Sujeto.agregar()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="observador.html#observador.Sujeto.quitar"><code class="docutils literal notranslate"><span class="pre">Sujeto.quitar()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="observador.html#observador.Sujeto.notificar"><code class="docutils literal notranslate"><span class="pre">Sujeto.notificar()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="observador.html#observador.Observador"><code class="docutils literal notranslate"><span class="pre">Observador</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="observador.html#observador.Observador.update"><code class="docutils literal notranslate"><span class="pre">Observador.update()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="observador.html#observador.ObservadorConcreto"><code class="docutils literal notranslate"><span class="pre">ObservadorConcreto</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="observador.html#observador.ObservadorConcreto.__init__"><code class="docutils literal notranslate"><span class="pre">ObservadorConcreto.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="observador.html#observador.ObservadorConcreto.update"><code class="docutils literal notranslate"><span class="pre">ObservadorConcreto.update()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cliente.html">Módulo Cliente</a></li>
+<li class="toctree-l1"><a class="reference internal" href="servidor.html">Módulo Servidor</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="servidor.html#servidor.Serv"><code class="docutils literal notranslate"><span class="pre">Serv</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="servidor.html#servidor.Serv.__init__"><code class="docutils literal notranslate"><span class="pre">Serv.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="servidor.html#servidor.Serv.lanza_servidor"><code class="docutils literal notranslate"><span class="pre">Serv.lanza_servidor()</span></code></a></li>
 </ul>
 </li>
 </ul>

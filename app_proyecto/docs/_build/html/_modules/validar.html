@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>validar &mdash; documentación de Control de stock - 0.0.1</title>
+  <title>validar &mdash; documentación de Control de stock - 0.0.2</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -32,7 +32,7 @@
             Control de stock
           </a>
               <div class="version">
-                0.0.1
+                0.0.2
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -83,7 +83,7 @@
 <span class="n">__maintainer__</span> <span class="o">=</span> <span class="s2">&quot;Diego Calderón, Nahuel Vargas&quot;</span>
 <span class="n">__email__</span> <span class="o">=</span> <span class="s2">&quot;diegoacalderon994@gmail.com, nahuvargas24@gmail.com&quot;</span>
 <span class="n">__copyright__</span> <span class="o">=</span> <span class="s2">&quot;Copyright 2023&quot;</span>
-<span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;0.0.1&quot;</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;0.0.2&quot;</span>
 
 <span class="kn">import</span> <span class="nn">re</span>
 
@@ -126,29 +126,13 @@
 <span class="sd">        :returns: ``0`` Si el campo está vacío.</span>
 <span class="sd">        :returns: ``1`` Si en el campo se ingresó un dato.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="p">(</span>
-            <span class="n">name_entry</span> <span class="o">==</span> <span class="s2">&quot;nom&quot;</span>
-            <span class="ow">and</span> <span class="n">data_entry</span>
-            <span class="ow">and</span> <span class="n">data_entry</span> <span class="o">!=</span> <span class="s2">&quot;Escriba el nombre del artículo&quot;</span>
-        <span class="p">):</span>
+        <span class="k">if</span> <span class="n">name_entry</span> <span class="o">==</span> <span class="s2">&quot;nom&quot;</span> <span class="ow">and</span> <span class="n">data_entry</span><span class="p">:</span>
             <span class="k">return</span> <span class="mi">1</span>
-        <span class="k">elif</span> <span class="p">(</span>
-            <span class="n">name_entry</span> <span class="o">==</span> <span class="s2">&quot;cant&quot;</span>
-            <span class="ow">and</span> <span class="n">data_entry</span>
-            <span class="ow">and</span> <span class="n">data_entry</span> <span class="o">!=</span> <span class="s2">&quot;Escriba un valor numérico&quot;</span>
-        <span class="p">):</span>
+        <span class="k">elif</span> <span class="n">name_entry</span> <span class="o">==</span> <span class="s2">&quot;cant&quot;</span> <span class="ow">and</span> <span class="n">data_entry</span><span class="p">:</span>
             <span class="k">return</span> <span class="mi">1</span>
-        <span class="k">elif</span> <span class="p">(</span>
-            <span class="n">name_entry</span> <span class="o">==</span> <span class="s2">&quot;prec&quot;</span>
-            <span class="ow">and</span> <span class="n">data_entry</span>
-            <span class="ow">and</span> <span class="n">data_entry</span> <span class="o">!=</span> <span class="s2">&quot;Escriba un valor numérico&quot;</span>
-        <span class="p">):</span>
+        <span class="k">elif</span> <span class="n">name_entry</span> <span class="o">==</span> <span class="s2">&quot;prec&quot;</span> <span class="ow">and</span> <span class="n">data_entry</span><span class="p">:</span>
             <span class="k">return</span> <span class="mi">1</span>
-        <span class="k">elif</span> <span class="p">(</span>
-            <span class="n">name_entry</span> <span class="o">==</span> <span class="s2">&quot;descrip&quot;</span>
-            <span class="ow">and</span> <span class="n">data_entry</span>
-            <span class="ow">and</span> <span class="n">data_entry</span> <span class="o">!=</span> <span class="s2">&quot;Agregue una breve descrip. del art.&quot;</span>
-        <span class="p">):</span>
+        <span class="k">elif</span> <span class="n">name_entry</span> <span class="o">==</span> <span class="s2">&quot;descrip&quot;</span> <span class="ow">and</span> <span class="n">data_entry</span><span class="p">:</span>
             <span class="k">return</span> <span class="mi">1</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="mi">0</span></div></div>

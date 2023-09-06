@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Módulo Controlador &mdash; documentación de Control de stock - 0.0.1</title>
+  <title>Módulo Controlador &mdash; documentación de Control de stock - 0.0.2</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -35,7 +35,7 @@
             Control de stock
           </a>
               <div class="version">
-                0.0.1
+                0.0.2
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -50,6 +50,7 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Módulo Controlador</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#controlador.Controlador"><code class="docutils literal notranslate"><span class="pre">Controlador</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#controlador.Controlador.__init__"><code class="docutils literal notranslate"><span class="pre">Controlador.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#controlador.Controlador.iniciar_servidor"><code class="docutils literal notranslate"><span class="pre">Controlador.iniciar_servidor()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -57,6 +58,9 @@
 <li class="toctree-l1"><a class="reference internal" href="modelo.html">Módulo Modelo</a></li>
 <li class="toctree-l1"><a class="reference internal" href="validar.html">Módulo Validar</a></li>
 <li class="toctree-l1"><a class="reference internal" href="vista.html">Módulo Vista</a></li>
+<li class="toctree-l1"><a class="reference internal" href="observador.html">Módulo Observador</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cliente.html">Módulo Cliente</a></li>
+<li class="toctree-l1"><a class="reference internal" href="servidor.html">Módulo Servidor</a></li>
 </ul>
 
         </div>
@@ -91,22 +95,25 @@
 </dl>
 <dl class="py class">
 <dt class="sig sig-object py" id="controlador.Controlador">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">controlador.</span></span><span class="sig-name descname"><span class="pre">Controlador</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">window</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/controlador.html#Controlador"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#controlador.Controlador" title="Enlazar permanentemente con esta definición"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">controlador.</span></span><span class="sig-name descname"><span class="pre">Controlador</span></span><a class="reference internal" href="_modules/controlador.html#Controlador"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#controlador.Controlador" title="Enlazar permanentemente con esta definición"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Clase que crea un objeto de clase <code class="docutils literal notranslate"><span class="pre">Menu()</span></code> para la configuración de la interfaz gráfica.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parámetros<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>window</strong> – Objeto ventana que se crea al iniciar la app.</p>
-</dd>
-</dl>
+<p>Clase que crea un objeto de clase <code class="docutils literal notranslate"><span class="pre">MainWindow()</span></code> para la configuración de la interfaz gráfica.
+También define un observador y enciende el servidor.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="controlador.Controlador.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">window</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/controlador.html#Controlador.__init__"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#controlador.Controlador.__init__" title="Enlazar permanentemente con esta definición"></a></dt>
-<dd><p>Constructor que crea un objeto de clase <code class="docutils literal notranslate"><span class="pre">Menu()</span></code> (que importa de <code class="docutils literal notranslate"><span class="pre">vista.py</span></code>)
-y le pasa como argumento el objeto ventana (<code class="docutils literal notranslate"><span class="pre">window</span></code>).</p>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/controlador.html#Controlador.__init__"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#controlador.Controlador.__init__" title="Enlazar permanentemente con esta definición"></a></dt>
+<dd><p>Constructor que crea un objeto de clase <code class="docutils literal notranslate"><span class="pre">MainWindow()</span></code> (que importa de <code class="docutils literal notranslate"><span class="pre">vista.py</span></code>)
+y define un observador que seguirá las acciones del objeto de clase <code class="docutils literal notranslate"><span class="pre">Crud()</span></code> creado en <code class="docutils literal notranslate"><span class="pre">vista.MainWindow</span></code>,
+También se encarga de activar el servidor que atenderá las conexiones entrantes.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="controlador.Controlador.iniciar_servidor">
+<span class="sig-name descname"><span class="pre">iniciar_servidor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj_f</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/controlador.html#Controlador.iniciar_servidor"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#controlador.Controlador.iniciar_servidor" title="Enlazar permanentemente con esta definición"></a></dt>
+<dd><p>Método que crea objeto de clase <code class="docutils literal notranslate"><span class="pre">Serv()</span></code> para lanzar al servidor.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parámetros<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>window</strong> – Objeto ventana que se crea al iniciar la app.</p>
+<dd class="field-odd"><p><strong>obj_f</strong> – Objeto de clase <code class="docutils literal notranslate"><span class="pre">Crud()</span></code> creado en <code class="docutils literal notranslate"><span class="pre">MainWindow()</span></code>.</p>
 </dd>
 </dl>
 </dd></dl>

@@ -6,365 +6,393 @@ __author__ = "Diego Calderón, Nahuel Vargas"
 __maintainer__ = "Diego Calderón, Nahuel Vargas"
 __email__ = "diegoacalderon994@gmail.com, nahuvargas24@gmail.com"
 __copyright__ = "Copyright 2023"
-__version__ = "0.0.1"
+__version__ = "0.0.2"
 
-from tkinter import StringVar
-from tkinter import Label
-from tkinter import Entry
-from tkinter import Button
-from tkinter import ttk
-from tkinter.messagebox import showerror
-from tkinter.messagebox import showinfo
-from modelo import Evento
+from PySide2.QtCore import *
+from PySide2.QtGui import *
+from PySide2.QtWidgets import *
+
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
+import matplotlib.pyplot as plt
+
+from Qt.window_main import *
+from Qt.window_agregar import *
+from Qt.window_eliminar import *
+from Qt.window_modificar import *
+from Qt.window_consulta import *
+
 from modelo import Crud
+import random
 
 
-class Menu:
+# -------- Clases para widgets -------- #
+class Opciones:
     """
-    Clase que configura la ventana, treeview, botones y mensajes emergentes.
-
-    :param window: Objeto ventana que recibe como argumento de ``controlador.py``
+    Clase que establece qué ventanas mostrar
     """
 
-    def __init__(self, window):
+    def show_win_agregar(self):
         """
-        Constructor que configura la ventana y treeview.
-
-        :param window: Objeto ventana que recibe como argumento de ``controlador.py``
+        Método para setear y mostrar ventana de **Agregar Artículo**.
         """
-        self.window = window
-        self.obj_sub_m = SubWindow()  # Creo un objeto de clase Subwindow.
+        self.close_all_window()
+        self.window_agregar.setWindowTitle("Agregar")
+        self.window_agregar.show()
+        # Muevo la ventana a la derecha de la ventana principal.
+        self.window_agregar.move(self.geometry().right() + 10, self.geometry().top())
+        self.opened_windows.append(self.window_agregar)
 
-        # --------------------Config de ventana-------------------------
-        self.window.title("Control de stock - Electrónica del oeste")
+        # Limpio celdas.
+        self.window_agregar.ui.in_nombre.clear()
+        self.window_agregar.ui.in_cant.clear()
+        self.window_agregar.ui.in_precio.clear()
+        self.window_agregar.ui.in_descrip.clear()
+        self.window_agregar.ui.notificacion.clear()
 
-        # --------------------Variables---------------------------------
-        self.var_nombre = StringVar()
-        self.var_cantidad = StringVar()  # Luego lo convierto a int.
-        self.var_precio = StringVar()  # Luego lo convierto a float.
-        self.var_descrip = StringVar()
-        self.obj_f = Crud()  # Creo un objeto de clase Crud.
-
-        # --------------------Etiquetas---------------------------------
-        self.titulo = Label(
-            self.window,
-            text="Electrónica del oeste",
-            background="#51CFF5",
-            width=50,
-            height=2,
-            font=("calibri", 22, "bold"),
-        )
-
-        self.subtitulo = Label(
-            self.window,
-            text="Bienvenido, seleccione la acción a realizar",
-            font=("calibri", 12),
-        )
-
-        # ---------------------Treeview-----------------------------------
-        self.tree = ttk.Treeview(self.window)
-        self.tree["columns"] = ("col1", "col2", "col3", "col4")
-        self.tree.column("#0", width=50, minwidth=50)
-        self.tree.column("col1", width=144, minwidth=144, anchor="center")
-        self.tree.column("col2", width=80, minwidth=80, anchor="center")
-        self.tree.column("col3", width=80, minwidth=80, anchor="center")
-        self.tree.column("col4", width=250, minwidth=250, anchor="center")
-        self.tree.heading("#0", text="ID")
-        self.tree.heading("col1", text="Producto")
-        self.tree.heading("col2", text="Cantidad")
-        self.tree.heading("col3", text="Precio")
-        self.tree.heading("col4", text="Descripción")
-
-        self.obj_f.mostrar_cat(self.tree)
-
-        self.window.grid_rowconfigure(4, minsize=10)
-        self.window.grid_rowconfigure(6, minsize=10)
-        self.window.grid_rowconfigure(8, minsize=22)
-        self.window.grid_rowconfigure(10, minsize=22)
-
-        self.titulo.grid(row=0, column=0, columnspan=4, rowspan=2)
-        self.subtitulo.grid(row=2, column=0, columnspan=4, pady=5)
-
-        self.tree.grid(column=0, row=11, columnspan=6, padx=50, pady=40)
-
-        self.obj_sub_m.ingreso_datos(
-            self.window,
-            self.var_nombre,
-            self.var_cantidad,
-            self.var_precio,
-            self.var_descrip,
-        )
-
-        self.menu_opciones()
-
-    def menu_opciones(self):
+    def show_win_eliminar(self):
         """
-        Método que configura los botones de opciones.
-
+        Método para setear y mostrar ventana de **Eliminar Artículo**.
         """
+        self.close_all_window()
+        self.window_eliminar.setWindowTitle("Eliminar")
+        self.window_eliminar.show()
+        # Muevo la ventana a la derecha de la ventana principal.
+        self.window_eliminar.move(self.geometry().right() + 10, self.geometry().top())
+        self.opened_windows.append(self.window_eliminar)
 
-        # ---------------------Botones--------------------------------------
-        agregar = Button(
-            self.window,
-            text="Agregar artículo",
-            background="#51CFF5",
-            activebackground="#3FB9F5",
-            width=15,
-            height=2,
-            command=lambda: self.call_agreg(),
-        )
+        # Limpio celdas.
+        self.window_eliminar.ui.in_nombre.clear()
+        self.window_eliminar.ui.notificacion.clear()
 
-        eliminar = Button(
-            self.window,
-            text="Eliminar artículo",
-            background="#51CFF5",
-            activebackground="#3FB9F5",
-            width=15,
-            height=2,
-            command=lambda: self.call_elim(),
-        )
-
-        modificar = Button(
-            self.window,
-            text="Modificar artículo",
-            background="#51CFF5",
-            activebackground="#3FB9F5",
-            width=15,
-            height=2,
-            command=lambda: self.call_modif(),
-        )
-
-        consultar = Button(
-            self.window,
-            text="Consultar stock",
-            background="#51CFF5",
-            activebackground="#3FB9F5",
-            width=15,
-            height=2,
-            command=lambda: self.call_consulta(),
-        )
-
-        catalogo = Button(
-            self.window,
-            text="Ver Catálogo completo",
-            background="#51CFF5",
-            activebackground="#3FB9F5",
-            width=20,
-            height=2,
-            command=lambda: self.obj_f.mostrar_cat(self.tree, True),
-        )
-
-        # -------------------Posiciono los controles ---------------------------
-
-        agregar.grid(row=3, column=1, pady=5, padx=50, sticky="w")
-        eliminar.grid(row=5, column=1, pady=5, padx=50, sticky="w")
-        modificar.grid(row=7, column=1, pady=5, padx=50, sticky="w")
-        consultar.grid(row=9, column=1, pady=5, padx=50, sticky="w")
-        catalogo.grid(row=7, column=2, columnspan=3, pady=5, padx=130, sticky="w")
-
-    def call_agreg(self):
+    def show_win_modificar(self):
         """
-        Método que imprime un mensaje emergente de acuerdo al string que retorna
-        la función de agregar un dato ``agreg()``, que forma parte de ``modelo.py``.
+        Método para setear y mostrar ventana de **Modificar Artículo**.
+        """
+        self.close_all_window()
+        self.window_modificar.setWindowTitle("Modificar")
+        self.window_modificar.show()
+        # Muevo la ventana a la derecha de la ventana principal.
+        self.window_modificar.move(self.geometry().right() + 10, self.geometry().top())
+        self.opened_windows.append(self.window_modificar)
 
-        Si se generó una excepción mostrará el mensaje de error correspondiente.
+        # Limpio celdas.
+        self.window_modificar.ui.in_nombre.clear()
+        self.window_modificar.ui.in_cant.clear()
+        self.window_modificar.ui.in_precio.clear()
+        self.window_modificar.ui.in_descrip.clear()
+        self.window_modificar.ui.notificacion.clear()
+
+    def show_win_consultar(self):
+        """
+        Método para setear y mostrar ventana de **Consultar Artículo**.
+        """
+        self.close_all_window()
+        self.window_consulta.setWindowTitle("Consulta")
+        self.window_consulta.show()
+        # Muevo la ventana a la derecha de la ventana principal.
+        self.window_consulta.move(self.geometry().right() + 10, self.geometry().top())
+        self.opened_windows.append(self.window_consulta)
+
+        # Limpio celdas.
+        self.window_consulta.ui.in_nombre.clear()
+        self.window_consulta.ui.in_descrip.clear()
+        self.window_consulta.ui.notificacion.clear()
+
+        self.window_consulta.full_cat()  # Obtengo catálogo completo de la bd y lo muestra al abrir la ventana.
+
+    def close_all_window(self):
+        """
+        Método para cerrar todas las ventanas secundarias abiertas.
+        """
+        for window in self.opened_windows:
+            window.close()
+        self.opened_windows = []  # Vacio la lista de ventanas abiertas.
+
+
+# --- Clase para interactuar con gráfico de torta --- #
+class Canvas_grafica(FigureCanvas):
+    """
+    Clase que contiene métodos para actualizar y dar estilo al gráfico de torta.
+    """
+
+    def __init__(self):
+        """
+        Constructor que hereda el correspondiente a la clase ``FigureCanvas()``,
+        y que además crea un gráfico matplotlib en blanco.
+        """
+        # Asigno un espacio para ubicar el gráfico de matplotlib usando Canvas.
+        self.fig, self.ax = plt.subplots(
+            1, dpi=80, figsize=(12, 12), sharey=True, facecolor="none"
+        )
+        super().__init__(self.fig)
+
+    def upgrade_graph(self, nombre, cantidad):
+        """
+        Método para actualizar nombres y cantidades en gráfico de torta.
+
+        :param nombre: Nombre del componente.
+        :param cantidad: Cantidad del componente.
+        """
+        # Borro gráfico antiguo.
+        self.ax.clear()
+
+        # Parámetros para nuevo gráfico.
+        self.nombres = nombre
+        self.tamanio = cantidad
+        self.colores = []
+        self.explotar = []
+
+        # Asigno color aleatorio claros segun la cantidad de artículos disponibles.
+        for i in range(len(self.nombres)):
+            r = random.randint(150, 255)
+            g = random.randint(150, 255)
+            b = random.randint(150, 255)
+            self.colores.append("#%02x%02x%02x" % (r, g, b))
+            self.explotar.append(0.05)
+
+        # Pasaje de porcentaje a valor real en bd.
+        valor_real = lambda pct: "{:.0f}".format(
+            (pct * sum(list(map(int, self.tamanio)))) / 100
+        )
+        # Asigno nuevos parámetros a gráfico.
+        self.ax.pie(
+            self.tamanio,
+            explode=self.explotar,
+            labels=self.nombres,
+            colors=self.colores,
+            autopct=valor_real,
+            pctdistance=0.8,
+            shadow=True,
+            startangle=90,
+            radius=0.7,
+            labeldistance=1.1,
+            textprops={"fontsize": 12},
+        )
+        # self.ax.set_aspect('equal')
+        # Actualizo gráfico.
+        self.draw()
+
+
+# -------- Clases para ventanas -------#
+class MainWindow(QMainWindow, Opciones):
+    """
+    Clase que contiene métodos para la interacción en la ventana principal.
+    """
+
+    def __init__(self, parent=None):
+        """
+        Constructor que hereda el correspondiente a la clase ``QMainWindow()`` para acceder a widgets.
+        Tambíen hereda de la clase ``Opciones()`` para acceder a las ventanas secundarias.
+        """
+        super().__init__()
+        # Creo objeto de la clase en QT para crear widgets.
+        self.ui = Ui_MainWindow()
+        # Se acccede al metodo setupUi que crea widgets.
+        self.ui.setupUi(self)
+        # Defino un objeto de clase Crud() para el manejo de datos.
+        self.obj_f = Crud()
+
+        # Creo objetos window para acceder a las ventanas secundarias y estas a la principal.
+        self.window_agregar = WindowAgregar(self.obj_f)
+        self.window_eliminar = WindowEliminar(self.obj_f)
+        self.window_modificar = WindowModificar(self.obj_f)
+        self.window_consulta = WindowConsulta(self.obj_f, self)
+
+        # Lista de ventanas abiertas.
+        self.opened_windows = []
+
+        # Creo objeto de clase Canvas_grafica() para crear y actualizar gráfico de matplotlib.
+        self.grafica = Canvas_grafica()
+        self.ui.grafica_torta.addWidget(self.grafica)
+
+        # Obtengo y muestro catálogo completo en gráfico de torta al iniciar.
+        self.window_consulta.full_cat()
+
+        # Callback de widgets Button para abrir ventanas secundarias.
+        self.ui.btn_agregar.clicked.connect(self.show_win_agregar)
+        self.ui.btn_eliminar.clicked.connect(self.show_win_eliminar)
+        self.ui.btn_modificar.clicked.connect(self.show_win_modificar)
+        self.ui.btn_consultar.clicked.connect(self.show_win_consultar)
+
+
+class WindowAgregar(QDialog):
+    """
+    Clase que contiene métodos para la interacción en la ventana **Agregar Artículo**.
+    """
+
+    def __init__(self, obj_f):
+        """
+        Constructor que hereda el correspondiente a la clase ``QDialog()`` para acceder a widgets.
+
+        :param obj_f: Objeto de clase ``Crud()``.
+        """
+        super().__init__()
+        # Creo objeto de la clase en QT para crear widgets.
+        self.ui = Ui_Agregar()
+        # Se acccede al método setupUi que crea widgets.
+        self.ui.setupUi(self)
+        # Cedo acceso a objeto Crud desde cualquier método de esta clase.
+        self.obj_f = obj_f
+
+        # Callback de widgets Button
+        self.ui.btn_aceptar.clicked.connect(self.new_load)
+        self.ui.btn_cancelar.clicked.connect(self.close)
+
+    def new_load(self):
+        """
+        Método para agregar un nuevo artículo.
         """
         try:
             mje = self.obj_f.agreg(
-                self.var_nombre,
-                self.var_cantidad,
-                self.var_precio,
-                self.var_descrip,
-                self.tree,
+                self.ui.in_nombre,
+                self.ui.in_cant,
+                self.ui.in_precio,
+                self.ui.in_descrip,
             )
+            # Informo en la ventana el resultado de la operacíon realizada.
+            self.ui.notificacion.setText(mje)
+        except ValueError as mje:
+            # Informo en la ventana la excepción.
+            self.ui.notificacion.setText(str(mje))
 
-        except (
-            ValueError
-        ) as mje:  # Si se genera una excepción, la capturo y muestro mje de error.
-            print(mje)
-            showerror("Error en la operación", "Campos cargados incorrectamente")
 
-        else:
-            if mje == "existe":
-                showerror("Error en la carga de datos", "Artículo ya existente")
-            elif mje == "cargado":
-                showinfo("Operación exitosa", "Artículo cargado correctamente")
-            elif mje == "campos vacios":
-                showerror(
-                    "Error en la operacíon", "No se han completado todos los campos"
-                )
+class WindowEliminar(QDialog):
+    """
+    Clase que contiene métodos para la interacción en la ventana **Eliminar Artículo**.
+    """
 
-        self.obj_f.mostrar_cat(self.tree)
-
-    def call_elim(self):
+    def __init__(self, obj_f):
         """
-        Método que imprime un mensaje emergente de acuerdo al string que retorna
-        la función de eliminar un dato ``elim()``, que forma parte de ``modelo.py``.
+        Constructor que hereda el correspondiente a la clase ``QDialog()`` para acceder a widgets.
 
+        :param obj_f: Objeto de clase ``Crud()``.
         """
-        mje = self.obj_f.elim(self.var_nombre)
-        if mje == "eliminado":
-            showinfo("Operación exitosa", "Artículo eliminado correctamente")
-        elif mje == "no encontrado":
-            showerror("Error en la operación", "Artículo no encontrado")
-        elif mje == "campo vacio":
-            showerror("Error en la operación", "No se ha ingresado ningun nombre")
+        super().__init__()
+        # Creo objeto de la clase en QT para crear widgets.
+        self.ui = Ui_Eliminar()
+        # Se acccede al método setupUi que crea widgets.
+        self.ui.setupUi(self)
+        # Cedo acceso a objeto Crud desde cualquier método de esta clase.
+        self.obj_f = obj_f
 
-        self.obj_f.mostrar_cat(self.tree)
+        # Callback de widgets Button.
+        self.ui.btn_aceptar.clicked.connect(self.delete)
+        self.ui.btn_cancelar.clicked.connect(self.close)
 
-    def call_modif(self):
+    def delete(self):
         """
-        Método que imprime un mensaje emergente de acuerdo al string que retorna
-        la función de modificar un dato ``modif()``, que forma parte de ``modelo.py``.
+        Método para eliminar un artículo existente.
+        """
+        mje = self.obj_f.elim(self.ui.in_nombre)
 
-        Si se generó una excepción mostrará el mensaje de error correspondiente.
+        # Informo en la ventana el resultado de la operacíon realizada.
+        self.ui.notificacion.setText(mje)
+
+
+class WindowModificar(QDialog):
+    """
+    Clase que contiene métodos para la interacción en la ventana **Modificar Artículo**.
+    """
+
+    def __init__(self, obj_f):
+        """
+        Constructor que hereda el correspondiente a la clase ``QDialog()`` para acceder a widgets.
+
+        :param obj_f: Objeto de clase ``Crud()``.
+        """
+        super().__init__()
+        # Creo objeto de la clase en QT para crear widgets.
+        self.ui = Ui_Modificar()
+        # Se acccede al método setupUi que crea widgets.
+        self.ui.setupUi(self)
+        # Cedo acceso a objeto Crud desde cualquier método de esta clase.
+        self.obj_f = obj_f
+
+        # Callback de widgets Button.
+        self.ui.btn_aceptar.clicked.connect(self.modificated)
+        self.ui.btn_cancelar.clicked.connect(self.close)
+
+    def modificated(self):
+        """
+        Método para modificar un artículo existente.
         """
         try:
             mje = self.obj_f.modif(
-                self.var_nombre,
-                self.var_cantidad,
-                self.var_precio,
-                self.var_descrip,
+                self.ui.in_nombre,
+                self.ui.in_cant,
+                self.ui.in_precio,
+                self.ui.in_descrip,
             )
-
-        except (
-            ValueError
-        ) as mje:  # Si se genera una excepción, la capturo y muestro mje de error.
-            print(mje)
-            showerror("Error en la operación", "Campos cargados incorrectamente")
-
-        else:
-            if mje == "campo vacio":
-                showerror("Error en la operación", "No se ha ingresado ningun nombre")
-            elif mje == "no existe":
-                showerror("Error en la operación", "Artículo no encontrado")
-            elif mje == "sin modificar":
-                showerror("Error en la operación", "No se completó ningún campo")
-            elif mje == "modificado":
-                showinfo("Operación exitosa", "Artículo modificado correctamente")
-
-        self.obj_f.mostrar_cat(self.tree)
-
-    def call_consulta(self):
-        """
-        Método que imprime un mensaje emergente de acuerdo al string que retorna
-        la función de consultar stock ``consulta()``, que forma parte de ``modelo.py``.
-
-        """
-        mje = self.obj_f.consulta(self.var_nombre, self.tree)
-        if mje == "campo vacio":
-            showerror("Error en la operación", "No se ha ingresado ningun nombre")
-        elif mje == "no encontrado":
-            showerror("Error en la operación", "Artículo no encontrado")
+            # Informo en la ventana el resultado de la operacíon realizada.
+            self.ui.notificacion.setText(mje)
+        except ValueError as mje:
+            # Informo en la ventana la excepción.
+            self.ui.notificacion.setText(str(mje))
 
 
-class SubWindow:
+class WindowConsulta(QWidget):
     """
-    Clase que configura las etiquetas y los campos de entrada.
+    Clase que contiene métodos para la interacción en la ventana **Consultar Artículo**.
     """
 
-    def ingreso_datos(self, window, var_nombre, var_cantidad, var_precio, var_descrip):
+    def __init__(self, obj_f, obj_win_main):
         """
-        Método que define las etiquetas, los campos de entrada y eventos asociados a los mismos.
+        Constructor que hereda el correspondiente a la clase ``QWidget()`` para acceder a widgets.
 
-        :param window: Objeto ventana que recibe como argumento de la clase ``Menu()``.
-        :param var_nombre: Variable que será asociada al campo de entrada **Nombre**.
-        :param var_cantidad: Variable que será asociada al campo de entrada **Cantidad**.
-        :param var_precio: Variable que será asociada al campo de entrada **Precio**.
-        :param var_descrip: Variable que será asociada al campo de entrada **Descripción**.
+        :param obj_f: Objeto de clase ``Crud()``.
+        :param obj_win_main: Objeto de clase ``MainWindow()`` para acceder a atributos/métodos de ventana principal.
         """
-        self.obj_e = Evento()
+        super().__init__()
+        # Creo objeto de la clase en QT para crear widgets.
+        self.ui = Ui_Consulta()
+        # Se acccede al método setupUi que crea widgets.
+        self.ui.setupUi(self)
+        # Cedo acceso a objeto Crud desde cualquier método de esta clase.
+        self.obj_f = obj_f
+        # Cedo acceso a objeto MainWindow desde cualquier método de esta clase.
+        self.obj_win_main = obj_win_main
 
-        self.nombre = Label(window, text="\tNombre:")
-        self.cantidad = Label(window, text="\tCantidad:")
-        self.precio = Label(window, text="\tPrecio:")
-        self.descripcion = Label(window, text="\tDescripción:")
+        # Callback de widgets Button.
+        self.ui.btn_buscar.clicked.connect(self.search)
+        self.ui.btn_cat_full.clicked.connect(self.full_cat)
+        self.ui.btn_volver.clicked.connect(self.close)
 
-        # --------------------------Campos de entrada------------------------------------
-        # En lambda, a la función que llama le paso como parámetro
-        # "nom"/"cant"/"precio"/"descrip" para hacer referencia
-        # al campo "Nombre"/"Cantidad"/"Precio"/"Descripción".
+    def insert(self, id, nom, cant, prec, descrip):
+        """
+        Método para agregar un artículo nuevo en la tabla.
+        """
+        self.frame = []
+        self.frame.append((id, nom, cant, prec, descrip))
 
-        self.nombre_entry = Entry(window, textvariable=var_nombre, width=30)
-        self.nombre_entry.config(foreground="grey")
-        self.nombre_entry.insert(0, "Escriba el nombre del artículo")
-        self.nombre_entry.bind(
-            "<Button-1>",
-            lambda event: self.obj_e.click(event, "nom", var_nombre, self.nombre_entry),
-        )
-        self.nombre_entry.bind(
-            "<FocusOut>",
-            lambda event: self.obj_e.focus_out(
-                event,
-                "nom",
-                var_nombre,
-                self.nombre_entry,
-            ),
-        )
+        fila = 0
+        for registro in self.frame:
+            columna = 0
+            # Creo fila nueva cada vez que se lee un nuevo frame (todos los parámetros de un artículo).
+            self.ui.catalogo_list.insertRow(fila)
+            for elemento in registro:
+                # Cargo cada parámetro en la columna correspondiente, por orden.
+                self.ui.catalogo_list.setItem(fila, columna, QTableWidgetItem(elemento))
+                columna += 1
 
-        self.cantidad_entry = Entry(window, textvariable=var_cantidad, width=30)
-        self.cantidad_entry.config(foreground="grey")
-        self.cantidad_entry.insert(0, "Escriba un valor numérico")
-        self.cantidad_entry.bind(
-            "<Button-1>",
-            lambda event: self.obj_e.click(
-                event, "cant", var_cantidad, self.cantidad_entry
-            ),
-        )
-        self.cantidad_entry.bind(
-            "<FocusOut>",
-            lambda event: self.obj_e.focus_out(
-                event,
-                "cant",
-                var_cantidad,
-                self.cantidad_entry,
-            ),
-        )
+    def delete(self):
+        """
+        Método para limpiar celdas de la tabla.
+        """
+        self.ui.catalogo_list.clearContents()
 
-        self.precio_entry = Entry(window, textvariable=var_precio, width=30)
-        self.precio_entry.config(foreground="grey")
-        self.precio_entry.insert(0, "Escriba un valor numérico")
-        self.precio_entry.bind(
-            "<Button-1>",
-            lambda event: self.obj_e.click(
-                event, "precio", var_precio, self.precio_entry
-            ),
-        )
-        self.precio_entry.bind(
-            "<FocusOut>",
-            lambda event: self.obj_e.focus_out(
-                event,
-                "precio",
-                var_precio,
-                self.precio_entry,
-            ),
-        )
+    def search(self):
+        """
+        Método para buscar y mostrar artículo/s en la tabla.
+        """
+        mje = self.obj_f.consulta(self.ui.in_nombre, self.ui.in_descrip, self)
 
-        self.descripcion_entry = Entry(window, textvariable=var_descrip, width=30)
-        self.descripcion_entry.config(foreground="grey")
-        self.descripcion_entry.insert(0, "Agregue una breve descrip. del art.")
-        self.descripcion_entry.bind(
-            "<Button-1>",
-            lambda event: self.obj_e.click(
-                event, "descrip", var_descrip, self.descripcion_entry
-            ),
-        )
-        self.descripcion_entry.bind(
-            "<FocusOut>",
-            lambda event: self.obj_e.focus_out(
-                event,
-                "descrip",
-                var_descrip,
-                self.descripcion_entry,
-            ),
-        )
+        # Informo en la ventana el resultado de la operacíon realizada.
+        self.ui.notificacion.setText(mje)
 
-        self.nombre.grid(row=3, column=2, sticky="w")
-        self.cantidad.grid(row=4, column=2, sticky="w")
-        self.precio.grid(row=5, column=2, sticky="w")
-        self.descripcion.grid(row=6, column=2, sticky="w")
-
-        self.nombre_entry.grid(row=3, column=3, padx=5, sticky="w")
-        self.cantidad_entry.grid(row=4, column=3, padx=5, sticky="w")
-        self.precio_entry.grid(row=5, column=3, padx=5, sticky="w")
-        self.descripcion_entry.grid(row=6, column=3, padx=5, sticky="w")
+    def full_cat(self):
+        """
+        Método para mostrar todos los artículos en la tabla.
+        """
+        self.ui.catalogo_list.clearContents()
+        # Actualizo tabla y gráfico de torta.
+        self.obj_f.mostrar_cat(self, self.obj_win_main)
