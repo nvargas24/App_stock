@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="es" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>modelo &mdash; documentación de Control de stock - 0.0.2</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+        <script src="../_static/translations.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Índice" href="../genindex.html" />
+    <link rel="search" title="Búsqueda" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Control de stock
+          </a>
+              <div class="version">
+                0.0.2
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Buscar documentos" aria-label="Buscar documentos" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contenidos:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../controlador.html">Módulo Controlador</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modelo.html">Módulo Modelo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../validar.html">Módulo Validar</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../vista.html">Módulo Vista</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../observador.html">Módulo Observador</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cliente.html">Módulo Cliente</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../servidor.html">Módulo Servidor</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Control de stock</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Código de módulo</a></li>
+      <li class="breadcrumb-item active">modelo</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Código fuente para modelo</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">modelo.py:</span>
+<span class="sd">    Módulo encargado de la lógica de la app, lo cual implica el manejo de base de datos, CRUD, y eventos. </span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="n">__author__</span> <span class="o">=</span> <span class="s2">&quot;Diego Calderón, Nahuel Vargas&quot;</span>
+<span class="n">__maintainer__</span> <span class="o">=</span> <span class="s2">&quot;Diego Calderón, Nahuel Vargas&quot;</span>
+<span class="n">__email__</span> <span class="o">=</span> <span class="s2">&quot;diegoacalderon994@gmail.com, nahuvargas24@gmail.com&quot;</span>
+<span class="n">__copyright__</span> <span class="o">=</span> <span class="s2">&quot;Copyright 2023&quot;</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;0.0.2&quot;</span>
+
+<span class="kn">from</span> <span class="nn">peewee</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">validar</span> <span class="kn">import</span> <span class="n">Validacion</span>
+<span class="kn">from</span> <span class="nn">observador</span> <span class="kn">import</span> <span class="n">Sujeto</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="c1"># --------------------Variables---------------------------------</span>
+<span class="c1"># Flag utilizado para informar si hubo un error en la validación de los datos de un campo a actualizar.</span>
+<span class="n">flag_e</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="c1"># Flag utilizado para informar que existe un dato válido para actualizar en el campo cantidad.</span>
+<span class="n">flag_c</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="c1"># Flag utilizado para informar que existe un dato válido para actualizar en el campo precio.</span>
+<span class="n">flag_p</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="c1"># Flag utilizado para informar que existe un dato válido para actualizar en el campo descripción.</span>
+<span class="n">flag_d</span> <span class="o">=</span> <span class="mi">0</span>
+
+
+<span class="c1"># ---------------------Decoradores-------------------------------</span>
+<div class="viewcode-block" id="decorador_add"><a class="viewcode-back" href="../modelo.html#modelo.decorador_add">[documentos]</a><span class="k">def</span> <span class="nf">decorador_add</span><span class="p">(</span><span class="n">metodo</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Función decoradora que captura el método ``agregar_db()``</span>
+
+<span class="sd">    :param metodo: Método ``agregar_db()`` que captura.</span>
+
+<span class="sd">    :returns: La función ``envoltura()``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">envoltura</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Función que ejecuta el método capturado e informa en un archivo de log la acción realizada.</span>
+
+<span class="sd">        :param args: Párametros que fueron enviados previamente a la función capturada.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Abro y escribo en un archivo de log para informar que se ingresó un nuevo registro.</span>
+        <span class="n">archivo</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;registro_log_app.txt&quot;</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
+        <span class="n">archivo</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
+            <span class="s2">&quot;Se ingresó un nuevo registro &quot;</span>
+            <span class="o">+</span> <span class="s2">&quot;Fecha: &quot;</span>
+            <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">today</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%d</span><span class="s2">/%m/%y&quot;</span><span class="p">))</span>
+            <span class="o">+</span> <span class="s2">&quot; Hora: &quot;</span>
+            <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">today</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%H:%M:%S&quot;</span><span class="p">))</span>
+            <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Ejecuto método capturado.</span>
+        <span class="n">metodo</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">envoltura</span></div>
+
+
+<div class="viewcode-block" id="decorador_del"><a class="viewcode-back" href="../modelo.html#modelo.decorador_del">[documentos]</a><span class="k">def</span> <span class="nf">decorador_del</span><span class="p">(</span><span class="n">metodo</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Función decoradora que captura el método ``eliminar_db()``</span>
+
+<span class="sd">    :param metodo: Método ``eliminar_db()`` que captura.</span>
+
+<span class="sd">    :returns: La función ``envoltura()``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">envoltura</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Función que ejecuta el método capturado e informa en un archivo de log la acción realizada.</span>
+
+<span class="sd">        :param args: Párametros que fueron enviados previamente a la función capturada.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Abro y escribo en un archivo de log para informar que se eliminó un registro.</span>
+        <span class="n">archivo</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;registro_log_app.txt&quot;</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
+        <span class="n">archivo</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
+            <span class="s2">&quot;Se eliminó un registro &quot;</span>
+            <span class="o">+</span> <span class="s2">&quot;Fecha: &quot;</span>
+            <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">today</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%d</span><span class="s2">/%m/%y&quot;</span><span class="p">))</span>
+            <span class="o">+</span> <span class="s2">&quot; Hora: &quot;</span>
+            <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">today</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%H:%M:%S&quot;</span><span class="p">))</span>
+            <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Ejecuto método capturado.</span>
+        <span class="n">metodo</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">envoltura</span></div>
+
+
+<div class="viewcode-block" id="decorador_mod"><a class="viewcode-back" href="../modelo.html#modelo.decorador_mod">[documentos]</a><span class="k">def</span> <span class="nf">decorador_mod</span><span class="p">(</span><span class="n">metodo</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Función decoradora que captura el método ``actualizar_db()``</span>
+
+<span class="sd">    :param metodo: Método ``actualizar_db()`` que captura.</span>
+
+<span class="sd">    :returns: La función ``envoltura()``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">envoltura</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Función que ejecuta el método capturado e informa en un archivo de log la acción realizada.</span>
+
+<span class="sd">        :param args: Párametros que fueron enviados previamente a la función capturada.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Abro y escribo en un archivo de log para informar que se modificó un registro.</span>
+        <span class="n">archivo</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;registro_log_app.txt&quot;</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
+        <span class="n">archivo</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
+            <span class="s2">&quot;Se modificó un registro &quot;</span>
+            <span class="o">+</span> <span class="s2">&quot;Fecha: &quot;</span>
+            <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">today</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%d</span><span class="s2">/%m/%y&quot;</span><span class="p">))</span>
+            <span class="o">+</span> <span class="s2">&quot; Hora: &quot;</span>
+            <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">today</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%H:%M:%S&quot;</span><span class="p">))</span>
+            <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Ejecuto método capturado.</span>
+        <span class="n">metodo</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">envoltura</span></div>
+
+
+<div class="viewcode-block" id="decorador_mostrar"><a class="viewcode-back" href="../modelo.html#modelo.decorador_mostrar">[documentos]</a><span class="k">def</span> <span class="nf">decorador_mostrar</span><span class="p">(</span><span class="n">metodo</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Función decoradora que captura el método ``mostrar_cat()``</span>
+
+<span class="sd">    :param metodo: Método ``mostrar_cat()`` que captura.</span>
+
+<span class="sd">    :returns: La función ``envoltura()``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">envoltura</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Función que ejecuta el método capturado, e informa en consola mediante una</span>
+<span class="sd">        tabla la lista de componentes ingresados.</span>
+<span class="sd">        A partir de dicha información también realiza un gráfico de torta que se</span>
+<span class="sd">        actualiza cada vez que se consulta el stock de componentes o al iniciar la app.</span>
+
+<span class="sd">        :param args: Párametros que fueron enviados previamente a la función capturada.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">window_main</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+
+        <span class="n">list_componente</span><span class="p">,</span> <span class="n">list_cantidad</span> <span class="o">=</span> <span class="n">metodo</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">list_componente</span> <span class="ow">and</span> <span class="n">list_cantidad</span><span class="p">:</span>
+            <span class="c1"># Se calcula y se muestra en consola una tabla de componentes cargados con sus respectivas cantidades.</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;---&quot;</span> <span class="o">*</span> <span class="mi">23</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Lista de stock&quot;</span><span class="p">)</span>
+            <span class="n">dataset</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Componente&quot;</span><span class="p">:</span> <span class="n">list_componente</span><span class="p">,</span> <span class="s2">&quot;Cantidad&quot;</span><span class="p">:</span> <span class="n">list_cantidad</span><span class="p">}</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;---&quot;</span> <span class="o">*</span> <span class="mi">23</span><span class="p">)</span>
+
+        <span class="c1"># Se realiza un gráfico de torta del total de componentes cargados con sus respectivas cantidades.</span>
+        <span class="n">window_main</span><span class="o">.</span><span class="n">grafica</span><span class="o">.</span><span class="n">upgrade_graph</span><span class="p">(</span><span class="n">list_componente</span><span class="p">,</span> <span class="n">list_cantidad</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">envoltura</span></div>
+
+
+<span class="c1"># ---------------------Clases que contienen métodos para base de datos--------------------------------</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">db</span> <span class="o">=</span> <span class="n">SqliteDatabase</span><span class="p">(</span>
+        <span class="s2">&quot;base_stock.db&quot;</span>
+    <span class="p">)</span>  <span class="c1"># Creo el objeto que indica el tipo y nombre de bd a la cual me voy a conectar (si no existe la crea).</span>
+<span class="k">except</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No se pudo crear la base de datos&quot;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="BaseModel"><a class="viewcode-back" href="../modelo.html#modelo.BaseModel">[documentos]</a><span class="k">class</span> <span class="nc">BaseModel</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Clase que establece a que base de datos me conecto y su tipo.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">database</span> <span class="o">=</span> <span class="n">db</span>  <span class="c1"># Indico a que base me conecto y su tipo.</span></div>
+
+
+<div class="viewcode-block" id="Componentes"><a class="viewcode-back" href="../modelo.html#modelo.Componentes">[documentos]</a><span class="k">class</span> <span class="nc">Componentes</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Clase asociada a la tabla de la base de datos, y donde defino sus atributos (campos).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">nombre</span> <span class="o">=</span> <span class="n">CharField</span><span class="p">()</span>
+    <span class="n">cantidad</span> <span class="o">=</span> <span class="n">CharField</span><span class="p">()</span>
+    <span class="n">precio</span> <span class="o">=</span> <span class="n">CharField</span><span class="p">()</span>
+    <span class="n">descripcion</span> <span class="o">=</span> <span class="n">CharField</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="BaseDatos"><a class="viewcode-back" href="../modelo.html#modelo.BaseDatos">[documentos]</a><span class="k">class</span> <span class="nc">BaseDatos</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Clase que contiene métodos para conectarme a la base de datos, y para manejar los registros de la misma.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="BaseDatos.__init__"><a class="viewcode-back" href="../modelo.html#modelo.BaseDatos.__init__">[documentos]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Constructor para crear, conectarme, y agregar una tabla a la base de datos.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">con</span> <span class="o">=</span> <span class="n">db</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">con</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>  <span class="c1"># Me conecto a la bd.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">con</span><span class="o">.</span><span class="n">create_tables</span><span class="p">([</span><span class="n">Componentes</span><span class="p">])</span>  <span class="c1"># Creo la tabla Componentes.</span></div>
+
+<div class="viewcode-block" id="BaseDatos.agregar_db"><a class="viewcode-back" href="../modelo.html#modelo.BaseDatos.agregar_db">[documentos]</a>    <span class="nd">@decorador_add</span>
+    <span class="k">def</span> <span class="nf">agregar_db</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nombre</span><span class="p">,</span> <span class="n">cantidad</span><span class="p">,</span> <span class="n">precio</span><span class="p">,</span> <span class="n">descripcion</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Método para agregar una fila de datos (registro) a la tabla.</span>
+
+<span class="sd">        :param nombre: Nombre del componente.</span>
+<span class="sd">        :param cantidad: Cantidad del componente.</span>
+<span class="sd">        :param precio: Precio del componente.</span>
+<span class="sd">        :param descripcion: Descripción del componente.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">comp</span> <span class="o">=</span> <span class="n">Componentes</span><span class="p">()</span>  <span class="c1"># Creo un objeto (registro) de la clase Componentes.</span>
+
+        <span class="c1"># Le asigno los valores ingresados a cada atributo(campo) del objeto.</span>
+        <span class="n">comp</span><span class="o">.</span><span class="n">nombre</span> <span class="o">=</span> <span class="n">nombre</span>
+        <span class="n">comp</span><span class="o">.</span><span class="n">cantidad</span> <span class="o">=</span> <span class="n">cantidad</span>
+        <span class="n">comp</span><span class="o">.</span><span class="n">precio</span> <span class="o">=</span> <span class="n">precio</span>
+        <span class="n">comp</span><span class="o">.</span><span class="n">descripcion</span> <span class="o">=</span> <span class="n">descripcion</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">comp</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>  <span class="c1"># Guardo el registro en la tabla.</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No se pudo guardar el registro&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BaseDatos.eliminar_db"><a class="viewcode-back" href="../modelo.html#modelo.BaseDatos.eliminar_db">[documentos]</a>    <span class="nd">@decorador_del</span>
+    <span class="k">def</span> <span class="nf">eliminar_db</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nombre</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Método para eliminar una fila de datos (registro) de la tabla</span>
+<span class="sd">        usando como referencia el campo **Nombre**.</span>
+
+<span class="sd">        :param nombre: Nombre del componente.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">reg_borrar</span> <span class="o">=</span> <span class="n">Componentes</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">Componentes</span><span class="o">.</span><span class="n">nombre</span> <span class="o">==</span> <span class="n">nombre</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">reg_borrar</span><span class="o">.</span><span class="n">delete_instance</span><span class="p">()</span>  <span class="c1"># Borro el registro de la tabla.</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No se pudo eliminar el registro&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BaseDatos.leer_db"><a class="viewcode-back" href="../modelo.html#modelo.BaseDatos.leer_db">[documentos]</a>    <span class="k">def</span> <span class="nf">leer_db</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nombre</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">descrip</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Método para seleccionar una o varias filas de la tabla usando como referencia</span>
+<span class="sd">        el campo **Nombre** y/o el campo **Descripción**.</span>
+
+<span class="sd">        :param nombre: Nombre del componente.</span>
+<span class="sd">        :param descrip: Descripcion del componente.</span>
+
+<span class="sd">        :returns: Fila/s encontrada/s de acuerdo a la referencia.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">nombre</span> <span class="o">==</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">descrip</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">rows</span> <span class="o">=</span> <span class="n">Componentes</span><span class="o">.</span><span class="n">select</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="n">nombre</span> <span class="o">!=</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">descrip</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">rows</span> <span class="o">=</span> <span class="n">Componentes</span><span class="o">.</span><span class="n">select</span><span class="p">()</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">Componentes</span><span class="o">.</span><span class="n">nombre</span> <span class="o">==</span> <span class="n">nombre</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">nombre</span> <span class="o">==</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">descrip</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">rows</span> <span class="o">=</span> <span class="n">Componentes</span><span class="o">.</span><span class="n">select</span><span class="p">()</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">Componentes</span><span class="o">.</span><span class="n">descripcion</span> <span class="o">==</span> <span class="n">descrip</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">nombre</span> <span class="o">!=</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">descrip</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">rows</span> <span class="o">=</span> <span class="n">Componentes</span><span class="o">.</span><span class="n">select</span><span class="p">()</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
+                <span class="p">(</span><span class="n">Componentes</span><span class="o">.</span><span class="n">nombre</span> <span class="o">==</span> <span class="n">nombre</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">Componentes</span><span class="o">.</span><span class="n">descripcion</span> <span class="o">==</span> <span class="n">descrip</span><span class="p">)</span>
+            <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">rows</span></div>
+
+<div class="viewcode-block" id="BaseDatos.actualizar_db"><a class="viewcode-back" href="../modelo.html#modelo.BaseDatos.actualizar_db">[documentos]</a>    <span class="nd">@decorador_mod</span>
+    <span class="k">def</span> <span class="nf">actualizar_db</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nombre</span><span class="p">,</span> <span class="n">cant</span><span class="p">,</span> <span class="n">prec</span><span class="p">,</span> <span class="n">descrip</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Método para actualizar uno o varios campos de una fila de la tabla.</span>
+
+<span class="sd">        :param nombre: Nombre del componente.</span>
+<span class="sd">        :param cant: Nuevo valor del campo cantidad (si existe un dato válido).</span>
+<span class="sd">        :param prec: Nuevo valor del campo precio (si existe un dato válido).</span>
+<span class="sd">        :param descrip: Nuevo valor del campo descripción (si existe un dato válido).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">flag_c</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>  <span class="c1"># Si existe un dato cantidad válido.</span>
+            <span class="n">reg_actualizar</span> <span class="o">=</span> <span class="n">Componentes</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">cantidad</span><span class="o">=</span><span class="n">cant</span><span class="p">)</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
+                <span class="n">Componentes</span><span class="o">.</span><span class="n">nombre</span> <span class="o">==</span> <span class="n">nombre</span>
+            <span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">reg_actualizar</span><span class="o">.</span><span class="n">execute</span><span class="p">()</span>  <span class="c1"># Actualizo el registro.</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No se pudo actualizar el registro&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">flag_p</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>  <span class="c1"># Si existe un dato precio válido.</span>
+            <span class="n">reg_actualizar</span> <span class="o">=</span> <span class="n">Componentes</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">precio</span><span class="o">=</span><span class="n">prec</span><span class="p">)</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
+                <span class="n">Componentes</span><span class="o">.</span><span class="n">nombre</span> <span class="o">==</span> <span class="n">nombre</span>
+            <span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">reg_actualizar</span><span class="o">.</span><span class="n">execute</span><span class="p">()</span>  <span class="c1"># Actualizo el registro.</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No se pudo actualizar el registro&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">flag_d</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>  <span class="c1"># Si existe un dato descripción válido.</span>
+            <span class="n">reg_actualizar</span> <span class="o">=</span> <span class="n">Componentes</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">descripcion</span><span class="o">=</span><span class="n">descrip</span><span class="p">)</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
+                <span class="n">Componentes</span><span class="o">.</span><span class="n">nombre</span> <span class="o">==</span> <span class="n">nombre</span>
+            <span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">reg_actualizar</span><span class="o">.</span><span class="n">execute</span><span class="p">()</span>  <span class="c1"># Actualizo el registro.</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No se pudo actualizar el registro&quot;</span><span class="p">)</span></div></div>
+
+
+<span class="c1"># ---------------------Clase que contienen métodos para manejo de datos ingresados--------------------------------</span>
+<div class="viewcode-block" id="Crud"><a class="viewcode-back" href="../modelo.html#modelo.Crud">[documentos]</a><span class="k">class</span> <span class="nc">Crud</span><span class="p">(</span><span class="n">BaseDatos</span><span class="p">,</span> <span class="n">Sujeto</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Clase que contiene métodos para el manejo de los datos ingresados.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Crud.__init__"><a class="viewcode-back" href="../modelo.html#modelo.Crud.__init__">[documentos]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Constructor que hereda el correspondiente a la clase ``BaseDatos()``,</span>
+<span class="sd">        y que además crea un objeto ``Validacion()`` para comprobar los campos de entrada.</span>
+<span class="sd">        También hereda de la clase ``Sujeto()`` para el manejo de observadores.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">obj_val</span> <span class="o">=</span> <span class="n">Validacion</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Crud.agreg"><a class="viewcode-back" href="../modelo.html#modelo.Crud.agreg">[documentos]</a>    <span class="k">def</span> <span class="nf">agreg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nombre</span><span class="p">,</span> <span class="n">cantidad</span><span class="p">,</span> <span class="n">precio</span><span class="p">,</span> <span class="n">descripcion</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Método para agregar un nuevo componente.</span>
+
+<span class="sd">        :param nombre: Nombre del componente.</span>
+<span class="sd">        :param cantidad: Cantidad del componente.</span>
+<span class="sd">        :param precio: Precio del componente.</span>
+<span class="sd">        :param descripcion: Descripción del componente.</span>
+
+<span class="sd">        :returns: ``&quot;Campos vacios&quot;`` si no se completaron todos los campos.</span>
+<span class="sd">        :returns: ``&quot;Ya existe el articulo&quot;`` si el componente que se quiere ingresar ya se encontraba cargado.</span>
+<span class="sd">        :returns: ``&quot;Nuevo articulo cargado&quot;`` si el componente fue ingresado exitosamente.</span>
+
+<span class="sd">        Si en algunos de los campos se ingresó un dato inválido (no cumple regex)</span>
+<span class="sd">        se generará una excepción.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">nom</span> <span class="o">=</span> <span class="n">nombre</span><span class="o">.</span><span class="n">text</span><span class="p">()</span>
+        <span class="n">cant</span> <span class="o">=</span> <span class="n">cantidad</span><span class="o">.</span><span class="n">text</span><span class="p">()</span>
+        <span class="n">prec</span> <span class="o">=</span> <span class="n">precio</span><span class="o">.</span><span class="n">text</span><span class="p">()</span>
+        <span class="n">descrip</span> <span class="o">=</span> <span class="n">descripcion</span><span class="o">.</span><span class="n">text</span><span class="p">()</span>
+
+        <span class="c1"># Chequeo que el campo nombre, cantidad, precio y descripción no se encuentren vacíos.</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">obj_val</span><span class="o">.</span><span class="n">empty_entry</span><span class="p">(</span><span class="n">nom</span><span class="p">,</span> <span class="s2">&quot;nom&quot;</span><span class="p">)</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj_val</span><span class="o">.</span><span class="n">empty_entry</span><span class="p">(</span><span class="n">cant</span><span class="p">,</span> <span class="s2">&quot;cant&quot;</span><span class="p">)</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj_val</span><span class="o">.</span><span class="n">empty_entry</span><span class="p">(</span><span class="n">prec</span><span class="p">,</span> <span class="s2">&quot;prec&quot;</span><span class="p">)</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj_val</span><span class="o">.</span><span class="n">empty_entry</span><span class="p">(</span><span class="n">descrip</span><span class="p">,</span> <span class="s2">&quot;descrip&quot;</span><span class="p">)</span>
+        <span class="p">):</span>
+            <span class="k">return</span> <span class="s2">&quot;Campos vacíos&quot;</span>
+
+        <span class="c1"># Si se ingresó un dato inválido genero una excepción.</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">obj_val</span><span class="o">.</span><span class="n">val_entry</span><span class="p">(</span><span class="n">nom</span><span class="p">,</span> <span class="s2">&quot;nom&quot;</span><span class="p">)</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj_val</span><span class="o">.</span><span class="n">val_entry</span><span class="p">(</span><span class="n">cant</span><span class="p">,</span> <span class="s2">&quot;cant&quot;</span><span class="p">)</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj_val</span><span class="o">.</span><span class="n">val_entry</span><span class="p">(</span><span class="n">prec</span><span class="p">,</span> <span class="s2">&quot;prec&quot;</span><span class="p">)</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj_val</span><span class="o">.</span><span class="n">val_entry</span><span class="p">(</span><span class="n">descrip</span><span class="p">,</span> <span class="s2">&quot;descrip&quot;</span><span class="p">)</span>
+        <span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Campos incorrectos&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Cargo en la base de datos y notifico al observador</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">leer_db</span><span class="p">(</span><span class="n">nom</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">agregar_db</span><span class="p">(</span><span class="n">nom</span><span class="p">,</span> <span class="n">cant</span><span class="p">,</span> <span class="n">prec</span><span class="p">,</span> <span class="n">descrip</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">notificar</span><span class="p">(</span><span class="n">nom</span><span class="p">,</span> <span class="n">cant</span><span class="p">,</span> <span class="n">prec</span><span class="p">,</span> <span class="n">descrip</span><span class="p">)</span>
+            <span class="k">return</span> <span class="s2">&quot;Nuevo artículo cargado&quot;</span>
+
+        <span class="k">return</span> <span class="s2">&quot;Ya existe el artículo&quot;</span></div>
+
+<div class="viewcode-block" id="Crud.elim"><a class="viewcode-back" href="../modelo.html#modelo.Crud.elim">[documentos]</a>    <span class="k">def</span> <span class="nf">elim</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nombre</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Método para eliminar un componente ingresado (lo busco por el nombre).</span>
+
+<span class="sd">        :param nombre: Nombre del componente.</span>
+
+<span class="sd">        :returns: ``&quot;Campo vacio&quot;`` si no se ingresó ningún nombre.</span>
+<span class="sd">        :returns: ``&quot;Articulo no encontrado&quot;`` si el componente a eliminar no se encuentra ingresado.</span>
+<span class="sd">        :returns: ``&quot;Articulo eliminado&quot;`` si el componente fue eliminado exitosamente.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">nom</span> <span class="o">=</span> <span class="n">nombre</span><span class="o">.</span><span class="n">text</span><span class="p">()</span>
+
+        <span class="c1"># Chequeo que el campo nombre no esté vacío.</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj_val</span><span class="o">.</span><span class="n">empty_entry</span><span class="p">(</span><span class="n">nom</span><span class="p">,</span> <span class="s2">&quot;nom&quot;</span><span class="p">):</span>
+            <span class="k">return</span> <span class="s2">&quot;Campo vacío&quot;</span>
+
+        <span class="c1"># Chequeo si el artículo a eliminar existe.</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">leer_db</span><span class="p">(</span><span class="n">nom</span><span class="p">):</span>
+            <span class="k">return</span> <span class="s2">&quot;Artículo no encontrado&quot;</span>
+
+        <span class="c1"># Elimino de la base de datos y notifico al observador.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">eliminar_db</span><span class="p">(</span><span class="n">nom</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">notificar</span><span class="p">(</span><span class="n">nom</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s2">&quot;Artículo eliminado&quot;</span></div>
+
+<div class="viewcode-block" id="Crud.modif"><a class="viewcode-back" href="../modelo.html#modelo.Crud.modif">[documentos]</a>    <span class="k">def</span> <span class="nf">modif</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nombre</span><span class="p">,</span> <span class="n">cantidad</span><span class="p">,</span> <span class="n">precio</span><span class="p">,</span> <span class="n">descripcion</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Método para modificar un componente ingresado (lo busco por el nombre).</span>
+
+<span class="sd">        :param nombre: Nombre del componente.</span>
+<span class="sd">        :param cantidad: Cantidad del componente.</span>
+<span class="sd">        :param precio: Precio del componente.</span>
+<span class="sd">        :param descripcion: Descripción del componente.</span>
+
+<span class="sd">        :returns: ``&quot;Campo vacio&quot;`` si no se ingresó ningún nombre.</span>
+<span class="sd">        :returns: ``&quot;Articulo no existe&quot;`` si el componente a modificar no se encuentra ingresado.</span>
+<span class="sd">        :returns: ``&quot;Articulo sin modificar&quot;`` si no se ingresó ningún parámetro a modificar del componente.</span>
+<span class="sd">        :returns: ``&quot;Articulo modificado&quot;`` si el componente fue modificado exitosamente.</span>
+
+<span class="sd">        Si en algunos de los campos se ingresó un dato inválido (no cumple regex)</span>
+<span class="sd">        se generará una excepción.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">global</span> <span class="n">flag_e</span>
+        <span class="k">global</span> <span class="n">flag_c</span>
+        <span class="k">global</span> <span class="n">flag_p</span>
+        <span class="k">global</span> <span class="n">flag_d</span>
+
+        <span class="n">nom</span> <span class="o">=</span> <span class="n">nombre</span><span class="o">.</span><span class="n">text</span><span class="p">()</span>
+        <span class="n">cant</span> <span class="o">=</span> <span class="n">cantidad</span><span class="o">.</span><span class="n">text</span><span class="p">()</span>
+        <span class="n">prec</span> <span class="o">=</span> <span class="n">precio</span><span class="o">.</span><span class="n">text</span><span class="p">()</span>
+        <span class="n">descrip</span> <span class="o">=</span> <span class="n">descripcion</span><span class="o">.</span><span class="n">text</span><span class="p">()</span>
+
+        <span class="c1"># Chequeo que el campo nombre no esté vacío.</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj_val</span><span class="o">.</span><span class="n">empty_entry</span><span class="p">(</span><span class="n">nom</span><span class="p">,</span> <span class="s2">&quot;nom&quot;</span><span class="p">):</span>
+            <span class="k">return</span> <span class="s2">&quot;Campo Nombre vacío&quot;</span>
+
+        <span class="c1"># Chequeo si el artículo a modificar existe.</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">leer_db</span><span class="p">(</span><span class="n">nom</span><span class="p">):</span>
+            <span class="k">return</span> <span class="s2">&quot;Artículo no existente&quot;</span>
+
+        <span class="c1"># Si el campo cantidad no está vacío y cumple con el patrón de regex</span>
+        <span class="c1"># se pondrá en &#39;1&#39; el flag_c (dato válido para actualizar).</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj_val</span><span class="o">.</span><span class="n">empty_entry</span><span class="p">(</span><span class="n">cant</span><span class="p">,</span> <span class="s2">&quot;cant&quot;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj_val</span><span class="o">.</span><span class="n">val_entry</span><span class="p">(</span><span class="n">cant</span><span class="p">,</span> <span class="s2">&quot;cant&quot;</span><span class="p">):</span>
+                <span class="n">flag_c</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">flag_e</span> <span class="o">=</span> <span class="mi">1</span>
+
+        <span class="c1"># Si el campo precio no está vacío y cumple con el patrón de regex</span>
+        <span class="c1"># se pondrá en &#39;1&#39; el flag_p (dato válido para actualizar).</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj_val</span><span class="o">.</span><span class="n">empty_entry</span><span class="p">(</span><span class="n">prec</span><span class="p">,</span> <span class="s2">&quot;prec&quot;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj_val</span><span class="o">.</span><span class="n">val_entry</span><span class="p">(</span><span class="n">prec</span><span class="p">,</span> <span class="s2">&quot;prec&quot;</span><span class="p">):</span>
+                <span class="n">flag_p</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">flag_e</span> <span class="o">=</span> <span class="mi">1</span>
+
+        <span class="c1"># Si el campo descripción no está vacío y cumple con el patrón de regex</span>
+        <span class="c1"># se pondrá en &#39;1&#39; el flag_p (dato válido para actualizar).</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj_val</span><span class="o">.</span><span class="n">empty_entry</span><span class="p">(</span><span class="n">descrip</span><span class="p">,</span> <span class="s2">&quot;descrip&quot;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj_val</span><span class="o">.</span><span class="n">val_entry</span><span class="p">(</span><span class="n">descrip</span><span class="p">,</span> <span class="s2">&quot;descrip&quot;</span><span class="p">):</span>
+                <span class="n">flag_d</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">flag_e</span> <span class="o">=</span> <span class="mi">1</span>
+
+        <span class="c1"># Si no hubo error en la validación de datos (flag_e == 0) se actualizarán</span>
+        <span class="c1"># los datos que hayan sido ingresados en los campos correspondientes.</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">flag_e</span><span class="p">:</span>
+            <span class="c1"># Si no se ingresó ningún dato a modificar.</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">flag_c</span> <span class="ow">or</span> <span class="n">flag_p</span> <span class="ow">or</span> <span class="n">flag_d</span><span class="p">):</span>
+                <span class="k">return</span> <span class="s2">&quot;No se modificó artículo&quot;</span>
+
+            <span class="c1"># Si se ingresó un dato modifico el componente y notifico al observador.</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">actualizar_db</span><span class="p">(</span><span class="n">nom</span><span class="p">,</span> <span class="n">cant</span><span class="p">,</span> <span class="n">prec</span><span class="p">,</span> <span class="n">descrip</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">notificar</span><span class="p">(</span><span class="n">nom</span><span class="p">,</span> <span class="n">flag_c</span><span class="p">,</span> <span class="n">cant</span><span class="p">,</span> <span class="n">flag_p</span><span class="p">,</span> <span class="n">prec</span><span class="p">,</span> <span class="n">flag_d</span><span class="p">,</span> <span class="n">descrip</span><span class="p">)</span>
+
+            <span class="n">flag_c</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">flag_p</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">flag_d</span> <span class="o">=</span> <span class="mi">0</span>
+
+            <span class="k">return</span> <span class="s2">&quot;Artículo modificado&quot;</span>
+
+        <span class="c1"># Si hubo error en la validación de datos (flag == 1)</span>
+        <span class="c1"># no se actualizará ningun campo y se informará del error al usuario.</span>
+        <span class="n">flag_e</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># Como ya se detecto un error se lo vuelve a setear para la siguiente operación.</span>
+
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;Campos incorrectos&quot;</span>
+        <span class="p">)</span>  <span class="c1"># Si se ingresó un dato inválido genero una excepción.</span></div>
+
+<div class="viewcode-block" id="Crud.consulta"><a class="viewcode-back" href="../modelo.html#modelo.Crud.consulta">[documentos]</a>    <span class="k">def</span> <span class="nf">consulta</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nombre</span><span class="p">,</span> <span class="n">descrip</span><span class="p">,</span> <span class="n">window_consulta</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Método para consultar los datos de un componente en particular (lo busco por el nombre y/o descripción).</span>
+
+<span class="sd">        :param nombre: Nombre del componente.</span>
+<span class="sd">        :param descrip: Descripción del componente.</span>
+<span class="sd">        :param window_consulta: Objeto de clase ``WindowConsulta()``.</span>
+
+<span class="sd">        :returns: ``&quot;Campo vacios&quot;`` si no se ingresó ningún nombre y/o descripción.</span>
+<span class="sd">        :returns: ``&quot;Articulo no encontrado por nombre&quot;`` si el componente consultado por nombre no se encuentra ingresado.</span>
+<span class="sd">        :returns: ``&quot;Articulo no encontrado por descripcion&quot;`` si el componente consultado por descripción no se encuentra ingresado.</span>
+<span class="sd">        :returns: ``&quot;Articulo no encontrado&quot;`` si el componente consultado por nombre y descripción no se encuentra ingresado.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">nom</span> <span class="o">=</span> <span class="n">nombre</span><span class="o">.</span><span class="n">text</span><span class="p">()</span>
+        <span class="n">descrip</span> <span class="o">=</span> <span class="n">descrip</span><span class="o">.</span><span class="n">text</span><span class="p">()</span>
+
+        <span class="c1"># Búsqueda por nombre.</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj_val</span><span class="o">.</span><span class="n">empty_entry</span><span class="p">(</span><span class="n">nom</span><span class="p">,</span> <span class="s2">&quot;nom&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj_val</span><span class="o">.</span><span class="n">empty_entry</span><span class="p">(</span>
+            <span class="n">descrip</span><span class="p">,</span> <span class="s2">&quot;descrip&quot;</span>
+        <span class="p">):</span>
+            <span class="n">data_from_db</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">leer_db</span><span class="p">(</span><span class="n">nom</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">data_from_db</span><span class="p">:</span>
+                <span class="k">return</span> <span class="s2">&quot;Artículo no encontrado por nombre&quot;</span>
+
+        <span class="c1"># Búsqueda por descripción.</span>
+        <span class="k">elif</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj_val</span><span class="o">.</span><span class="n">empty_entry</span><span class="p">(</span><span class="n">nom</span><span class="p">,</span> <span class="s2">&quot;nom&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj_val</span><span class="o">.</span><span class="n">empty_entry</span><span class="p">(</span>
+            <span class="n">descrip</span><span class="p">,</span> <span class="s2">&quot;descrip&quot;</span>
+        <span class="p">):</span>
+            <span class="n">data_from_db</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">leer_db</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">descrip</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">data_from_db</span><span class="p">:</span>
+                <span class="k">return</span> <span class="s2">&quot;Artículo no encontrado por descripción&quot;</span>
+
+        <span class="c1"># Búsqueda por nombre y descripción.</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj_val</span><span class="o">.</span><span class="n">empty_entry</span><span class="p">(</span><span class="n">nom</span><span class="p">,</span> <span class="s2">&quot;nom&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj_val</span><span class="o">.</span><span class="n">empty_entry</span><span class="p">(</span>
+            <span class="n">descrip</span><span class="p">,</span> <span class="s2">&quot;descrip&quot;</span>
+        <span class="p">):</span>
+            <span class="n">data_from_db</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">leer_db</span><span class="p">(</span><span class="n">nom</span><span class="p">,</span> <span class="n">descrip</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">data_from_db</span><span class="p">:</span>
+                <span class="k">return</span> <span class="s2">&quot;Artículo no encontrado&quot;</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;Campos vacíos&quot;</span>
+
+        <span class="c1"># Borro las filas de la tabla que contiene la ventana de Consulta.</span>
+        <span class="n">window_consulta</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
+
+        <span class="c1"># Cargo la tabla con la/s fila/s encontradas de acuerdo a la búsqueda.</span>
+        <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">data_from_db</span><span class="p">:</span>
+            <span class="n">window_consulta</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span>
+                <span class="nb">str</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">id</span><span class="p">),</span>
+                <span class="n">row</span><span class="o">.</span><span class="n">nombre</span><span class="p">,</span>
+                <span class="n">row</span><span class="o">.</span><span class="n">cantidad</span><span class="p">,</span>
+                <span class="n">row</span><span class="o">.</span><span class="n">precio</span><span class="p">,</span>
+                <span class="n">row</span><span class="o">.</span><span class="n">descripcion</span><span class="p">,</span>
+            <span class="p">)</span></div>
+
+<div class="viewcode-block" id="Crud.mostrar_cat"><a class="viewcode-back" href="../modelo.html#modelo.Crud.mostrar_cat">[documentos]</a>    <span class="nd">@decorador_mostrar</span>
+    <span class="k">def</span> <span class="nf">mostrar_cat</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">window_consulta</span><span class="p">,</span> <span class="n">window_main</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Método que muestra el catálogo completo de componentes cargados hasta el momento.</span>
+
+<span class="sd">        :param window_consulta: Objeto de clase ``WindowConsulta()``.</span>
+<span class="sd">        :param window_main: Objeto de clase ``MainWindow()``, utilizado por el decorador vinculado al método.</span>
+
+<span class="sd">        :returns: **x_nom**, lista que almacena los nombres de cada componente registrado.</span>
+<span class="sd">        :returns: **y_cant**, lista que almacena las cantidades de cada componente registrado.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">x_nom</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># Lista que almacena los nombres de cada componente cargado.</span>
+        <span class="n">y_cant</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># Lista que almacena las cantidades de cada componente cargado.</span>
+
+        <span class="n">data_from_db</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">leer_db</span><span class="p">()</span>
+
+        <span class="c1"># Cargo la tabla de la ventana Consulta con todos los registros almacenados en la bd.</span>
+        <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">data_from_db</span><span class="p">:</span>
+            <span class="n">window_consulta</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span>
+                <span class="nb">str</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">id</span><span class="p">),</span>
+                <span class="n">row</span><span class="o">.</span><span class="n">nombre</span><span class="p">,</span>
+                <span class="n">row</span><span class="o">.</span><span class="n">cantidad</span><span class="p">,</span>
+                <span class="n">row</span><span class="o">.</span><span class="n">precio</span><span class="p">,</span>
+                <span class="n">row</span><span class="o">.</span><span class="n">descripcion</span><span class="p">,</span>
+            <span class="p">)</span>
+
+            <span class="n">x_nom</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">nombre</span><span class="p">)</span>
+            <span class="n">y_cant</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">cantidad</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">x_nom</span><span class="p">,</span> <span class="n">y_cant</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Derechos de autor 2023, Diego Calderón, Nahuel Vargas.</p>
+  </div>
+
+  Compilado con <a href="https://www.sphinx-doc.org/">Sphinx</a> usando un
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">tema</a>
+    proporcionado por <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
