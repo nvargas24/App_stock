@@ -10,7 +10,6 @@ Ing. Calderón, Diego
 Sr. Vargas, Nahuel
 
 ## Tabla de Contenidos
-- [Introducción](#introducción)
 - [Aclaraciones](#aclaraciones)
 - [Versión Tkinter](#versión_tkinter)
     - [Ejecución](#ejecución)
