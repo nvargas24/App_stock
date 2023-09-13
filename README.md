@@ -1,9 +1,9 @@
 # app_stock
 En este repositorio se contará con la app de control de stock diseñada para el cierre de la diplomatura en Python, 
-llevado a cabo en la Universidad Tecnologica Nacional regional Buenos Aires E-Learning.
+llevado a cabo en la Universidad Tecnologica Nacional Regional Buenos Aires E-Learning.
 
 Se implementa una interfaz de usuario, utilizando el patron MVC con una base de datos SQLite y un servidor-cliente. Se pone 
-en practica la escalabilidad de un proyecto utilizando disntintas herramientas para ui **#Tkinter** **#QtDesigner** **#KivyMD**.
+en practica la escalabilidad de un proyecto utilizando distintas herramientas para ui **#Tkinter** **#QtDesigner** **#KivyMD**.
 
 ## Autores
 Ing. Calderón, Diego  
@@ -39,12 +39,12 @@ Una vez corroborado que estan instaladas la librerias, ejecutar:
 python tkinter/controlador.py
 ```
 ### Uso
-La app al ejecutarse se tendrá disponible esta única ventana.    
+Al ejecutarse la App, se tendrá disponible esta única ventana.    
 ![](Imagenes/tkinter1.jpg)
-+ **Formulario**: Sección que permite al usuario cargar los datos, estos cuenta con verificación de campos según la accion a realizar.
++ **Formulario**: Sección que permite al usuario cargar los datos, los cuales cuentan con verificación de campos según la accion a realizar.
 + **CRUD**: Acciones a realizar con los datos cargados en formularios.
-+ **Recarga de base datos**: Consulta __todos__ los datos en la base datos y carga en la tabla.
-+ **Tabla de base de datos**: Se cargan todos o algún datos consultado a la base de datos.
++ **Recarga de base datos**: Consulta __todos__ los artículos en la base de datos y carga en la tabla.
++ **Tabla de base de datos**: Se cargan todos o ciertos artículos consultados a la base de datos.
 
 En la sección de formulario, el usuario puede ingresar los siguientes parametros:  
 + *Nombre*
@@ -53,18 +53,17 @@ En la sección de formulario, el usuario puede ingresar los siguientes parametro
 + *Descripción*  
 
 En la sección CRUD, puede interactuar con la base de datos:  
-+ ***Agregar artículo***: se tomarán todos los campos se sección **Formulario**. Estos serán cargados en la base de datos.  
-+ ***Eliminar artículo***: se toma sólo el campo **Nombre** y se buscará en la base datos, si existe se elimina de la base
-de datos, si no existe no se realiza nada.  
-+ ***Modificar artículo***: se toman todos los campos, verificando primero por **Nombre** si existe el artículo. Si existe
-se procede a modificar los demas parametros cargados en el fomulario para dicho artículo.  
-+ ***Consultar stock***: se toma solo el campo **Nombre**, y se busca en la base de datos. Si existe se muestra en la tabla
-con todos sus parametros actuales.
++ ***Agregar artículo***: Se consideran todos los campos de sección **Formulario**. Estos serán cargados en la base de datos.  
++ ***Eliminar artículo***: Se toma sólo el campo **Nombre** y se buscará en la base datos. Si existe se elimina de la misma y, en caso contrario, no se realiza nada.  
++ ***Modificar artículo***: Se consideran todos los campos, verificando primero por **Nombre** si existe el artículo. En caso afirmativo
+se procede a modificar los demás parametros cargados en el formulario para dicho componente.  
++ ***Consultar stock***: Se toma solo el campo **Nombre**, y se busca en la base de datos. Si existe se muestra en la tabla
+con todos sus parámetros actuales.
 
-*Dependiendo de la acción a realizar se verifica que los campos involucrados no esten vacios y cumpla el regex (sólo numero/letras)*
+*Dependiendo de la acción a realizar se verifica que los campos involucrados no estén vacíos y cumplan el regex (sólo numero/letras)*
 
 Aparte de las acciones disponibles en la sección CRUD, se cuenta con la opción ***Ver Catálogo completo***. El cual lee y 
-muestra todos los datos disponibles en la base de datos en la tabla y en un gráfico de tortas, realizado con Matplotlib.
+muestra todos los datos disponibles en la base de datos en la tabla y en un gráfico de torta, realizado con Matplotlib.
 
 ***Toda acción realizada será notificada por medio de popup y por terminal implementando decoradores***
 
